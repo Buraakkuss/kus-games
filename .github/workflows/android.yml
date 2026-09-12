@@ -1,0 +1,85 @@
+name: Android build
+
+# Amac: hicbir hesap acmadan "uygulama gercekten derleniyor mu" sorusunu
+# kapatmak. Imza anahtari secret olarak eklenirse imzali AAB, eklenmezse
+# imzasiz AAB + debug APK uretir.
+on:
+  push:
+    branches: ['**']
+    paths:
+      - '.github/workflows/android.yml'
+      - 'slot/**'
+      - 'latch/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: slot
+            dir: slot
+          - app: latch
+            dir: latch
+    name: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'   # Capacitor 7 Java 21 ister; 17 ile 'invalid source release: 21' hatasi verir
+
+      - name: Bagimliliklar
+        working-directory: ${{ matrix.dir }}
+        run: npm install --no-audit --no-fund
+
+      - name: Android projesini olustur
+        working-directory: ${{ matrix.dir }}
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Native ayarlari uygula
+        working-directory: ${{ matrix.dir }}
+        run: bash tools/android-prepare.sh
+
+      - name: Imza anahtarini yerlestir (secret varsa)
+        working-directory: ${{ matrix.dir }}
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > android/release.jks
+            printf 'storeFile=../release.jks\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' \
+              "$KEYSTORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD" > android/keystore.properties
+            echo "imzali derleme"
+          else
+            echo "imza anahtari yok - imzasiz derleme (Play'e yuklenemez, yalnizca dogrulama)"
+          fi
+
+      - name: AAB uret
+        working-directory: ${{ matrix.dir }}/android
+        run: ./gradlew bundleRelease --no-daemon --stacktrace
+
+      - name: Debug APK uret (cihazda denemek icin)
+        working-directory: ${{ matrix.dir }}/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.app }}-android
+          path: |
+            ${{ matrix.dir }}/android/app/build/outputs/bundle/release/*.aab
+            ${{ matrix.dir }}/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
+<meta name="theme-color" content="#070d14">
+<title>Latch</title>
+<style>
+:root{
+  --bg:#070d14; --ink:#eaf2f7; --dim:#7e93a6;
+  --amber:#ffb84d; --mint:#6ff3d6; --gold:#ffd166; --danger:#ff5470;
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",Roboto,system-ui,sans-serif;
+  -webkit-user-select:none;user-select:none;touch-action:none;overscroll-behavior:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.layer{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(24px + var(--safe-t)) 24px calc(24px + var(--safe-b));z-index:5}
+.layer.hide{display:none}
+#hud{pointer-events:none;justify-content:flex-start}
+#score{font-size:clamp(44px,14vw,120px);font-weight:800;letter-spacing:-.03em;
+  text-shadow:0 4px 30px rgba(255,184,77,.35);opacity:.96;line-height:1}
+#combo{font-size:15px;font-weight:800;color:var(--gold);letter-spacing:.14em;margin-top:6px;opacity:0;transition:opacity .2s}
+#combo.on{opacity:1}
+.panel{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:14px}
+#menu .panel{margin-bottom:14vh}
+.title{font-size:clamp(40px,13vw,64px);font-weight:900;letter-spacing:.24em;margin-left:.24em;
+  background:linear-gradient(180deg,#fff,#ffb84d);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:12px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;margin-top:-8px}
+.best{font-size:14px;color:var(--dim);letter-spacing:.06em}
+.big{font-size:clamp(60px,20vw,104px);font-weight:900;line-height:1}
+.btn{width:100%;padding:16px 20px;border:0;border-radius:18px;font-size:17px;font-weight:800;letter-spacing:.04em;
+  background:linear-gradient(180deg,#ffc76b,#f09427);color:#2a1700;cursor:pointer;
+  box-shadow:0 10px 28px rgba(240,148,39,.34);transition:transform .1s,filter .15s}
+.btn:active{transform:scale(.97);filter:brightness(1.08)}
+.btn.ghost{background:rgba(255,255,255,.07);box-shadow:none;color:var(--ink);font-weight:700}
+.btn.gold{background:linear-gradient(180deg,#ffe08a,#f0b62a);color:#2a1b00;box-shadow:0 10px 28px rgba(240,182,42,.32)}
+.row{display:flex;gap:10px;width:100%}
+.row .btn{flex:1}
+.seg{display:flex;gap:5px;width:100%;background:rgba(255,255,255,.05);padding:5px;border-radius:17px}
+.sg{flex:1;padding:11px 0;border:0;border-radius:12px;background:transparent;color:var(--dim);
+  font-size:12px;font-weight:800;letter-spacing:.12em;cursor:pointer;transition:background .15s,color .15s}
+.sg.on{background:rgba(255,255,255,.13);color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.icons{display:flex;gap:10px;margin-top:4px}
+.ico{width:46px;height:46px;border-radius:14px;border:0;background:rgba(255,255,255,.07);color:var(--ink);
+  font-size:19px;display:grid;place-items:center;cursor:pointer}
+.ico.off{opacity:.35}
+.ico.hide{display:none}
+.badge{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+#toast{position:fixed;left:50%;bottom:calc(28px + var(--safe-b));transform:translateX(-50%) translateY(20px);
+  background:rgba(9,16,24,.94);border:1px solid rgba(255,255,255,.1);padding:11px 18px;border-radius:14px;
+  font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:20;pointer-events:none;max-width:86vw;text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#tapHint{position:fixed;left:0;right:0;bottom:calc(12vh + var(--safe-b));text-align:center;font-size:13px;
+  letter-spacing:.24em;color:var(--dim);text-transform:uppercase;z-index:4;animation:pulse 1.8s infinite}
+#tapHint.hide{display:none}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:.85}}
+.sheet{position:fixed;inset:0;background:rgba(6,10,16,.96);z-index:30;display:flex;flex-direction:column;
+  padding:calc(20px + var(--safe-t)) 22px calc(20px + var(--safe-b));overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sheet.hide{display:none}
+.sheet h2{font-size:20px;margin-bottom:12px}
+.sheet p{font-size:13px;line-height:1.7;color:var(--dim);margin-bottom:10px}
+.sheet a{color:var(--amber)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="hud" class="layer hide">
+  <div id="score">0</div>
+  <div id="combo">PERFECT</div>
+</div>
+<div id="tapHint" class="hide">HOLD TO LATCH &middot; RELEASE TO FLY</div>
+
+<div id="menu" class="layer">
+  <div class="panel">
+    <div class="title">LATCH</div>
+    <div class="sub">hold &middot; swing &middot; let go</div>
+    <div class="best" id="mBest">BEST 0</div>
+    <div class="seg" id="seg">
+      <button class="sg" data-d="easy">EASY</button>
+      <button class="sg on" data-d="normal">NORMAL</button>
+      <button class="sg" data-d="hard">HARD</button>
+    </div>
+    <button class="btn" id="bPlay">PLAY</button>
+    <div class="icons">
+      <button class="ico" id="bSound" title="Sound">&#9834;</button>
+      <button class="ico" id="bVibe" title="Vibration">&#9776;</button>
+      <button class="ico" id="bNoAds" title="Remove ads">&#9733;</button>
+      <button class="ico" id="bInfo" title="About">i</button>
+    </div>
+  </div>
+</div>
+
+<div id="dead" class="layer hide">
+  <div class="panel">
+    <div class="badge" id="dBadge" style="opacity:0">new best</div>
+    <div class="big" id="dScore">0</div>
+    <div class="best" id="dBest">BEST 0</div>
+    <button class="btn gold hide" id="bRevive">&#9654; WATCH AD &middot; CONTINUE</button>
+    <button class="btn" id="bRetry">RETRY</button>
+    <div class="row">
+      <button class="btn ghost" id="bShare">SHARE</button>
+      <button class="btn ghost" id="bHome">HOME</button>
+    </div>
+  </div>
+</div>
+
+<div id="info" class="sheet hide">
+  <h2>Latch</h2>
+  <p id="iVer"></p>
+  <p>Hold anywhere and a rope shoots to the nearest hook above you. You swing. Let go and you fly off along the arc you were travelling &mdash; so the moment you release decides everything. Let go around 45&deg; and the throw counts PERFECT: double points.</p>
+  <p>Release too early and you fall short. Release too late and you go straight up, then straight down. Miss the next hook and the drop below is the end of the run.</p>
+  <p>No account, no sign-up. Best scores are kept per mode on this device only.</p>
+  <p><a href="#" id="lPrivacy">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="#" id="lTerms">Terms of Use</a> &nbsp;&middot;&nbsp; <a href="#" id="lSupport">Support</a></p>
+  <p><a href="#" id="lConsent">Ad privacy settings</a> &nbsp;&middot;&nbsp; <a href="#" id="lRestore">Restore purchase</a></p>
+  <button class="btn ghost" id="bInfoClose" style="margin-top:auto">CLOSE</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* =====================================================================
+   LATCH v1.0.0  —  tek dosya oyun (vanilla JS + Canvas, bagimlilik yok)
+   Basili tut = ipi at ve salin, birak = teget boyunca firla.
+   Test modlari:  ?selftest=1   ?shot=1   (bkz. CLAUDE.md)
+   ===================================================================== */
+'use strict';
+
+var CFG = {
+  name: 'Latch',
+  version: '1.0.0',
+  bundleId: 'com.kusgrup.latch',
+  supportEmail: 't.burakkus@gmail.com',
+  urls: {
+    privacy: 'https://buraakkuss.github.io/kus-games/latch/privacy.html',
+    terms:   'https://buraakkuss.github.io/kus-games/latch/terms.html',
+    support: 'https://buraakkuss.github.io/kus-games/latch/support.html'
+  },
+  /* ---- REKLAM KIMLIKLERI --------------------------------------------
+     useTest=true iken Google'in resmi TEST birimleri kullanilir.
+     AdMob hesabin acilinca real.* alanlarini doldur, useTest=false yap.
+     UYARI: useTest=false yapmadan yayina cikarsan gelir olmaz;
+     gercek kimliklerle test reklamina tiklarsan hesabin kapanir.       */
+  ads: {
+    useTest: true,
+    test: {
+      android: { app:'ca-app-pub-3940256099942544~3347511713',
+                 interstitial:'ca-app-pub-3940256099942544/1033173712',
+                 rewarded:'ca-app-pub-3940256099942544/5224354917' },
+      ios:     { app:'ca-app-pub-3940256099942544~1458002511',
+                 interstitial:'ca-app-pub-3940256099942544/4411468910',
+                 rewarded:'ca-app-pub-3940256099942544/1712485313' }
+    },
+    real: {
+      android: { app:'', interstitial:'', rewarded:'' },
+      ios:     { app:'', interstitial:'', rewarded:'' }
+    },
+    interstitialEveryDeaths: 3,
+    minSecondsBetween: 75,
+    minPlaysBeforeFirstAd: 3
+  },
+  iap: { removeAds: 'remove_ads' }
+};
+
+/* ---------- kucuk yardimcilar ---------- */
+var TAU = Math.PI * 2;
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function $(id){ return document.getElementById(id); }
+function show(el,on){ el.classList.toggle('hide', !on); }
+
+/* Tohumlanabilir rastgele: ?seed=N ile magaza gorselleri ve self-test
+   tekrarlanabilir olur. Tohum yoksa Math.random.                       */
+var _seed = 0;
+function seedFrom(n){ _seed = n >>> 0; }
+function rnd(){
+  if (!_seed) return Math.random();
+  _seed = (_seed + 0x6D2B79F5) >>> 0;
+  var t = _seed;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+function rand(a,b){ return a + rnd()*(b-a); }
+function randi(n){ return Math.min(n-1, Math.floor(rnd()*n)); }
+
+var Store = {
+  get: function(k,d){ try{ var v=localStorage.getItem('latch.'+k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+  set: function(k,v){ try{ localStorage.setItem('latch.'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+/* =====================  DUNYA OLCUSU  =====================
+   Tek dunya olcegi: SC = H/800. Boylece gorunur dikey alan her cihazda
+   TAM 800 sanal birimdir; tum oyun alani (cengeller 70..300, salinim
+   200..600, olum hatti 720) ekrana sigar -> DIKEY KAMERA YOK.
+   Yatay gorunur genislik 800*W/H kadardir (tipik 360-400).
+   Tum fizik sabitleri sanal birimdedir.                                */
+var BAND_TOP = 70, BAND_BOT = 300;   /* cengellerin yerlesebilecegi serit */
+var DEATH_Y  = 720;                  /* bu hattin altina dusersen biter   */
+var GRAV = 1400, VMAX = 780;
+
+/* =====================  ZORLUK  =====================
+   Denge ayari YALNIZ bu tablodan yapilir.
+   grav yercekimi, gap cengel araligi, reach ip menzili,
+   perfect PERFECT aci penceresi (radyan, 45 derecenin iki yani),
+   vmax hiz tavani, breakFrom kopan cengel esigi,
+   spikeFrom diken esigi,
+   moveFrom hareketli cengel esigi - v1.0'DA KAPALI (9999): hareket eden
+     cengel katı ip kisitiyla oyuncuyu da surukluyor, bu etkiyi uretim
+     dogrulamasi (simChain) modelleyemiyor ve adaletsiz olumler uretiyor.
+     Modellenmeden ACMA; self-test bunu deaths>0 olarak yakalar.
+   help yardim gosterimi hangi skora kadar, size oyuncu buyuklugu       */
+var DIFF = {
+  easy:   { grav:0.86, gap:0.80, reach:1.30, perfect:0.34, vmax:0.88, breakFrom:9999, spikeFrom:26, moveFrom:9999, help:9999, size:1.10 },
+  normal: { grav:0.95, gap:0.95, reach:1.10, perfect:0.24, vmax:0.95, breakFrom:30,   spikeFrom:16, moveFrom:9999, help:6,    size:1.04 },
+  hard:   { grav:1.00, gap:1.00, reach:1.00, perfect:0.17, vmax:1.00, breakFrom:18,   spikeFrom:10, moveFrom:9999, help:0,    size:1.00 }
+};
+function DF(){ return DIFF[S.diff] || DIFF.normal; }
+
+function loadBest(){
+  var b = Store.get('best', null);
+  if (typeof b === 'number') b = { easy:0, normal:b, hard:b };
+  if (!b || typeof b !== 'object') b = { easy:0, normal:0, hard:0 };
+  return { easy:b.easy|0, normal:b.normal|0, hard:b.hard|0 };
+}
+
+var S = {
+  best:   loadBest(),
+  diff:   Store.get('diff', 'normal'),
+  sound:  Store.get('sound', true),
+  vibe:   Store.get('vibe', true),
+  noAds:  Store.get('noAds', false),
+  plays:  Store.get('plays', 0),
+  deaths: Store.get('deaths', 0)
+};
+if (!DIFF[S.diff]) S.diff = 'normal';
+
+/* ---------- ses (dosya yok, WebAudio ile uretiliyor) ---------- */
+var Snd = {
+  ctx: null,
+  boot: function(){
+    if (this.ctx){ if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    try { this.ctx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){ this.ctx=null; }
+  },
+  tone: function(f1,f2,dur,type,vol,delay){
+    if (!S.sound || !this.ctx) return;
+    var t = this.ctx.currentTime + (delay||0);
+    var o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = type||'sine';
+    o.frequency.setValueAtTime(f1,t);
+    if (f2 && f2!==f1) o.frequency.exponentialRampToValueAtTime(Math.max(20,f2), t+dur);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol||0.16, t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t+dur+0.02);
+  },
+  noise: function(dur,vol){
+    if (!S.sound || !this.ctx) return;
+    var sr=this.ctx.sampleRate, n=Math.floor(sr*dur);
+    var b=this.ctx.createBuffer(1,n,sr), d=b.getChannelData(0);
+    for (var i=0;i<n;i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/n, 2.2);
+    var src=this.ctx.createBufferSource(), g=this.ctx.createGain();
+    src.buffer=b; g.gain.value=vol||0.22;
+    src.connect(g); g.connect(this.ctx.destination); src.start();
+  },
+  latch:   function(){ this.tone(240,420,0.06,'square',0.07); },
+  release: function(){ this.tone(520,300,0.07,'sawtooth',0.06); },
+  pass:    function(n){ this.tone(380+Math.min(380,n*10), 560+Math.min(520,n*14), 0.09,'triangle',0.12); },
+  perfect: function(){ this.tone(720,1080,0.09,'square',0.08); this.tone(1080,1500,0.11,'square',0.055,0.07); },
+  snap:    function(){ this.tone(180,90,0.12,'square',0.10); },
+  die:     function(){ this.noise(0.34,0.24); this.tone(190,44,0.46,'sawtooth',0.16); },
+  ui:      function(){ this.tone(480,700,0.06,'sine',0.10); }
+};
+
+function buzz(ms){
+  if (!S.vibe) return;
+  try {
+    var H = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.Haptics;
+    if (H){ H.impact({ style: ms > 30 ? 'MEDIUM' : 'LIGHT' }); return; }
+  } catch(e){}
+  if (navigator.vibrate){ try{ navigator.vibrate(ms); }catch(e){} }
+}
+
+/* =====================  MOTOR  ===================== */
+var cv = $('c'), cx = cv.getContext('2d');
+var W=0, H=0, DPR=1, SC=1, VW=400, PR=13, camX=0;
+var skyGrad=null, hills=[];
+
+function metrics(){
+  SC = H/800;                 /* tek dunya olcegi */
+  VW = W/SC;                  /* gorunur genislik, sanal birim */
+  PR = 13 * DF().size;        /* oyuncu yaricapi, sanal birim */
+}
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR);
+  cv.style.width = W+'px'; cv.style.height = H+'px';
+  cx.setTransform(DPR,0,0,DPR,0,0);
+  metrics();
+  skyGrad = cx.createLinearGradient(0,0,0,H);
+  skyGrad.addColorStop(0,'#0e1f2b'); skyGrad.addColorStop(0.45,'#0a1520'); skyGrad.addColorStop(1,'#060a11');
+  hills = [];
+  for (var i=0;i<3;i++){
+    var pts=[], n=14;
+    for (var k=0;k<=n;k++) pts.push(rand(0.25,1)*1);
+    hills.push({ p:0.12+i*0.16, y:520+i*70, h:130+i*40, pts:pts, a:0.16-i*0.04 });
+  }
+}
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', function(){ setTimeout(resize,150); });
+
+var G = {
+  mode:'menu', silent:false, demoCap:14,
+  score:0, nHooks:0, nPerfect:0, combo:0, revived:false,
+  anchors:[], spikes:[], parts:[], pops:[], trail:[],
+  P:{ x:0, y:250, vx:0, vy:0 },
+  hooked:null, rope:0, hookT:0, aiPrev:null,
+  shake:0, flash:0, flashCol:'255,84,112', pop:0, t:0
+};
+
+function grav(){ return GRAV * DF().grav; }
+function vmax(){ return VMAX * DF().vmax; }
+function reachNow(){ return (190 - Math.min(40, G.score*1.1)) * DF().reach; }
+/* DIKKAT: cengel, secilen YAY NOKTASININ 0.94*reach ilerisine konur.
+   Bu yuzden hedef, cengel-cengel mesafesi degil YAY UZERINDE alinacak
+   yol (want) olarak tanimlanir; gercek cengel araligi want + 0.94*reach
+   olarak kendiliginden olusur. Ikisini karistirmak, ulasilamayan
+   mesafeler istenmesine ve uretimin surekli fallback'e dusmesine yol acar. */
+function wantNow(){
+  var lim = VW*0.95 - reachNow()*0.94;
+  return clamp((120 + Math.min(110, G.score*3)) * DF().gap, 55, Math.max(70, lim));
+}
+function gapNow(){ return wantNow() + reachNow()*0.94; }
+
+/* Tek fizik adimi. Canli oyun, self-test ve uretim dogrulamasi AYNI
+   fonksiyonu kullanir - tutarlilik bu yuzden garanti.                  */
+function stepPhys(st, a, L, dt){
+  st.vy += grav()*dt;
+  st.x += st.vx*dt; st.y += st.vy*dt;
+  if (a){
+    var dx=st.x-a.x, dy=st.y-a.y, d=Math.hypot(dx,dy);
+    if (d > 0.0001){
+      var nx=dx/d, ny=dy/d;
+      st.x = a.x + nx*L; st.y = a.y + ny*L;       /* katı cubuk kisiti */
+      var vr = st.vx*nx + st.vy*ny;
+      st.vx -= nx*vr; st.vy -= ny*vr;             /* radyal hizi sil   */
+    }
+  }
+  var sp = Math.hypot(st.vx, st.vy), mx = vmax();
+  if (sp > mx){ st.vx = st.vx/sp*mx; st.vy = st.vy/sp*mx; }
+}
+
+/* Sarkacta hiz her zaman tegettir; bu yuzden birakma acisi = konum
+   acisi (asagi dikeyden olculur, ileri pozitif). PERFECT penceresini
+   ekranda YAY olarak cizebilmemizin sebebi bu.                        */
+function velAng(st){ return Math.atan2(-st.vy, st.vx); }
+function perfectWin(){ return DF().perfect; }
+/* Konum acisi: asagi dikeyden olculur, ileri pozitif. Tepe noktasinda
+   hiz sifirlandigi icin aci hesabi hizdan degil KONUMDAN yapilir.     */
+function phiOf(a, st){ return Math.atan2(st.x-a.x, st.y-a.y); }
+
+/* ---- KANCA CEKISI ----
+   Ip tutundugu anda, salinimin birakma penceresine (45 derece) ULASACAK
+   enerjiyi garanti edecek kadar teget hiz eklenir. Bu olmazsa oyuncu
+   cengelin altina yakin tutundugunda salinim 45 dereceye hic ulasamaz ve
+   sonsuza kadar asili kalir; ayrica bolum uretiminin her tutunma acisini
+   ongormesi gerekirdi. Kanca "cekiyor" hissi de buradan geliyor.        */
+function latchBoost(a, st, L){
+  var phi = phiOf(a, st);
+  var tgt = Math.PI/4 + 0.22;
+  var d2 = 2*grav()*L*(Math.cos(tgt) - Math.cos(phi));
+  var need = Math.sqrt(Math.max(0, 90*90 - d2));
+  var tx = Math.cos(phi), ty = -Math.sin(phi);
+  var vt = st.vx*tx + st.vy*ty;
+  if (vt < need){ var add = Math.min(need - vt, vmax()*0.9); st.vx += tx*add; st.vy += ty*add; }
+}
+function isPerfect(){
+  var a = G.hooked; if (!a) return false;
+  return G.P.vx > 0 && Math.abs(phiOf(a, G.P) - Math.PI/4) <= perfectWin();
+}
+/* Yapay oyuncunun birakma karari (self-test + menu gosterisi + uretim).
+   prev = onceki karedeki phi. Ileri salinim tepesi gecildiyse de birakir,
+   yoksa yetersiz enerjili bir salinimda sonsuza kadar asili kalirdi.   */
+function aiRelease(a, st, prev){
+  var phi = phiOf(a, st);
+  if (st.vx > 0 && Math.abs(phi - Math.PI/4) <= perfectWin()) return true;
+  if (prev !== null && phi < prev - 1e-7 && phi > 0.12) return true;
+  return false;
+}
+
+/* ---------- ADALET GARANTISI ----------
+   Bir sonraki cengel rastgele konmaz: kanonik bir salinim + atis simule
+   edilir, cengel O YAYIN uzerine (reach kadar ustune) konur ve yayin
+   gercekten yaklastigi dogrulanir. Gecilemeyen bolum uretilemez.       */
+/* Canli oyunun dongusunu birebir taklit eder: kare basina 2 x 1/120
+   alt adim, karar kare sonunda. Aksi halde tahmin ile gercek yol
+   sayisal olarak ayrisir ve uretim garantisi coker.                   */
+function simArc(a, L, st0){
+  var st = { x:st0.x, y:st0.y, vx:st0.vx, vy:st0.vy }, prev = null, guard = 0, h = 1/120;
+  while (guard++ < 360){
+    if (a.brk && guard > 72) break;             /* kopan cengel: 1.2 sn */
+    if (aiRelease(a, st, prev)) break;
+    prev = phiOf(a, st);
+    stepPhys(st, a, L, h); stepPhys(st, a, L, h);
+  }
+  var pts = [], f = { x:st.x, y:st.y, vx:st.vx, vy:st.vy };
+  for (var i=0;i<300;i++){
+    pts.push({ x:f.x, y:f.y });
+    stepPhys(f, null, 0, h); stepPhys(f, null, 0, h);
+    if (f.y > DEATH_Y) break;
+  }
+  return pts;
+}
+
+/* ---- ADALET GARANTISI: UCTAN UCA DOGRULAMA ----
+   Aday cengel icin oyunun KARAR DONGUSU birebir simule edilir
+   (once karar, sonra kare basina 2 x 1/120 fizik adimi - canli oyunla
+   ayni). Oyuncu adayi gercekten yakaliyor ve yakaladigi aci 45 dereceye
+   ulasacak enerjiyi veriyorsa aday kabul edilir. Boylece gecilemeyen
+   bolum URETILEMEZ; self-test'in deaths=0 sarti bunun kanitidir.      */
+function simChain(a, L, st0, B, reach){
+  var st = { x:st0.x, y:st0.y, vx:st0.vx, vy:st0.vy };
+  var hooked = a, rope = L, prev = null, phase = 0, h = 1/120, ht = 0;
+  for (var f=0; f<420; f++){
+    if (hooked){
+      if (aiRelease(hooked, st, prev)){
+        if (phase === 1)return true;   /* B'den de saglikli birakildi */
+        hooked = null; prev = null; ht = 0;
+      } else {
+        prev = phiOf(hooked, st);
+        ht += 1/60;
+        if (hooked.brk && ht > 1.2){               /* kopan cengel: zorla birak */
+          if (phase === 1)return true;
+          hooked = null; prev = null; ht = 0;
+        }
+      }
+    } else {
+      var d = Math.hypot(st.x-B.x, st.y-B.y);
+      /* Tetik yaricapini %4 kisik tut: menzil skorla daraldiginda bile
+         aday yakalanabilir kalsin. Tetik gec olunca aci DAHA dik olur,
+         yani bu pay aci kontrolunu de guvenli tarafa cekiyor.          */
+      if (d <= reach*0.96 && B.y < st.y - 6){
+        if (Math.abs(Math.atan2(st.x-B.x, st.y-B.y)) < 0.25)return false;
+        hooked = B; rope = d; prev = null; phase = 1;
+        latchBoost(B, st, rope);
+      }
+    }
+    if (st.y > DEATH_Y) return false;
+    stepPhys(st, hooked, rope, h); stepPhys(st, hooked, rope, h);
+  }
+  return false;
+}
+
+/* Cengel, yayin "ustune" degil, ISTENEN TUTUNMA ACISINDAN GERIYE
+   COZULEREK konur. Oyuncu menzile dist=reach aninda girer; o anda
+   cengelin 0.94*reach solunda ve 0.34*reach altinda olmasi istenirse
+   tutunma acisi ~70 derece olur ve salinim 45 dereceyi rahat gecer.
+   Cengeli yayin dik ustune koymak, oyuncunun menzile neredeyse dikey
+   (sig) bir aciyla girmesine ve salinimin enerjisiz kalmasina yol acar. */
+/* Her offset BIRIM uzunlukta olmali (sin^2+cos^2=1): boylece secilen yay
+   noktasinda mesafe tam olarak reach olur ve tetik o noktada/sonrasinda
+   yani istenen acida calisir. Birimden kisa bir offset, cengeli menzilin
+   icine koyar; tetik yayin cok daha erken ve SIG bir noktasinda calisir
+   ve salinim 45 dereceye ulasacak enerjiyi bulamaz.
+   Degerler: phi = -75, -68, -60, -55 derece.                            */
+var OFFS = [[0.966,0.259],[0.927,0.375],[0.866,0.500],[0.819,0.574]];
+function mkCand(pt, o, reach){
+  return { x: pt.x + reach*o[0], y: clamp(pt.y - reach*o[1], BAND_TOP, BAND_BOT) };
+}
+function placeOnArc(a, L, st0){
+  var pts = simArc(a, L, st0), reach = reachNow(), i, k, v, B;
+  /* 1) istenen bosluga en yakin aday */
+  for (k=0;k<8;k++){
+    var want = wantNow() * (1 - k*0.11), idx = -1;
+    for (i=0;i<pts.length;i++) if (pts[i].x - a.x >= want){ idx = i; break; }
+    if (idx < 0) continue;
+    for (v=0;v<OFFS.length;v++){
+      B = mkCand(pts[idx], OFFS[v], reach);
+      if (simChain(a, L, st0, B, reach)){ B.arc = pts; return B; }
+    }
+  }
+  /* 2) yay boyunca tarama - adil bir yerlesim varsa mutlaka bulunur */
+  for (i=6;i<pts.length;i+=5){
+    for (v=0;v<OFFS.length;v++){
+      B = mkCand(pts[i], OFFS[v], reach);
+      if (simChain(a, L, st0, B, reach)){ B.arc = pts; return B; }
+    }
+  }
+  G.dbgFall = (G.dbgFall||0) + 1;
+  var p0 = pts.length ? pts[Math.min(pts.length-1, 10)] : { x:a.x+80, y:a.y+40 };
+  B = mkCand(p0, OFFS[0], reach); B.arc = pts; return B;
+}
+
+/* Oyuncu henuz orada degilken kullanilan kanonik tahmin */
+function canonState(a, L){
+  var phi = -1.02, sp0 = vmax()*0.42;
+  return { x:a.x + Math.sin(phi)*L, y:a.y + Math.cos(phi)*L,
+           vx:Math.cos(phi)*sp0, vy:-Math.sin(phi)*sp0 };
+}
+
+/* ---- GERCEK DURUMDAN YENIDEN PLANLAMA ----
+   Kanonik tahmin oyuncunun gercek salinim enerjisini bilemez. Oyuncu bir
+   cengele tutundugu anda sonraki cengel ONUN gercek durumundan yeniden
+   konur; o cengel o sirada daima ekran disindadir, tasinma gorulmez.   */
+function makeVerifiedAnchor(a, L, st0){
+  var B = placeOnArc(a, L, st0);
+  var A2 = mkAnchor(B.x, B.y);
+  A2.arc = B.arc;
+  /* Hareketli cengel yakalandiginda hangi fazda olacagi bilinemez:
+     HER IKI uc konumda da dogrulanmali. Gecmiyorsa bayraklar dusurulur -
+     adalet, mekanik susunden once gelir.                                */
+  var okAll = true;
+  if (A2.move){
+    var lo = { x:A2.x, y:A2.y - A2.move, brk:A2.brk, move:A2.move };
+    var hi = { x:A2.x, y:A2.y + A2.move, brk:A2.brk, move:A2.move };
+    okAll = simChain(a, L, st0, lo, reachNow()) && simChain(a, L, st0, hi, reachNow());
+  } else {
+    okAll = simChain(a, L, st0, A2, reachNow());
+  }
+  if (!okAll){
+    A2.brk = false; A2.move = 0;
+    if (!simChain(a, L, st0, A2, reachNow())) A2.plain = true;
+  }
+  return A2;
+}
+function replanNext(){
+  var a = G.hooked; if (!a) return;
+  var idx = G.anchors.indexOf(a); if (idx < 0) return;
+  var st0 = { x:G.P.x, y:G.P.y, vx:G.P.vx, vy:G.P.vy };
+  /* Sonraki cengel zaten ekrandaysa once oldugu yerde dogrula; geciyorsa
+     dokunma (gorsel sicrama olmasin), gecmiyorsa adalet ugruna tasi.    */
+  if (G.anchors.length > idx+1){
+    var nx = G.anchors[idx+1];
+    if (simChain(a, G.rope, st0, nx, reachNow())) return;
+  }
+  var A2 = makeVerifiedAnchor(a, G.rope, st0);
+  G.anchors.length = idx + 1;
+  for (var i=G.spikes.length-1;i>=0;i--) if (G.spikes[i].x > a.x) G.spikes.splice(i,1);
+  G.anchors.push(A2);
+  if (G.score >= DF().spikeFrom && A2.arc && A2.arc.length > 8 && rnd() < 0.5){
+    var apex = A2.arc[0];
+    for (var j=0;j<A2.arc.length;j++) if (A2.arc[j].y < apex.y) apex = A2.arc[j];
+    if (apex.y + 150 < DEATH_Y - 40) G.spikes.push({ x:apex.x, y:apex.y + 150, r:20 });
+  }
+}
+function mkAnchor(x,y){
+  var D = DF();
+  var A = { x:x, y:y, base:y, used:false, cool:0, brk:false, brkT:0, move:0, phase:rand(0,TAU) };
+  if (G.score >= D.breakFrom && rnd() < 0.32) A.brk = true;
+  if (G.score >= D.moveFrom  && rnd() < 0.30) A.move = rand(16,30);
+  return A;
+}
+function ensureAnchors(){
+  var guard = 0;
+  while (guard++ < 12){
+    var last = G.anchors[G.anchors.length-1];
+    if (!last){ G.anchors.push(mkAnchor(0,150)); continue; }
+    if (last.x < camX + VW + gapNow()*0.6){
+      var L0 = reachNow()*0.92;
+      var A = makeVerifiedAnchor(last, L0, canonState(last, L0));
+      var B = { x:A.x, y:A.y, arc:A.arc };
+      G.anchors.push(A);
+      /* diken: kanonik yayin tepesinin ALTINA - dogru oynayan degmez,
+         alcak/yavas yay yapan deger.                                   */
+      if (G.score >= DF().spikeFrom && B.arc && B.arc.length > 8 && rnd() < 0.5){
+        var apex = B.arc[0], i;
+        for (i=0;i<B.arc.length;i++) if (B.arc[i].y < apex.y) apex = B.arc[i];
+        if (apex.y + 150 < DEATH_Y - 40) G.spikes.push({ x:apex.x, y:apex.y + 150, r:20 });
+      }
+      continue;
+    }
+    break;
+  }
+  while (G.anchors.length > 3 && G.anchors[0] !== G.hooked && G.anchors[0].x < camX - VW*0.35) G.anchors.shift();
+  while (G.spikes.length && G.spikes[0].x < camX - VW*0.35) G.spikes.shift();
+}
+
+/* ---------- tutunma / birakma ---------- */
+/* Kullanilmamis cengel her zaman oncelikli; kullanilmis olan yalnizca
+   baska secenek yoksa (kurtarma hamlesi) secilir. Biraktigin cengele
+   aninda geri tutunmayi engellemek icin kisa bir soguma var - yoksa
+   ayni cengelde sonsuza kadar salinmak mumkun olurdu.                  */
+function bestAnchor(){
+  var reach = reachNow(), fresh = null, fd = 1e9, used = null, ud = 1e9;
+  for (var i=0;i<G.anchors.length;i++){
+    var a = G.anchors[i];
+    if (a.cool > 0) continue;
+    if (a.y > G.P.y - 6) continue;                 /* cengel oyuncunun USTUNDE olmali */
+    if (a.x < G.P.x - reach*0.45) continue;        /* cok geride kalmis               */
+    var d = Math.hypot(a.x-G.P.x, a.y-G.P.y);
+    if (d > reach) continue;
+    if (!a.used){ if (d < fd){ fd = d; fresh = a; } }
+    else if (d < ud){ ud = d; used = a; }
+  }
+  return fresh || used;
+}
+function doLatch(){
+  if (G.hooked || (G.mode !== 'play' && G.mode !== 'menu')) return;
+  var a = bestAnchor();
+  if (!a) return;
+  G.hooked = a; G.rope = Math.hypot(a.x-G.P.x, a.y-G.P.y);
+  latchBoost(a, G.P, G.rope);
+  G.hookT = 0; G.aiPrev = null;
+  replanNext();
+  Snd.latch(); buzz(8);
+}
+function doRelease(forced){
+  if (!G.hooked) return;
+  var a = G.hooked, perfect = isPerfect() && !forced;
+  G.hooked = null; G.aiPrev = null;
+  a.cool = 0.5;                       /* ayni cengele aninda geri tutunma */
+  Snd.release();
+  if (!a.used){
+    a.used = true;
+    G.nHooks++;
+    if (perfect){
+      G.combo++; G.nPerfect++; G.score += 2;
+      Snd.perfect(); G.flash = Math.max(G.flash, 0.4); G.flashCol = '255,209,102';
+      addPop('PERFECT +2', '255,209,102'); sparks(14,'255,209,102');
+      UI.perfect();
+    } else {
+      G.combo = 0; G.score += 1;
+      Snd.pass(G.score); addPop('+1','111,243,214'); sparks(6,'111,243,214');
+    }
+    G.pop = 1; buzz(perfect?22:10);
+    UI.score(G.score);
+  }
+}
+
+/* ---------- efektler ---------- */
+function addPop(txt,col){ G.pops.push({ x:G.P.x, y:G.P.y-PR-38, txt:txt, col:col, t:1 }); }
+function sparks(n,col){
+  for (var i=0;i<n;i++){
+    var a = rand(0,TAU), sp = rand(40,220);
+    G.parts.push({ x:G.P.x, y:G.P.y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp, r:rand(1.5,3.4), life:1, col:col });
+  }
+}
+function newGame(){
+  G.mode='play'; G.score=0; G.nHooks=0; G.nPerfect=0; G.combo=0; G.revived=false;
+  G.anchors=[]; G.spikes=[]; G.parts=[]; G.pops=[]; G.trail=[];
+  G.hooked=null; G.rope=0; G.aiPrev=null; G.shake=0; G.flash=0; G.pop=0;
+  metrics();
+  camX = -VW*0.30;
+  ensureAnchors();
+  /* oyun ilk cengele tutunmus halde baslar: oyuncunun tek isi birakmak */
+  var a = G.anchors[0], L = reachNow()*0.85, phi = -0.95;
+  G.P.x = a.x + Math.sin(phi)*L; G.P.y = a.y + Math.cos(phi)*L;
+  var sp0 = vmax()*0.42;
+  G.P.vx = Math.cos(phi)*sp0; G.P.vy = -Math.sin(phi)*sp0;
+  G.hooked = a; G.rope = L;
+  camX = G.P.x - VW*0.30;
+  ensureAnchors();
+  if (!G.silent){ S.plays++; Store.set('plays', S.plays); }
+  UI.toPlay();
+}
+function startDemo(){
+  G.mode='menu'; G.anchors=[]; G.spikes=[]; G.parts=[]; G.pops=[]; G.trail=[];
+  G.hooked=null; G.aiPrev=null; G.shake=0; G.flash=0; G.pop=0; G.combo=0;
+  metrics();
+  G.score = 4 + randi(6);
+  G.demoCap = G.score + 14;
+  camX = -VW*0.30;
+  ensureAnchors();
+  var a = G.anchors[0], L = reachNow()*0.85, phi = -0.95;
+  G.P.x = a.x + Math.sin(phi)*L; G.P.y = a.y + Math.cos(phi)*L;
+  var sp0 = vmax()*0.42;
+  G.P.vx = Math.cos(phi)*sp0; G.P.vy = -Math.sin(phi)*sp0;
+  G.hooked = a; G.rope = L;
+  camX = G.P.x - VW*0.30;
+  ensureAnchors();
+}
+function die(){
+  if (G.mode === 'menu'){ startDemo(); return; }
+  G.mode = 'dead';
+  G.hooked = null;
+  sparks(26,'255,84,112');
+  G.shake = 14; G.flash = 0.85; G.flashCol = '255,84,112';
+  Snd.die(); buzz(60);
+  if (!G.silent){
+    S.deaths++; Store.set('deaths', S.deaths);
+    if (G.score > S.best[S.diff]){ S.best[S.diff] = G.score; Store.set('best', S.best); }
+  } else if (G.score > S.best[S.diff]){ S.best[S.diff] = G.score; }
+  UI.toDead();
+}
+
+/* ---------- yapay oyuncu ---------- */
+function autoPlay(){
+  if (G.hooked){
+    if (aiRelease(G.hooked, G.P, G.aiPrev)) doRelease(false);
+    else G.aiPrev = phiOf(G.hooked, G.P);
+  } else {
+    if (bestAnchor()) doLatch();
+  }
+}
+
+/* =====================  GUNCELLEME  ===================== */
+function update(dt){
+  G.t += dt;
+  G.pop   = Math.max(0, G.pop   - dt*3.6);
+  G.flash = Math.max(0, G.flash - dt*3.0);
+  G.shake = Math.max(0, G.shake - dt*36);
+
+  var live = (G.mode === 'play' || G.mode === 'menu'), i;
+
+  /* hareketli cengeller */
+  for (i=0;i<G.anchors.length;i++){
+    var a = G.anchors[i];
+    if (a.cool > 0) a.cool -= dt;
+    if (a.move) a.y = a.base + Math.sin(G.t*1.1 + a.phase)*a.move;
+  }
+
+  if (live){
+    if (G.mode === 'menu') autoPlay();
+    /* kopan cengel */
+    if (G.hooked && G.hooked.brk){
+      G.hookT += dt;
+      if (G.hookT > 1.2){ Snd.snap(); doRelease(true); }
+    }
+    /* sabit 1/120 alt adim: simArc ile birebir ayni integrasyon */
+    var steps = Math.max(1, Math.round(dt*120)), sdt = dt/steps;
+    for (i=0;i<steps;i++) stepPhys(G.P, G.hooked, G.rope, sdt);
+
+    camX += ((G.P.x - VW*0.30) - camX) * Math.min(1, dt*9);
+    if (camX < G.P.x - VW*0.62) camX = G.P.x - VW*0.62;
+
+    G.trail.push({ x:G.P.x, y:G.P.y });
+    if (G.trail.length > 16) G.trail.shift();
+
+    ensureAnchors();
+
+    /* olum: dusus hatti veya diken */
+    if (G.P.y > DEATH_Y) die();
+    else {
+      for (i=0;i<G.spikes.length;i++){
+        var s = G.spikes[i];
+        if (Math.hypot(s.x-G.P.x, s.y-G.P.y) < s.r + PR*0.8){ die(); break; }
+      }
+    }
+    if (G.mode === 'menu' && G.score > G.demoCap) startDemo();
+  } else {
+    for (i=0;i<G.trail.length;i++) G.trail[i];
+  }
+
+  for (i=G.parts.length-1;i>=0;i--){
+    var p = G.parts[i];
+    p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 620*dt; p.life -= dt*1.6;
+    if (p.life <= 0) G.parts.splice(i,1);
+  }
+  for (i=G.pops.length-1;i>=0;i--){ G.pops[i].t -= dt*1.5; if (G.pops[i].t<=0) G.pops.splice(i,1); }
+}
+
+/* =====================  CIZIM  ===================== */
+var forceHelp = false;
+function sx(x){ return (x - camX) * SC; }
+function sy(y){ return y * SC; }
+function helped(){ return G.score < DF().help || forceHelp; }
+
+function drawHills(){
+  for (var li=0; li<hills.length; li++){
+    var h = hills[li];
+    cx.beginPath(); cx.moveTo(0, H);
+    for (var px=0; px<=W+16; px+=16){
+      var wx = camX*h.p + px/SC;
+      var y = h.y + Math.sin(wx*0.0032*(1+li*0.6))*h.h*0.28 + Math.sin(wx*0.0011 + li)*h.h*0.42;
+      cx.lineTo(px, sy(y));
+    }
+    cx.lineTo(W, H); cx.closePath();
+    cx.fillStyle = 'rgba(28,58,74,'+h.a.toFixed(3)+')';
+    cx.fill();
+  }
+}
+function drawDeath(){
+  var y0 = sy(DEATH_Y);
+  var g = cx.createLinearGradient(0, y0, 0, H);
+  g.addColorStop(0,'rgba(255,84,112,.30)'); g.addColorStop(1,'rgba(255,84,112,.06)');
+  cx.fillStyle = g; cx.fillRect(0, y0, W, H-y0);
+  cx.fillStyle = 'rgba(255,84,112,.75)'; cx.fillRect(0, y0, W, 2*SC);
+  cx.save();
+  cx.globalAlpha = 0.5;
+  cx.fillStyle = 'rgba(255,84,112,.9)';
+  for (var x = -((camX*SC) % (34*SC)); x < W; x += 34*SC){
+    cx.beginPath(); cx.moveTo(x, y0+1); cx.lineTo(x+17*SC, y0+1); cx.lineTo(x+8.5*SC, y0+14*SC); cx.closePath(); cx.fill();
+  }
+  cx.restore();
+}
+function drawAnchor(a){
+  var X = sx(a.x), Y = sy(a.y);
+  if (X < -40 || X > W+40) return;
+  var r = 9*SC, cand = (!G.hooked && bestAnchor() === a), on = (G.hooked === a);
+  cx.lineWidth = (on||cand ? 3 : 2)*SC;
+  if (a.brk){ cx.setLineDash([5*SC, 4*SC]); cx.strokeStyle = on ? 'rgba(255,184,77,.95)' : 'rgba(255,140,90,.7)'; }
+  else { cx.setLineDash([]); cx.strokeStyle = on ? 'rgba(255,184,77,.95)' : (cand ? 'rgba(111,243,214,.95)' : 'rgba(150,190,210,.55)'); }
+  if (on || cand){ cx.shadowBlur = 14*SC; cx.shadowColor = on ? 'rgba(255,184,77,.9)' : 'rgba(111,243,214,.8)'; }
+  cx.beginPath(); cx.arc(X, Y, r, 0, TAU); cx.stroke();
+  cx.shadowBlur = 0; cx.setLineDash([]);
+  cx.fillStyle = on ? 'rgba(255,184,77,.9)' : 'rgba(200,225,240,.55)';
+  cx.beginPath(); cx.arc(X, Y, 2.4*SC, 0, TAU); cx.fill();
+  if (a.move){
+    cx.strokeStyle = 'rgba(150,190,210,.35)'; cx.lineWidth = 1.5*SC;
+    cx.beginPath(); cx.moveTo(X-5*SC, Y-13*SC); cx.lineTo(X, Y-17*SC); cx.lineTo(X+5*SC, Y-13*SC); cx.stroke();
+    cx.beginPath(); cx.moveTo(X-5*SC, Y+13*SC); cx.lineTo(X, Y+17*SC); cx.lineTo(X+5*SC, Y+13*SC); cx.stroke();
+  }
+}
+/* Sarkacta hiz tegettir -> birakma acisi = konum acisi. PERFECT
+   penceresini bu yuzden salinim cemberi uzerinde YAY olarak cizebiliyoruz. */
+function drawSwingGuide(){
+  var a = G.hooked; if (!a) return;
+  var X = sx(a.x), Y = sy(a.y), R = G.rope*SC, w = perfectWin();
+  cx.lineWidth = 1.5*SC; cx.strokeStyle = 'rgba(160,200,220,.13)';
+  cx.beginPath(); cx.arc(X, Y, R, 0, TAU); cx.stroke();
+  var inWin = isPerfect();
+  cx.lineWidth = (inWin?6:4)*SC;
+  cx.strokeStyle = inWin ? 'rgba(255,209,102,.98)' : 'rgba(255,209,102,.45)';
+  if (inWin){ cx.shadowBlur = 18*SC; cx.shadowColor = 'rgba(255,209,102,.9)'; }
+  cx.beginPath(); cx.arc(X, Y, R, Math.PI/4 - w, Math.PI/4 + w); cx.stroke();
+  cx.shadowBlur = 0;
+}
+function drawPlayer(){
+  var X = sx(G.P.x), Y = sy(G.P.y), r = PR*SC*(1+0.18*G.pop);
+  if (G.trail.length > 1){
+    cx.lineWidth = 2.4*SC; cx.strokeStyle = 'rgba(255,184,77,.22)';
+    cx.beginPath();
+    for (var i=0;i<G.trail.length;i++){
+      var t = G.trail[i];
+      if (i) cx.lineTo(sx(t.x), sy(t.y)); else cx.moveTo(sx(t.x), sy(t.y));
+    }
+    cx.stroke();
+  }
+  if (G.hooked){
+    cx.lineWidth = 2.6*SC; cx.strokeStyle = 'rgba(255,184,77,.85)';
+    cx.shadowBlur = 10*SC; cx.shadowColor = 'rgba(255,184,77,.6)';
+    cx.beginPath(); cx.moveTo(sx(G.hooked.x), sy(G.hooked.y)); cx.lineTo(X, Y); cx.stroke();
+    cx.shadowBlur = 0;
+  }
+  var g = cx.createRadialGradient(X-r*0.3, Y-r*0.35, r*0.15, X, Y, r);
+  g.addColorStop(0,'#fff3d6'); g.addColorStop(0.5,'#ffb84d'); g.addColorStop(1,'#e0761d');
+  cx.shadowBlur = 22*SC; cx.shadowColor = 'rgba(255,184,77,.8)';
+  cx.beginPath(); cx.arc(X, Y, r, 0, TAU); cx.fillStyle = g; cx.fill();
+  cx.shadowBlur = 0;
+  cx.lineWidth = 2*SC; cx.strokeStyle = 'rgba(255,255,255,.7)'; cx.stroke();
+}
+function drawSpike(s){
+  var X = sx(s.x), Y = sy(s.y), r = s.r*SC;
+  if (X < -40 || X > W+40) return;
+  cx.fillStyle = 'rgba(255,84,112,.92)';
+  cx.beginPath();
+  for (var i=0;i<10;i++){
+    var ang = -Math.PI/2 + i*Math.PI/5, rr = (i%2 ? r*0.45 : r);
+    var px = X + Math.cos(ang)*rr, py = Y + Math.sin(ang)*rr;
+    i ? cx.lineTo(px,py) : cx.moveTo(px,py);
+  }
+  cx.closePath(); cx.fill();
+  cx.fillStyle = 'rgba(90,10,25,.9)';
+  cx.beginPath(); cx.arc(X, Y, r*0.30, 0, TAU); cx.fill();
+}
+
+function render(){
+  cx.setTransform(DPR,0,0,DPR,0,0);
+  cx.fillStyle = skyGrad; cx.fillRect(0,0,W,H);
+  cx.save();
+  if (G.shake) cx.translate(rand(-G.shake,G.shake)*SC, rand(-G.shake,G.shake)*SC);
+  drawHills();
+  drawDeath();
+  var i;
+  for (i=0;i<G.spikes.length;i++) drawSpike(G.spikes[i]);
+  for (i=0;i<G.anchors.length;i++) drawAnchor(G.anchors[i]);
+  if (G.hooked && (helped() || isPerfect())) drawSwingGuide();
+  if (!G.hooked && helped()){
+    var a = bestAnchor();
+    if (a){
+      cx.setLineDash([4*SC, 5*SC]); cx.lineWidth = 1.6*SC;
+      cx.strokeStyle = 'rgba(111,243,214,.45)';
+      cx.beginPath(); cx.moveTo(sx(G.P.x), sy(G.P.y)); cx.lineTo(sx(a.x), sy(a.y)); cx.stroke();
+      cx.setLineDash([]);
+    }
+  }
+  if (G.mode !== 'dead') drawPlayer();
+  for (i=0;i<G.parts.length;i++){
+    var p = G.parts[i];
+    cx.fillStyle = 'rgba('+p.col+','+clamp(p.life,0,1).toFixed(3)+')';
+    cx.fillRect(sx(p.x)-p.r*SC, sy(p.y)-p.r*SC, p.r*2*SC, p.r*2*SC);
+  }
+  for (i=0;i<G.pops.length;i++){
+    var o = G.pops[i], al = clamp(o.t,0,1);
+    cx.globalAlpha = al;
+    cx.fillStyle = 'rgba('+o.col+',1)';
+    cx.font = '800 '+Math.round(15*SC)+'px ui-rounded, system-ui, sans-serif';
+    cx.textAlign = 'center';
+    cx.fillText(o.txt, sx(o.x), sy(o.y) - (1-al)*34*SC);
+    cx.globalAlpha = 1;
+  }
+  cx.restore();
+
+  if (G.mode === 'menu'){
+    var mg = cx.createLinearGradient(0, 0, 0, H*0.60);
+    mg.addColorStop(0,'rgba(7,13,20,.88)');
+    mg.addColorStop(0.55,'rgba(7,13,20,.95)');
+    mg.addColorStop(1,'rgba(7,13,20,0)');
+    cx.fillStyle = mg; cx.fillRect(0,0,W,H*0.60);
+  }
+  if (G.flash > 0){
+    cx.fillStyle = 'rgba('+G.flashCol+','+(G.flash*0.30).toFixed(3)+')';
+    cx.fillRect(0,0,W,H);
+  }
+}
+
+var lastT = 0, raf = 0;
+function loop(ts){
+  raf = requestAnimationFrame(loop);
+  if (!lastT) lastT = ts;
+  var dt = Math.min((ts-lastT)/1000, 0.05);
+  lastT = ts;
+  update(dt);
+  render();
+}
+
+/* =====================  ARAYUZ  ===================== */
+var UI = {
+  toast: function(msg){
+    var el = $('toast'); el.textContent = msg; el.classList.add('on');
+    clearTimeout(this._tt); this._tt = setTimeout(function(){ el.classList.remove('on'); }, 2200);
+  },
+  score: function(n){ $('score').textContent = n; },
+  perfect: function(){
+    var c = $('combo');
+    c.textContent = G.combo > 1 ? ('PERFECT x'+G.combo) : 'PERFECT';
+    c.classList.add('on'); clearTimeout(this._ct);
+    this._ct = setTimeout(function(){ c.classList.remove('on'); }, 700);
+  },
+  toMenu: function(){
+    startDemo();
+    show($('menu'),true); show($('dead'),false); show($('hud'),false); show($('tapHint'),false);
+    UI.syncDiff();
+  },
+  toPlay: function(){
+    show($('menu'),false); show($('dead'),false); show($('hud'),true); show($('tapHint'),true);
+    UI.score(0);
+    clearTimeout(this._ht);
+    this._ht = setTimeout(function(){ show($('tapHint'),false); }, 3600);
+  },
+  toDead: function(){
+    show($('hud'),false); show($('tapHint'),false); show($('dead'),true);
+    $('dScore').textContent = G.score;
+    $('dBest').textContent  = 'BEST ' + S.best[S.diff];
+    $('dBadge').style.opacity = (G.score >= S.best[S.diff] && G.score > 0) ? 1 : 0;
+    show($('bRevive'), !G.revived && G.score >= 5 && Ads.rewardedReady());
+    Ads.maybeInterstitial();
+  },
+  syncDiff: function(){
+    var els = document.querySelectorAll('.sg');
+    for (var i=0;i<els.length;i++) els[i].classList.toggle('on', els[i].getAttribute('data-d') === S.diff);
+    $('mBest').textContent = 'BEST ' + S.best[S.diff];
+  },
+  syncIcons: function(){
+    $('bSound').classList.toggle('off', !S.sound);
+    $('bVibe').classList.toggle('off', !S.vibe);
+    show($('bNoAds'), !S.noAds);
+  }
+};
+/* =====================  REKLAM (AdMob)  =====================
+   Native degilse (tarayici) her sey sessizce kapali kalir.      */
+var Ads = {
+  native:false, plugin:null, ids:null,
+  interLoaded:false, rewardLoaded:false, lastInter:0, showing:false,
+
+  platform: function(){
+    try { return (window.Capacitor && Capacitor.getPlatform && Capacitor.getPlatform()) || 'web'; }
+    catch(e){ return 'web'; }
+  },
+  enabled: function(){ return this.native && !S.noAds; },
+
+  init: function(){
+    var self = this, plat = this.platform();
+    if (plat !== 'ios' && plat !== 'android') return;
+    var P = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.AdMob;
+    if (!P) return;
+    this.native = true; this.plugin = P;
+    var set = CFG.ads.useTest ? CFG.ads.test : CFG.ads.real;
+    this.ids = set[plat] || set.android;
+
+    P.initialize({ initializeForTesting: !!CFG.ads.useTest, requestTrackingAuthorization: true })
+      .then(function(){ return self.consent(); })
+      .then(function(){ self.loadInter(); self.loadReward(); })
+      .catch(function(){});
+  },
+
+  /* GDPR/UMP onay akisi - AEA/Birlesik Krallik icin zorunlu */
+  consent: function(force){
+    var self = this;
+    if (!this.plugin) return Promise.resolve();
+    return this.plugin.requestConsentInfo({})
+      .then(function(info){
+        var need = info && info.isConsentFormAvailable &&
+                   (force || info.status === 'REQUIRED' || info.status === 'UNKNOWN');
+        if (need) return self.plugin.showConsentForm();
+      })
+      .catch(function(){});
+  },
+
+  loadInter: function(){
+    var self = this;
+    if (!this.enabled() || !this.ids.interstitial) return;
+    this.plugin.prepareInterstitial({ adId:this.ids.interstitial, isTesting:!!CFG.ads.useTest })
+      .then(function(){ self.interLoaded = true; }).catch(function(){ self.interLoaded = false; });
+  },
+  loadReward: function(){
+    var self = this;
+    if (!this.native || !this.ids.rewarded) return;   /* odullu reklam reklamsiz surumde de kalir */
+    this.plugin.prepareRewardVideoAd({ adId:this.ids.rewarded, isTesting:!!CFG.ads.useTest })
+      .then(function(){ self.rewardLoaded = true; }).catch(function(){ self.rewardLoaded = false; });
+  },
+  rewardedReady: function(){ return this.native && this.rewardLoaded; },
+
+  maybeInterstitial: function(){
+    if (!this.enabled() || !this.interLoaded || this.showing) return;
+    if (S.plays <= CFG.ads.minPlaysBeforeFirstAd) return;
+    if (S.deaths % CFG.ads.interstitialEveryDeaths !== 0) return;
+    var now = Date.now()/1000;
+    if (now - this.lastInter < CFG.ads.minSecondsBetween) return;
+    var self = this; this.showing = true;
+    this.plugin.showInterstitial()
+      .then(function(){ self.lastInter = Date.now()/1000; })
+      .catch(function(){})
+      .then(function(){ self.showing = false; self.interLoaded = false; self.loadInter(); });
+  },
+
+  showRewarded: function(cb){
+    if (!this.rewardedReady()){ cb(false); return; }
+    var self = this, done = false;
+    this.showing = true;
+    this.plugin.showRewardVideoAd()
+      .then(function(item){ done = !!item; })
+      .catch(function(){ done = false; })
+      .then(function(){
+        self.showing = false; self.rewardLoaded = false; self.loadReward();
+        cb(done);
+      });
+  }
+};
+
+/* =====================  UYGULAMA ICI SATIN ALMA  ===================== */
+var IAP = {
+  ready:false, price:'',
+  init: function(){
+    var CP = window.CdvPurchase;
+    if (!CP || !CP.store) return;
+    var st = CP.store, plat = Ads.platform(), plats = [];
+    if (plat === 'android') plats.push(CP.Platform.GOOGLE_PLAY);
+    else if (plat === 'ios') plats.push(CP.Platform.APPLE_APPSTORE);
+    else return;
+    try {
+      st.register([{ id:CFG.iap.removeAds, type:CP.ProductType.NON_CONSUMABLE, platform:plats[0] }]);
+      st.when()
+        .productUpdated(function(p){ if (p.id === CFG.iap.removeAds && p.pricing) IAP.price = p.pricing.price || ''; })
+        .approved(function(t){ t.finish(); })
+        .finished(function(t){ if (t.products && t.products.some(function(p){ return p.id===CFG.iap.removeAds; })) IAP.grant(); });
+      st.initialize(plats).then(function(){ IAP.ready = true; }).catch(function(){});
+    } catch(e){}
+  },
+  grant: function(){
+    if (S.noAds) return;
+    S.noAds = true; Store.set('noAds', true);
+    UI.syncIcons(); UI.toast('Ads removed. Thank you!');
+  },
+  buy: function(){
+    var CP = window.CdvPurchase;
+    if (!this.ready || !CP){ UI.toast('Store not available right now.'); return; }
+    try {
+      var p = CP.store.get(CFG.iap.removeAds, null), offer = p && p.getOffer();
+      if (!offer){ UI.toast('Product not found.'); return; }
+      CP.store.order(offer).catch(function(){ UI.toast('Purchase cancelled.'); });
+    } catch(e){ UI.toast('Purchase failed.'); }
+  },
+  restore: function(){
+    var CP = window.CdvPurchase;
+    if (!this.ready || !CP){ UI.toast('Store not available right now.'); return; }
+    UI.toast('Restoring...');
+    try { CP.store.restorePurchases(); } catch(e){}
+  }
+};
+
+/* =====================  GIRIS / OLAYLAR  ===================== */
+function isUI(t){ return !!(t && t.closest && t.closest('button,a,.sheet')); }
+
+window.addEventListener('pointerdown', function(e){
+  Snd.boot();
+  if (isUI(e.target)) return;
+  if (G.mode === 'play'){ show($('tapHint'),false); doLatch(); }
+}, { passive:true });
+window.addEventListener('pointerup', function(){ if (G.mode === 'play') doRelease(false); }, { passive:true });
+window.addEventListener('pointercancel', function(){ if (G.mode === 'play') doRelease(false); }, { passive:true });
+
+var spaceDown = false;
+window.addEventListener('keydown', function(e){
+  if (e.code === 'Space' || e.code === 'Enter'){
+    Snd.boot();
+    if (G.mode === 'play'){ if (!spaceDown){ spaceDown = true; doLatch(); } }
+    else if (G.mode === 'menu') newGame();
+    e.preventDefault();
+  }
+});
+window.addEventListener('keyup', function(e){
+  if (e.code === 'Space' || e.code === 'Enter'){
+    spaceDown = false;
+    if (G.mode === 'play') doRelease(false);
+  }
+});
+
+var segBtns = document.querySelectorAll('.sg');
+for (var sgi=0; sgi<segBtns.length; sgi++){
+  segBtns[sgi].onclick = (function(b){ return function(){
+    S.diff = b.getAttribute('data-d'); Store.set('diff', S.diff);
+    UI.syncDiff(); startDemo(); Snd.boot(); Snd.ui();
+  }; })(segBtns[sgi]);
+}
+
+$('bPlay').onclick      = function(){ Snd.boot(); Snd.ui(); newGame(); };
+$('bRetry').onclick     = function(){ Snd.ui(); newGame(); };
+$('bHome').onclick      = function(){ Snd.ui(); UI.toMenu(); };
+$('bSound').onclick     = function(){ S.sound=!S.sound; Store.set('sound',S.sound); UI.syncIcons(); Snd.boot(); Snd.ui(); };
+$('bVibe').onclick      = function(){ S.vibe=!S.vibe; Store.set('vibe',S.vibe); UI.syncIcons(); buzz(20); };
+$('bNoAds').onclick     = function(){ Snd.ui(); IAP.buy(); };
+$('bInfo').onclick      = function(){ Snd.ui(); show($('info'),true); };
+$('bInfoClose').onclick = function(){ show($('info'),false); };
+$('lRestore').onclick   = function(e){ e.preventDefault(); IAP.restore(); };
+$('lConsent').onclick   = function(e){ e.preventDefault(); Ads.consent(true); };
+
+function openUrl(u){
+  try {
+    var B = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.Browser;
+    if (B){ B.open({ url:u }); return; }
+  } catch(e){}
+  window.open(u, '_blank');
+}
+$('lPrivacy').onclick = function(e){ e.preventDefault(); openUrl(CFG.urls.privacy); };
+$('lTerms').onclick   = function(e){ e.preventDefault(); openUrl(CFG.urls.terms); };
+$('lSupport').onclick = function(e){ e.preventDefault(); openUrl(CFG.urls.support); };
+
+$('bRevive').onclick = function(){
+  Snd.ui();
+  Ads.showRewarded(function(ok){
+    if (!ok){ UI.toast('Ad not available.'); return; }
+    G.revived = true;
+    show($('dead'),false); show($('hud'),true);
+    G.mode = 'play'; G.shake = 0; G.trail = [];
+    /* en yakin cengele tutunmus halde geri koy */
+    var a = null, i;
+    for (i=0;i<G.anchors.length;i++) if (!a || Math.abs(G.anchors[i].x-G.P.x) < Math.abs(a.x-G.P.x)) a = G.anchors[i];
+    if (!a){ G.anchors=[]; ensureAnchors(); a = G.anchors[0]; }
+    var L = reachNow()*0.85, phi = -0.95, sp0 = vmax()*0.42;
+    G.P.x = a.x + Math.sin(phi)*L; G.P.y = a.y + Math.cos(phi)*L;
+    G.P.vx = Math.cos(phi)*sp0; G.P.vy = -Math.sin(phi)*sp0;
+    G.hooked = a; G.rope = L; G.hookT = 0;
+    camX = G.P.x - VW*0.30;
+    G.spikes = [];
+    ensureAnchors();
+    UI.toast('Back on the rope!');
+  });
+};
+
+$('bShare').onclick = function(){
+  var txt = 'I swung ' + G.score + ' hooks on ' + S.diff.toUpperCase() + ' in Latch. Beat me.';
+  try {
+    var Sh = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.Share;
+    if (Sh){ Sh.share({ title:'Latch', text:txt, dialogTitle:'Share score' }); return; }
+  } catch(e){}
+  if (navigator.share) navigator.share({ title:'Latch', text:txt }).catch(function(){});
+  else UI.toast(txt);
+};
+
+/* =====================  ACILIS  ===================== */
+function boot(){
+  resize();
+  $('iVer').textContent = CFG.name + ' v' + CFG.version + ' - ' + CFG.bundleId;
+  UI.syncIcons();
+  UI.toMenu();
+  Ads.init();
+  IAP.init();
+  try {
+    var SB = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.StatusBar;
+    if (SB) SB.hide();
+    var SS = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.SplashScreen;
+    if (SS) setTimeout(function(){ SS.hide(); }, 200);
+  } catch(e){}
+  requestAnimationFrame(loop);
+}
+
+/* ---------------- otomatik dogrulama: ?selftest=1 ----------------
+   Mukemmel oynayan yapay oyuncu binlerce kare oynar. Bu oyuncunun
+   OLMESI = uretimde gecilemeyen bir bolum olustu demektir; o yuzden
+   olum sayisi sifir olmak zorunda.                                   */
+function selftest(){
+  try {
+    var q = new URLSearchParams(location.search);
+    if (q.get('diff') && DIFF[q.get('diff')]) S.diff = q.get('diff');
+    seedFrom(+(q.get('seed') || 424242));
+    resize();
+    G.silent = true;
+    var N = +(q.get('frames') || 12000);
+    var deaths=0, best=0, hooks=0, perf=0, i, maxGap=0;
+    newGame();
+    for (i=0;i<N;i++){
+      if (G.mode === 'dead'){
+        deaths++; hooks+=G.nHooks; perf+=G.nPerfect;
+        if (G.score>best) best=G.score;
+        newGame(); continue;
+      }
+      autoPlay();
+      update(1/60);
+      if (gapNow() > maxGap) maxGap = gapNow();
+      if (i % 3 === 0) render();
+    }
+    hooks+=G.nHooks; perf+=G.nPerfect; if (G.score>best) best=G.score;
+    var msg = 'diff='+S.diff+' frames='+N+' hooks='+hooks+' perfect='+perf+
+              ' best='+best+' deaths='+deaths+' gapMax='+maxGap.toFixed(0)+
+              ' reach='+reachNow().toFixed(0)+' fallback='+(G.dbgFall|0);
+    if (deaths > 0)      document.title = 'SELFTEST:FAIL mukemmel oyuncu oldu (uretim adaletsiz) | ' + msg;
+    else if (hooks < 60) document.title = 'SELFTEST:FAIL cok az cengel kullanildi | ' + msg;
+    else if ((G.dbgFall|0) > 0) document.title = 'SELFTEST:FAIL dogrulanmamis cengel konuldu | ' + msg;
+    else                 document.title = 'SELFTEST:OK ' + msg;
+  } catch(e){
+    document.title = 'SELFTEST:ERR ' + (e && e.message) + ' | ' +
+                     String(e && e.stack || '').split('\n').slice(0,2).join(' >> ');
+  }
+}
+
+/* ---------------- magaza gorseli: ?shot=1 ----------------
+   Fizik oyunu oldugu icin sahne, tohumlanmis yapay oyuncu belirli bir
+   duruma gelene kadar oynatilarak kurulur (until=arc|flight|hook).     */
+function shotMode(){
+  var q = new URLSearchParams(location.search), i;
+  seedFrom(+(q.get('seed') || 7777));
+  if (q.get('diff') && DIFF[q.get('diff')]) S.diff = q.get('diff');
+  resize();
+  UI.syncIcons();
+  if (q.get('guide') === '1') forceHelp = true;
+  G.silent = true;
+
+  if (q.get('menu') === '1'){
+    S.best[S.diff] = +(q.get('best') || 34);
+    show($('menu'),true); show($('dead'),false); show($('hud'),false); show($('tapHint'),false);
+    UI.syncDiff();
+    startDemo();
+    G.score = +(q.get('score') || 12);
+    var n = +(q.get('play') || 150);
+    for (i=0;i<n;i++){ autoPlay(); update(1/60); }
+    render();
+  } else {
+    newGame();
+    show($('menu'),false); show($('dead'),false); show($('tapHint'),false); show($('hud'),true);
+    G.score = +(q.get('score') || 9);
+    var until = q.get('until') || 'arc', maxF = +(q.get('max') || 2400), got = false;
+    for (i=0;i<maxF;i++){
+      autoPlay(); update(1/60);
+      if (G.mode === 'dead'){ newGame(); continue; }
+      if (i < 90) continue;
+      if (until === 'arc'   && G.hooked && phiOf(G.hooked,G.P) > 0.12 && phiOf(G.hooked,G.P) < Math.PI/4 - perfectWin()*0.2){ got=true; break; }
+      if (until === 'win'   && G.hooked && isPerfect()){ got=true; break; }
+      if (until === 'flight'&& !G.hooked && G.P.vy < 0 && G.P.vx > 0){ got=true; break; }
+      if (until === 'spike' && !G.hooked && G.spikes.length){ got=true; break; }
+    }
+    if (q.get('perfect') === '1'){
+      G.pops.push({ x:G.P.x, y:G.P.y-PR-38, txt:'PERFECT +2', col:'255,209,102', t:0.85 });
+      for (i=0;i<14;i++){
+        var an = rand(0,TAU), d = rand(PR*1.2, PR*3.4);
+        G.parts.push({ x:G.P.x+Math.cos(an)*d, y:G.P.y+Math.sin(an)*d, vx:0, vy:0,
+                       r:rand(1.5,3.2), life:rand(0.45,0.95), col:'255,209,102' });
+      }
+      G.pop = 0.6;
+      $('combo').textContent = 'PERFECT x' + (q.get('combo') || 3);
+      $('combo').classList.add('on');
+    }
+    render();
+    $('score').textContent = q.get('score') || G.score;
+    document.title = 'SHOT:' + (got ? 'READY' : 'FALLBACK');
+  }
+
+  if (q.get('shotpad') !== '0'){
+    $('hud').style.paddingTop = '3.5vh';
+    var topEl = document.createElement('div');
+    topEl.style.cssText = 'position:fixed;left:0;right:0;top:0;height:20%;z-index:3;pointer-events:none;'+
+      'background:linear-gradient(180deg,rgba(7,13,20,.92) 0%,rgba(7,13,20,.5) 55%,rgba(7,13,20,0) 100%)';
+    document.body.appendChild(topEl);
+  }
+  if (q.get('headline')){
+    var scrim = document.createElement('div');
+    scrim.style.cssText = 'position:fixed;left:0;right:0;bottom:0;height:34%;z-index:8;pointer-events:none;'+
+      'background:linear-gradient(180deg,rgba(7,13,20,0) 0%,rgba(7,13,20,.74) 42%,rgba(7,13,20,.96) 100%)';
+    document.body.appendChild(scrim);
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;left:0;right:0;bottom:10.5%;text-align:center;z-index:9;padding:0 7%';
+    d.innerHTML = '<div style="font-size:5.4vw;font-weight:900;letter-spacing:-.01em;line-height:1.15;'+
+      'text-shadow:0 6px 40px rgba(0,0,0,.85)">' + q.get('headline') + '</div>' +
+      (q.get('sub') ? '<div style="font-size:3.1vw;color:#7e93a6;margin-top:2.2vw;letter-spacing:.12em;'+
+      'text-transform:uppercase">' + q.get('sub') + '</div>' : '');
+    document.body.appendChild(d);
+  }
+  if (q.get('menu') === '1') document.title = 'SHOT:READY';
+}
+
+if (location.search.indexOf('selftest=1') >= 0) window.addEventListener('load', selftest);
+else if (location.search.indexOf('shot=1') >= 0) window.addEventListener('load', shotMode);
+else boot();
+</script>
+</body>
+</html>
