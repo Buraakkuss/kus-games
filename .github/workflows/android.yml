@@ -10,6 +10,7 @@ on:
       - '.github/workflows/android.yml'
       - 'slot/**'
       - 'latch/**'
+      - 'orbita/**'
   workflow_dispatch:
 
 jobs:
@@ -23,6 +24,8 @@ jobs:
             dir: slot
           - app: latch
             dir: latch
+          - app: orbita
+            dir: orbita
     name: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,88 @@
+name: iOS build
+
+# Apple hesabi ACILMADAN once: simulator icin imzasiz derleme yapar.
+# "Uygulama iOS'ta derleniyor mu" sorusunu hesapsiz kapatir.
+# Hesap acildiktan sonra: secret'lar eklenince arsivleyip TestFlight'a yollar
+# (asagidaki "Arsivle" adimi otomatik devreye girer).
+on:
+  push:
+    branches: ['**']
+    paths:
+      - '.github/workflows/ios.yml'
+      - 'slot/**'
+      - 'latch/**'
+      - 'orbita/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: slot
+            dir: slot
+          - app: latch
+            dir: latch
+          - app: orbita
+            dir: orbita
+    name: ${{ matrix.app }}
+    env:
+      # DIKKAT: secrets baglami step-level `if` icinde KULLANILAMAZ
+      # ("Unrecognized named-value: 'secrets'"). Is seviyesinde env'e alinip
+      # oyle test edilir.
+      HAS_APPLE: ${{ secrets.APPSTORE_ISSUER_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Bagimliliklar
+        working-directory: ${{ matrix.dir }}
+        run: npm install --no-audit --no-fund
+
+      - name: iOS projesini olustur
+        working-directory: ${{ matrix.dir }}
+        run: |
+          npx cap add ios
+          npx cap sync ios
+
+      - name: Native ayarlari uygula
+        working-directory: ${{ matrix.dir }}
+        run: bash tools/ios-prepare.sh
+
+      - name: Info.plist dogrula
+        working-directory: ${{ matrix.dir }}
+        run: |
+          /usr/libexec/PlistBuddy -c "Print :GADApplicationIdentifier" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Print :ITSAppUsesNonExemptEncryption" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Print :UISupportedInterfaceOrientations" ios/App/App/Info.plist
+
+      - name: Derle (simulator, imzasiz)
+        working-directory: ${{ matrix.dir }}/ios/App
+        run: |
+          xcodebuild -workspace App.xcworkspace -scheme App \
+            -configuration Release -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            build | tail -40
+
+      - name: Arsivle ve TestFlight'a yolla (Apple secret'lari varsa)
+        if: env.HAS_APPLE == 'true'
+        working-directory: ${{ matrix.dir }}/ios/App
+        env:
+          ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          KEY_P8: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$KEY_P8" > ~/private_keys/AuthKey_$KEY_ID.p8
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
+            -archivePath build/App.xcarchive archive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_$KEY_ID.p8 \
+            -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER_ID"
+          echo "Arsiv hazir: build/App.xcarchive"

@@ -7,6 +7,7 @@ Capacitor ile iOS ve Android. Hepsi mağazaya gönderilmeye hazır durumda tutul
 |---|---|---|---|
 | **Slot: Fit the Shape** | `slot/` | Şekli 90° döndür, inen duvardaki deliğe otur | v1.0.0 hazır |
 | **Latch: One Tap Swing** | `latch/` | Basılı tut, sarkaç gibi savrul, 45°'de bırak | v1.0.0 hazır |
+| **Orbita: One Tap Orbit Jump** | `orbita/` | Yörüngeden teğet boyunca fırla, sonraki gezegene kon | v1.0.1 hazır |
 
 ## Neden tek depo
 - Yeni oyun = yeni klasör. GitHub'da yeni depo açmak, Pages'i tekrar ayarlamak yok.
@@ -22,8 +23,8 @@ Capacitor ile iOS ve Android. Hepsi mağazaya gönderilmeye hazır durumda tutul
 docs/                 GitHub Pages kaynağı (TEK ayar)
   index.html          oyunların listesi
   _style.css          ortak stil (vurgu rengi oyun başına)
-  slot/  latch/       oyun başına gizlilik, şartlar, destek (EN + TR)
-slot/  latch/         oyunun kendisi: www, assets, store, native, marketing, tools
+  slot/ latch/ orbita/  oyun başına gizlilik, şartlar, destek (EN + TR)
+slot/  latch/  orbita/   oyunun kendisi: www, assets, store, native, marketing, tools
 .github/workflows/    bulutta Android derlemesi
 ```
 
