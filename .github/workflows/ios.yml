@@ -11,6 +11,7 @@ on:
       - '.github/workflows/ios.yml'
       - 'slot/**'
       - 'latch/**'
+      - 'orbita/**'
   workflow_dispatch:
 
 jobs:
@@ -24,6 +25,8 @@ jobs:
             dir: slot
           - app: latch
             dir: latch
+          - app: orbita
+            dir: orbita
     name: ${{ matrix.app }}
     env:
       # DIKKAT: secrets baglami step-level `if` icinde KULLANILAMAZ

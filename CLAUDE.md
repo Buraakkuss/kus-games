@@ -43,6 +43,28 @@ https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
 - `tools/android-prepare.sh` native/android.md'deki tüm elle adımları otomatik
   uygular; `android/` klasörü her silindiğinde tekrar çalıştırılır.
 
+## Oyunlar
+
+| Klasör | Oyun | Not |
+|---|---|---|
+| `slot/` | Slot: Fit the Shape | şekli döndür, duvardaki deliğe otur |
+| `latch/` | Latch: One Tap Swing | ipi at, salın, 45°'de bırak |
+| `orbita/` | Orbita: One Tap Orbit Jump | yörüngeden teğet boyunca fırla |
+
+Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
+
+**Self-test garantileri oyundan oyuna FARKLI — karıştırma:**
+
+| Oyun | Yapay oyuncu | Ne kanıtlıyor |
+|---|---|---|
+| `slot/` | mükemmel | `deaths=0` zorunlu → üretim adaletli |
+| `latch/` | mükemmel | `deaths=0` **ve** `fallback=0` zorunlu → her çengel ulaşılabilir |
+| `orbita/` | sezgisel (ölebilir) | yalnızca oyun döngüsünün çalıştığı ve çökmediği |
+
+Orbita'nınki daha zayıf bir güvence: ölüm sayısı > 0 olması hata değildir. Orbita'ya
+"adaletsiz bölüm üretilmiyor" güvencesi eklemek istersen önce mükemmel oynayan bir
+yapay oyuncu yazman gerekir; şu anki sezgisel oyuncu buna yetmez.
+
 ## Yeni oyun eklemek
 
 1. En yakın oyunun klasörünü kopyala: `cp -r latch yenioyun`
