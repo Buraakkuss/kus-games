@@ -9,7 +9,23 @@ npx cap add android
 npx cap sync android
 ```
 
-## 2. Simgeleri kopyala
+## 2. Tek komutla native ayarlar (onerilen)
+```bash
+bash tools/android-prepare.sh
+```
+Bu script asagidaki 2-6 arasi TUM adimlari (simgeler, Manifest, strings.xml,
+SDK seviyeleri, surum numaralari, imzalama blogu) otomatik uygular ve
+`app.config.json` icindeki degerleri kullanir. `android/` klasorunu her
+silip yeniden olusturdugunda tekrar calistir. Adimlari elle yapmak
+istersen veya ne yaptigini gormek istersen asagisi durusunu koruyor.
+
+> Bulutta derleme: depoda `.github/workflows/android.yml` var. Her pushta
+> GitHub Actions ayni scripti calistirip AAB ve debug APK uretir - kendi
+> bilgisayarina Android Studio kurman gerekmez. Imzali AAB icin 4 secret
+> ekle: `ANDROID_KEYSTORE_B64`, `ANDROID_KEYSTORE_PASSWORD`,
+> `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`.
+
+## 2b. Simgeleri kopyala (script bunu zaten yapiyor)
 ```bash
 cp -r assets/android/res/* android/app/src/main/res/
 cp assets/splash-2732.png android/app/src/main/res/drawable/splash.png
