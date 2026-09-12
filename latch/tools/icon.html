@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><title>icon</title>
+<style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}canvas{display:block}</style>
+</head><body><canvas id="k"></canvas><script>
+/* Latch ikon / acilis ekrani / one cikan grafik ureteci.
+   Kullanim: icon.html?s=1024 | ?s=512&round=1 | ?s=432&bg=0&scale=0.62 | ?w=1024&h=500&wide=1
+   DIKKAT: global "top" adini kullanma - window.top ile cakisir.        */
+var q = new URLSearchParams(location.search);
+var S = +(q.get('s') || 1024);
+var W = +(q.get('w') || S), H = +(q.get('h') || S);
+var drawBg = q.get('bg') !== '0';
+var scale  = +(q.get('scale') || 1);
+var wide   = q.get('wide') === '1';
+var k = document.getElementById('k'), c = k.getContext('2d');
+k.width = W; k.height = H; k.style.width = W+'px'; k.style.height = H+'px';
+var TAU = Math.PI*2;
+
+if (q.get('round') === '1'){
+  c.save(); c.beginPath(); c.arc(W/2,H/2,Math.min(W,H)/2,0,TAU); c.clip();
+}
+if (drawBg){
+  var g = c.createRadialGradient(W*0.5, H*0.34, 0, W*0.5, H*0.5, Math.max(W,H)*0.8);
+  g.addColorStop(0,'#13303f'); g.addColorStop(0.55,'#0a1622'); g.addColorStop(1,'#04080e');
+  c.fillStyle = g; c.fillRect(0,0,W,H);
+  /* uzak tepe siluetleri */
+  c.fillStyle = 'rgba(28,58,74,.5)';
+  c.beginPath(); c.moveTo(0,H);
+  for (var x=0;x<=W;x+=Math.max(2,W/40)) c.lineTo(x, H*0.80 + Math.sin(x/W*5.2)*H*0.05);
+  c.lineTo(W,H); c.closePath(); c.fill();
+}
+
+var cxp = wide ? W*0.235 : W*0.5, cyp = H*0.5, U = Math.min(W,H)*scale;
+var ax = cxp - U*0.10, ay = cyp - U*0.26;      /* cengel */
+var R  = U*0.40;                                /* ip boyu */
+var phi = 0.02;                                 /* oyuncu pencereye dogru saliniyor */
+var px = ax + Math.sin(phi)*R, py = ay + Math.cos(phi)*R;
+
+/* salinim cemberi */
+c.lineWidth = Math.max(1,U*0.008); c.strokeStyle = 'rgba(160,200,220,.16)';
+c.beginPath(); c.arc(ax, ay, R, 0, TAU); c.stroke();
+
+/* PERFECT birakma penceresi: 45 derece civari altin yay - oyunun imzasi */
+c.lineWidth = U*0.038; c.lineCap = 'round';
+c.strokeStyle = 'rgba(255,209,102,.95)';
+c.shadowBlur = U*0.07; c.shadowColor = 'rgba(255,209,102,.85)';
+c.beginPath(); c.arc(ax, ay, R, Math.PI/4 - 0.30, Math.PI/4 + 0.30); c.stroke();
+c.shadowBlur = 0;
+
+/* ip */
+c.lineWidth = U*0.026; c.strokeStyle = 'rgba(255,184,77,.92)';
+c.shadowBlur = U*0.05; c.shadowColor = 'rgba(255,184,77,.6)';
+c.beginPath(); c.moveTo(ax, ay); c.lineTo(px, py); c.stroke();
+c.shadowBlur = 0;
+
+/* cengel halkasi */
+c.lineWidth = U*0.030; c.strokeStyle = 'rgba(150,225,235,.95)';
+c.beginPath(); c.arc(ax, ay, U*0.055, 0, TAU); c.stroke();
+c.fillStyle = 'rgba(200,240,250,.9)';
+c.beginPath(); c.arc(ax, ay, U*0.016, 0, TAU); c.fill();
+
+/* oyuncu */
+var pg = c.createRadialGradient(px-U*0.03, py-U*0.035, U*0.012, px, py, U*0.105);
+pg.addColorStop(0,'#fff3d6'); pg.addColorStop(0.5,'#ffb84d'); pg.addColorStop(1,'#e0761d');
+c.shadowBlur = U*0.12; c.shadowColor = 'rgba(255,184,77,.9)';
+c.beginPath(); c.arc(px, py, U*0.105, 0, TAU); c.fillStyle = pg; c.fill();
+c.shadowBlur = 0;
+c.lineWidth = U*0.016; c.strokeStyle = 'rgba(255,255,255,.75)'; c.stroke();
+
+if (wide){
+  c.textAlign = 'left'; c.fillStyle = '#ffffff';
+  c.font = '900 ' + Math.round(H*0.21) + 'px ui-rounded, system-ui, sans-serif';
+  c.fillText('LATCH', W*0.42, H*0.50);
+  c.fillStyle = '#7e93a6';
+  c.font = '700 ' + Math.round(H*0.068) + 'px ui-rounded, system-ui, sans-serif';
+  c.fillText('HOLD  ·  SWING  ·  LET GO', W*0.425, H*0.645);
+}
+if (q.get('round') === '1') c.restore();
+document.title = 'ICON:READY';
+</script></body></html>

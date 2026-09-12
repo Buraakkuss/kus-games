@@ -631,7 +631,7 @@ function doRelease(forced){
 }
 
 /* ---------- efektler ---------- */
-function addPop(txt,col){ G.pops.push({ x:G.P.x, y:G.P.y-PR-14, txt:txt, col:col, t:1 }); }
+function addPop(txt,col){ G.pops.push({ x:G.P.x, y:G.P.y-PR-38, txt:txt, col:col, t:1 }); }
 function sparks(n,col){
   for (var i=0;i<n;i++){
     var a = rand(0,TAU), sp = rand(40,220);
@@ -1263,7 +1263,7 @@ function shotMode(){
       if (until === 'spike' && !G.hooked && G.spikes.length){ got=true; break; }
     }
     if (q.get('perfect') === '1'){
-      G.pops.push({ x:G.P.x, y:G.P.y-PR-14, txt:'PERFECT +2', col:'255,209,102', t:0.85 });
+      G.pops.push({ x:G.P.x, y:G.P.y-PR-38, txt:'PERFECT +2', col:'255,209,102', t:0.85 });
       for (i=0;i<14;i++){
         var an = rand(0,TAU), d = rand(PR*1.2, PR*3.4);
         G.parts.push({ x:G.P.x+Math.cos(an)*d, y:G.P.y+Math.sin(an)*d, vx:0, vy:0,
