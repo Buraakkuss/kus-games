@@ -5,6 +5,10 @@
    5) surum/kimlik tutarliligi  6) yayin oncesi ayar uyarilari          */
 const fs = require('fs'), path = require('path'), cp = require('child_process');
 const ROOT = path.join(__dirname, '..');
+/* docs/ tek depoda koktedir: <depo>/docs/<gameId>/ */
+const GAME = JSON.parse(require('fs').readFileSync(path.join(ROOT,'app.config.json'),'utf8')).gameId;
+const DOCS = path.join(ROOT, '..', 'docs', GAME);
+const DOCSROOT = path.join(ROOT, '..', 'docs');
 const CHROME = process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 let fail = 0, warn = 0;
 const ok  = m => console.log('  \x1b[32mOK\x1b[0m   ' + m);
@@ -74,10 +78,12 @@ console.log('\n3) Magaza gorselleri');
 }
 
 console.log('\n4) Hukuki ve destek sayfalari');
-['docs/privacy.html', 'docs/gizlilik.html', 'docs/terms.html', 'docs/support.html', 'docs/index.html']
-  .forEach(f => fs.existsSync(path.join(ROOT, f)) ? ok(f) : bad('eksik: ' + f));
+['privacy.html', 'gizlilik.html', 'terms.html', 'support.html', 'index.html']
+  .forEach(f => fs.existsSync(path.join(DOCS, f)) ? ok('docs/' + GAME + '/' + f) : bad('eksik: docs/' + GAME + '/' + f));
+if (fs.existsSync(path.join(DOCSROOT, '_style.css'))) ok('docs/_style.css (ortak stil)');
+else bad('eksik: docs/_style.css');
 /* GitHub Pages Jekyll'i alt cizgiyle baslayan dosyalari yayinlamaz -> _style.css 404 verir */
-if (fs.existsSync(path.join(ROOT, 'docs/.nojekyll'))) ok('docs/.nojekyll (Pages _style.css dosyasini atlamaz)');
+if (fs.existsSync(path.join(DOCSROOT, '.nojekyll'))) ok('docs/.nojekyll (Pages _style.css dosyasini atlamaz)');
 else bad('docs/.nojekyll eksik - GitHub Pages _style.css dosyasini yayinlamaz, sayfalar stilsiz kalir');
 
 console.log('\n5) Surum ve kimlik tutarliligi');
@@ -94,11 +100,11 @@ console.log('\n5) Surum ve kimlik tutarliligi');
   if (!html.includes(cfg.pagesBaseUrl)) wrn('www/index.html icindeki gizlilik adresi app.config.json ile ayni degil');
   const mail = cfg.supportEmail;
   if (!html.includes(mail)) wrn('www/index.html destek e-postasi farkli - bash tools/set-identity.sh');
-  if (!fs.readFileSync(path.join(ROOT, 'docs/privacy.html'), 'utf8').includes(mail))
+  if (!fs.readFileSync(path.join(DOCS, 'privacy.html'), 'utf8').includes(mail))
     wrn('docs/privacy.html e-postasi app.config.json ile ayni degil');
-  ['docs/index.html','docs/privacy.html','docs/terms.html','docs/support.html'].forEach(f => {
-    const s = fs.readFileSync(path.join(ROOT, f), 'utf8');
-    if (/orbita|nakitpilot/i.test(s)) bad(f + ' icinde baska projeden kalan metin var');
+  ['index.html','privacy.html','terms.html','support.html'].forEach(f => {
+    const s = fs.readFileSync(path.join(DOCS, f), 'utf8');
+    if (/orbita|nakitpilot/i.test(s)) bad('docs/' + GAME + '/' + f + ' icinde baska projeden kalan metin var');
   });
 }
 

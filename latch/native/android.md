@@ -1,6 +1,6 @@
 # Android derleme — adım adım
 
-Gereken: Node 18+, Android Studio (son sürüm), JDK 17.
+Gereken: Node 18+, Android Studio (son sürüm), JDK 21.
 
 ## 1. Projeyi hazırla
 ```bash

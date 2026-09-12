@@ -1,86 +1,62 @@
-# Slot — oyun projesi
+# KUŞ GRUP oyun deposu
 
-Tek dokunuşlu refleks oyunu. **Tek HTML dosyası** (`www/index.html`) + Capacitor.
-Güncel sürüm: **v1.0.0**. Bu depo başka projelerden tamamen bağımsızdır.
+Birden çok oyun, tek depo. Her oyun kendi klasöründe **bağımsızdır**: kendi
+`www/index.html`, `app.config.json`, `tools/`, `store/`, `native/`, `marketing/`
+ve `assets/` klasörü vardır. Ortak olan yalnızca `docs/` (GitHub Pages) ve
+`.github/workflows/`.
 
-## Çalışma kuralları
+## Değişmez kurallar
 
-1. Oyun mantığı, arayüz, reklam ve satın alma köprüsü **tek dosyada** kalır: `www/index.html`.
-   Yeni dosya açma; kullanıcı yazılımcı değil, tek dosyayı kopyalayarak güncelleme yapabilmeli.
-2. Sürüm yükseltirken birlikte güncellenir: `www/index.html` içindeki `CFG.version`,
-   `app.config.json` içindeki `version` ve `versionCode`, `store/*.md` sürüm notları.
-   (`bash tools/set-identity.sh` bunların çoğunu kendisi yazar.)
-3. **Git commit mesajı sadece sürüm numarasıdır.** Örnek: `v1.0.1`
-4. Her değişiklikten sonra `node tools/check.js` çalıştırılır. Yeşil değilse commit yok.
-5. Görsel değiştiyse `bash tools/gen.sh` ile tüm mağaza görselleri yeniden üretilir.
-6. Reklam kimlikleri, e-posta ve bundle id **yalnız `app.config.json`** içinde değiştirilir,
-   ardından `bash tools/set-identity.sh` çalıştırılır.
-7. Token tasarrufu: `index.html` ~1200 satırdır, tamamını okuma; `grep -n` ile hedefe git.
+1. **Oyun mantığı tek dosyada kalır:** `<oyun>/www/index.html`. Yeni dosya açma;
+   kullanıcı yazılımcı değil, tek dosyayı kopyalayarak güncelleme yapabilmeli.
+2. Bir oyunda çalışırken **o oyunun kendi `CLAUDE.md`'sini oku** — denge, adalet
+   garantisi ve tuzaklar orada yazılı. Bu dosya yalnızca depo düzenini anlatır.
+3. Her değişiklikten sonra ilgili oyunda `node tools/check.js`. Yeşil değilse commit yok.
+4. **Git commit mesajı sadece sürüm numarasıdır** (`v1.0.1`) — tek oyunu ilgilendiren
+   değişikliklerde `latch: v1.0.1` biçimi de kabul.
+5. Kimlik bilgileri (bundle id, e-posta, AdMob, Pages adresi) **yalnız
+   `<oyun>/app.config.json`** içinde değişir, ardından `bash tools/set-identity.sh`.
+6. Token tasarrufu: oyun dosyaları ~1200-1300 satırdır, tamamını okuma; `grep -n` kullan.
 
-## Oyun mekaniği
+## GitHub Pages
 
-- Oyuncu ekranın alt üçte birinde sabit bir çokgendir (`PY = H*0.72`), yalnızca döner.
-- Yukarıdan kalın duvarlar iner. Her duvarda oyuncunun **o anki şekliyle birebir aynı**,
-  ama farklı açıya çevrilmiş bir delik vardır.
-- Tek dokunuş = 90° saat yönünde dönüş, ~0.12 sn (`tap()`, easeOutCubic).
-- Karar anı duvarın ön yüzü şeklin üstüne değdiğinde verilir (`verdict()`):
-  açı hatası `DIFF.tol` içindeyse geçer, değilse `die()` → parçalanma.
-- Tolerans içinde ama tam değilse şekil delige **oturtulur** (0.07 sn "klik" tween'i).
-  Bu olmazsa geçiş anında şekil deliğin kenarına taşmış görünürdü.
-- `CLEAN` = temas anında dönüş tamamlanmışsa (`G.rotT >= 1`) → çift puan.
-- Bir duvar geçilince oyuncu **sıradaki duvarın şekline dönüşür** (morph). Bu yüzden
-  ekrandaki üstteki duvarın deliği oyuncunun mevcut şeklinden farklı olabilir; bu bir hata
-  değil, önizlemedir. Değişmez kural: **karar anında oyuncunun şekli = duvarın şekli.**
-  Self-test bunu her karede denetler (`mismatch`).
+Tek ayar: **Settings → Pages → `main` / `docs`**. Yayınlanan adres:
 
-## Mimari notlar
+```
+https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
+```
 
-- Oyun döngüsü: `update(dt)` → `render()`, `requestAnimationFrame(loop)` ile.
-- Durumlar: `menu · play · dead` (`G.mode`). `menu` durumunda oyun kendi kendini oynar
-  (`autoTap()`), menü arka planı budur; `die()` menüde ölmez, gösteriyi yeniden başlatır.
-- **Zorluk yalnız `DIFF` tablosundan ayarlanır.** `speed()`, `gapNow()`, tolerans, delik payı,
-  şekil havuzu eşikleri, sahte delik ve çift duvar eşikleri hepsi bu tablodan çarpan alır.
-  `hard` referans dengedir. Rekorlar mod başına ayrı tutulur (`S.best`).
-- Şekiller `SHAPES` içinde; `sym` = 90°'lik dönüşlere göre simetri derecesi
-  (4 = her açıda geçer, 2 = iki cevap, 1 = tek cevap). Zorluk artışının asıl motoru budur,
-  hız değil. Havuzlar `TIERS` tablosunda, eşikler `DIFF.tier` ile ölçeklenir.
-- **İki ölçek birimi var:** `U = min(W, H*0.58)/400` yatay (şekil, delik, duvar kalınlığı),
-  `V = H/800` düşey (duvar hızı, duvar aralığı). Sadece `U` kullanılsaydı uzun ekranlarda
-  tepki süresi uzar, oyun kolaylaşırdı. **Yeni bir mesafe eklerken ikisinden birini seç,
-  çıplak piksel yazma.**
-- Duvar kalınlığı `WT = R*2.45 + 30*U`: delik şeklin tamamını içine alabilmeli, yoksa
-  delik dilimlenmiş görünür ve oyuncu açıyı okuyamaz.
-- Delik `fill('evenodd')` ile deliniyor; yol önce `rect`, sonra `addPoly` ile eklenir ve
-  `clip()` bandın dışına taşmayı engeller. **`addPoly` yol başlatmaz; `polyPath` başlatır.**
-  (`tools/icon.html` içinde aynı hata bir kez yapıldı: `poly()` her seferinde `beginPath()`
-  çağırınca duvar hiç çizilmedi.)
-- Sekil değişimi (morph) sabit uzunlukta (64) örneklenmiş çokgen dizilerinin karışımı —
-  `resample()`. Yeni şekil eklerken tek yapılacak `SHAPES`'e nokta listesi ve `sym` yazmak.
-- `?seed=N` verilirse rastgelelik tohumlanır (`rnd()`), böylece mağaza görselleri ve
-  self-test tekrarlanabilir olur.
-- Ses dosyası yok; sesler WebAudio ile üretiliyor (`Snd`). Yeni ses eklenecekse yine sentezle.
-- `Ads` ve `IAP` nesneleri native değilse sessizce devre dışı kalır — tarayıcıda test hep çalışır.
+- `docs/.nojekyll` **silinmemeli**: Jekyll alt çizgiyle başlayan `_style.css`
+  dosyasını yayınlamaz, sayfalar çıplak HTML olarak açılır.
+- Ortak stil `docs/_style.css`; vurgu rengi sayfanın `<html data-game="...">`
+  niteliğinden gelir. Yeni oyun için CSS'e bir satır ekle.
 
-## Test modları
+## Bulutta derleme
 
-| URL | Ne yapar |
-|---|---|
-| `www/index.html` | normal oyun |
-| `www/index.html?selftest=1&diff=hard` | mükemmel oynayan yapay oyuncu 12000 kare oynar, sonucu `document.title` içine yazar |
-| `www/index.html?shot=1&...` | mağaza ekran görüntüsü kompozisyonu üretir (parametreler `tools/gen.sh` içinde) |
+`.github/workflows/android.yml` her push'ta matristeki tüm oyunları derler:
+`npx cap add android` → `tools/android-prepare.sh` → AAB + debug APK.
 
-**Self-test kuralı:** mükemmel oyuncu **ölmemelidir** (`deaths=0`). Ölüyorsa `DIFF` tablosunda
-geçilmesi imkansız bir eşik oluşmuş demektir — örneğin çift duvarın iki katmanı arasındaki
-mesafe tek dokunuşa yetmiyordur. Bu durumda mekaniği değil tabloyu düzelt.
+- **Java 21 zorunlu.** Capacitor 7 ile JDK 17 kullanırsan
+  `invalid source release: 21` hatası alırsın (bu hata bir kez yaşandı).
+- İmzalı AAB için 4 secret: `ANDROID_KEYSTORE_B64`, `ANDROID_KEYSTORE_PASSWORD`,
+  `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. Yoksa imzasız derler (doğrulama amaçlı).
+- `tools/android-prepare.sh` native/android.md'deki tüm elle adımları otomatik
+  uygular; `android/` klasörü her silindiğinde tekrar çalıştırılır.
 
-## Tuzaklar
+## Yeni oyun eklemek
 
-- `CFG.ads.useTest` **true** ile yayına çıkılırsa hiç gelir olmaz. `tools/check.js` bunu yakalar.
-- Gerçek AdMob kimlikleriyle kendi reklamına tıklamak hesabı kalıcı kapattırır.
-- Android `versionCode` her yüklemede artmalı.
-- `slot-release.jks` imza anahtarı kaybolursa uygulama bir daha güncellenemez.
-- **İsim riski:** mağaza adı tek başına "Slot" olmamalı ("Slot: Fit the Shape"). Kumar
-  çağrışımı hem aramayı hem incelemeyi vurur. Gerekçe `LAUNCH-CHECKLIST.md` AŞAMA 0.1'de,
-  kumar olmadığı `docs/terms.html` madde 4 ve App Review notunda yazılı.
-- Global `var top` kullanma — `window.top` ile çakışır ve sessizce NaN üretir.
-- Mağaza dağıtımından Türkiye çıkarılmışsa bu bir **vergi gereği**dir (KVK 10/1-g), yanlışlıkla açma.
+1. En yakın oyunun klasörünü kopyala: `cp -r latch yenioyun`
+2. `yenioyun/app.config.json`: `gameId`, `appName`, `bundleId`, `pagesBaseUrl`
+   (`.../kus-games/yenioyun`), `version` 1.0.0, `versionCode` 1.
+3. `bash tools/set-identity.sh` (yenioyun içinde) — adresleri her yere yazar.
+4. `docs/yenioyun/` klasörünü aç, `docs/latch/` sayfalarını kopyalayıp oyuna göre
+   yaz; `docs/index.html` listesine kart ekle; `docs/_style.css` içine renk satırı.
+5. `.github/workflows/android.yml` matrisine `- app: yenioyun / dir: yenioyun` ekle.
+6. Oyunu yaz, `bash tools/gen.sh`, `node tools/check.js`.
+
+## Bir oyunu kendi deposuna çıkarmak
+
+```bash
+cd latch && bash tools/extract-repo.sh ~/latch-game
+```
+Ortak `docs/latch/` sayfalarını da yanına alır ve stil yollarını düzeltir.

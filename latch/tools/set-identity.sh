@@ -6,8 +6,10 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 node -e '
 const fs=require("fs"),p=process.argv[1];
 const c=JSON.parse(fs.readFileSync(p+"/app.config.json","utf8"));
-const files=["www/index.html","docs/index.html","docs/privacy.html","docs/gizlilik.html",
-             "docs/terms.html","docs/support.html","capacitor.config.json","package.json",
+const g=c.gameId||"latch";
+const D="../docs/"+g+"/";
+const files=["www/index.html",D+"index.html",D+"privacy.html",D+"gizlilik.html",
+             D+"terms.html",D+"support.html","capacitor.config.json","package.json",
              "store/google-play.md","store/app-store.md","native/android.md","native/ios.md",
              "LAUNCH-CHECKLIST.md","README.md"];
 const OLD_MAIL="t.burakkus@gmail.com", OLD_URL="https://buraakkuss.github.io/latch-game", OLD_ID="com.kusgrup.latch";

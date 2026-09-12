@@ -40,7 +40,7 @@ tek yerden yapılır: `app.config.json` + `bash tools/set-identity.sh`.
 - [ ] Google Play: Ödemeler profili + vergi bilgileri
 - [ ] `bash tools/extract-repo.sh ~/latch-game` ile kendi deposuna taşı, GitHub'a gönder
 - [ ] GitHub → Settings → Pages → Source: `main` / `docs` → gizlilik sayfaları yayına girer
-- [ ] Yayına giren adresi doğrula: `https://buraakkuss.github.io/latch-game/privacy.html` açılıyor mu?
+- [ ] Yayına giren adresi doğrula: `https://buraakkuss.github.io/kus-games/latch/privacy.html` açılıyor mu?
 - [ ] Aynı sayfa **stilli** mi görünüyor? (Depoda `docs/.nojekyll` var; olmazsa Jekyll `_style.css` dosyasını yayınlamaz ve sayfalar çıplak HTML olarak açılır.)
 
 ---

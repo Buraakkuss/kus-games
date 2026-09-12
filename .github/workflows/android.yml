@@ -8,12 +8,8 @@ on:
     branches: ['**']
     paths:
       - '.github/workflows/android.yml'
-      - 'www/**'
-      - 'latch/www/**'
-      - 'tools/**'
-      - 'latch/tools/**'
-      - 'app.config.json'
-      - 'latch/app.config.json'
+      - 'slot/**'
+      - 'latch/**'
   workflow_dispatch:
 
 jobs:
@@ -24,7 +20,7 @@ jobs:
       matrix:
         include:
           - app: slot
-            dir: .
+            dir: slot
           - app: latch
             dir: latch
     name: ${{ matrix.app }}
@@ -38,7 +34,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'   # Capacitor 7 Java 21 ister; 17 ile 'invalid source release: 21' hatasi verir
 
       - name: Bagimliliklar
         working-directory: ${{ matrix.dir }}
