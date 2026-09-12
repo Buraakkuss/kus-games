@@ -801,11 +801,11 @@ function render(){
 
   /* menu gosterisi metnin arkasinda kalsin */
   if (G.mode === 'menu'){
-    var mg = cx.createLinearGradient(0, H*0.02, 0, H*0.64);
-    mg.addColorStop(0,'rgba(6,8,15,.30)');
-    mg.addColorStop(0.42,'rgba(6,8,15,.80)');
+    var mg = cx.createLinearGradient(0, 0, 0, H*0.62);
+    mg.addColorStop(0,'rgba(6,8,15,.88)');
+    mg.addColorStop(0.55,'rgba(6,8,15,.96)');
     mg.addColorStop(1,'rgba(6,8,15,0)');
-    cx.fillStyle = mg; cx.fillRect(0, 0, W, H*0.64);
+    cx.fillStyle = mg; cx.fillRect(0, 0, W, H*0.62);
   }
 
   if (G.flash > 0){
