@@ -1,0 +1,15 @@
+{
+  "appId": "com.kusgrup.latch",
+  "appName": "Latch",
+  "webDir": "www",
+  "android": { "backgroundColor": "#070d14", "allowMixedContent": false },
+  "ios": { "backgroundColor": "#070d14", "contentInset": "never" },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 600,
+      "backgroundColor": "#070d14",
+      "showSpinner": false,
+      "androidSplashResourceName": "splash"
+    }
+  }
+}
