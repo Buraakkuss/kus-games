@@ -100,11 +100,55 @@ console.log('\n5) Surum ve kimlik tutarliligi');
   else ok('bundle id ' + cfg.bundleId);
   if (!html.includes(cfg.bundleId)) wrn('www/index.html icindeki bundle id app.config.json ile ayni degil');
   if (!html.includes(cfg.pagesBaseUrl)) wrn('www/index.html icindeki gizlilik adresi app.config.json ile ayni degil');
+  /* Destek e-postasi magaza sayfasinda herkese gorunur; yanlis kalirsa kullanici
+     hicbir zaman ulasamaz. Bu yuzden UYARI degil HATA, ve tek bir dosya degil
+     e-postanin gectigi TUM dosyalar taranir (paylasilan docs/index.html dahil). */
   const mail = cfg.supportEmail;
-  if (!html.includes(mail)) wrn('www/index.html destek e-postasi farkli - bash tools/set-identity.sh');
-  if (!fs.readFileSync(path.join(DOCS, 'privacy.html'), 'utf8').includes(mail))
-    wrn('docs/privacy.html e-postasi app.config.json ile ayni degil');
+  const MAILFILES = ['www/index.html','store/google-play.md','store/app-store.md',
+                     'native/android.md','native/ios.md','LAUNCH-CHECKLIST.md','README.md']
+      .map(f => path.join(ROOT, f))
+      .concat(['index.html','privacy.html','gizlilik.html','terms.html','support.html']
+      .map(f => path.join(DOCS, f)))
+      .concat([path.join(DOCSROOT, 'index.html')]);
+  let stale = 0;
+  MAILFILES.forEach(fp => {
+    if (!fs.existsSync(fp)) return;
+    const found = fs.readFileSync(fp, 'utf8')
+      .match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) || [];
+    found.filter(a => a !== mail).forEach(a => {
+      stale++;
+      bad(path.relative(path.join(ROOT, '..'), fp) + ' icinde farkli e-posta: ' + a
+          + ' - app.config.json duzelt, sonra bash tools/set-identity.sh');
+    });
+  });
+  if (!stale) ok('destek e-postasi ' + mail + ' gectigi her yerde ayni');
+
+  /* set-identity.sh, dosyalarda SU AN yazili degerleri OLD_* sabitlerinden bilir.
+     Bunlar bayatlarsa betik sessizce hicbir sey degistirmez - OLD_URL bir kez
+     boyle bayatladi. Ayrica betigin icindeki node programinin kendisi de gecerli
+     olmali: "g" iki kez tanimlandigi icin betik bir kez hic calismadi, yani
+     gercek AdMob kimlikleri ve useTest=false hicbir zaman yazilmayacakti. */
+  {
+    const sh = fs.readFileSync(path.join(ROOT, 'tools/set-identity.sh'), 'utf8');
+    const want = { OLD_MAIL: cfg.supportEmail, OLD_URL: cfg.pagesBaseUrl, OLD_ID: cfg.bundleId };
+    let shBad = 0;
+    Object.keys(want).forEach(k => {
+      const got = (sh.match(new RegExp(k + '="([^"]*)"')) || [])[1];
+      if (got !== want[k]) {
+        shBad++;
+        bad('tools/set-identity.sh ' + k + ' bayat: "' + got + '" yazili, "' + want[k] + '" olmali');
+      }
+    });
+    const prog = (sh.match(/node -e '([\s\S]*?)'\s*"\$ROOT"/) || [])[1];
+    if (!prog) { shBad++; bad('tools/set-identity.sh icindeki node programi okunamadi'); }
+    else try { new Function(prog); }
+         catch (e) { shBad++; bad('tools/set-identity.sh sozdizimi bozuk: ' + e.message); }
+    if (!shBad) ok('tools/set-identity.sh sabitleri guncel, programi sozdizimi temiz');
+  }
   ['index.html','privacy.html','terms.html','support.html'].forEach(f => {
+    /* Eksik dosyayi 4. bolum zaten HATA olarak bildirdi; burada okumaya kalkarsak
+       check.js yigin iziyle coker ve geri kalan denetimler (useTest dahil) hic calismaz. */
+    if (!fs.existsSync(path.join(DOCS, f))) return;
     const s = fs.readFileSync(path.join(DOCS, f), 'utf8');
     if (/orbita|nakitpilot|\bslot\b/i.test(s)) bad('docs/' + GAME + '/' + f + ' icinde baska projeden kalan metin var');
   });

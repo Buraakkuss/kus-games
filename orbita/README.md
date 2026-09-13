@@ -46,5 +46,5 @@ bu dört satırla ayarlanır.
   `app.config.json` içindeki `admob.real` alanlarını doldur, `useTest`'i `false` yap,
   `bash tools/set-identity.sh` çalıştır. `node tools/check.js` bunu kontrol ediyor.
 - `www/index.html` içinde `?selftest=1` otomatik oyun testi, `?shot=1` mağaza görseli modu var.
-- Destek e-postası şu an `t.burakkus@gmail.com`. Yayınlandığında mağaza sayfasında **herkese
+- Destek e-postası şu an `kusgrupgames@gmail.com`. Yayınlandığında mağaza sayfasında **herkese
   görünür.** Ayrı bir adres istiyorsan `app.config.json` içinde değiştirip `set-identity.sh` çalıştır.

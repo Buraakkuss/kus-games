@@ -71,7 +71,7 @@ doğrudan çıkar). AdMob PIN'iyle **paralel** aksın, ikisi de ~2 hafta.
 
 | Alan | Değer |
 |---|---|
-| Destek e-postası | `t.burakkus@gmail.com` |
+| Destek e-postası | `kusgrupgames@gmail.com` |
 | Web sitesi | `https://buraakkuss.github.io/kus-games` |
 | Gizlilik – Slot | `https://buraakkuss.github.io/kus-games/slot/privacy.html` |
 | Gizlilik – Latch | `https://buraakkuss.github.io/kus-games/latch/privacy.html` |

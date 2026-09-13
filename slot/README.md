@@ -60,5 +60,5 @@ büyüt (hayalet şekil daha uzun süre görünür), mekaniğe dokunma.
 - `www/index.html` içinde `?selftest=1` otomatik oyun testi, `?shot=1` mağaza görseli modu var.
   Self-test mükemmel oynayan bir yapay oyuncu çalıştırır; **o oyuncu ölürse zorluk tablosu
   adaletsiz** demektir ve doğrulama kırmızı yanar.
-- Destek e-postası şu an `t.burakkus@gmail.com`. Yayınlandığında mağaza sayfasında **herkese
+- Destek e-postası şu an `kusgrupgames@gmail.com`. Yayınlandığında mağaza sayfasında **herkese
   görünür.** Ayrı bir adres istiyorsan `app.config.json` içinde değiştirip `set-identity.sh` çalıştır.
