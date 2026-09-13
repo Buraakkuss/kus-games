@@ -61,9 +61,29 @@ npx cap open ios
 > Bu doğru bir beyandır: uygulama yalnızca işletim sisteminin standart HTTPS'ini kullanır.
 
 ## 6. Arşivle ve gönder
+
+**Normal yol — Mac gerekmez.** GitHub → **Actions** → **iOS yayin** → *Run workflow*
+→ oyunu seç → *Run*. Hat imzalar, IPA üretir ve App Store Connect'e yükler.
+Build numarası her çalıştırmada kendiliğinden artar, bu yüzden "build already
+exists" hatası yapısal olarak imkânsızdır.
+
+Önce bir kez şu dört secret girilmeli (Settings → Secrets and variables → Actions):
+
+| Secret | Nereden |
+|---|---|
+| `APPSTORE_ISSUER_ID` | App Store Connect → Integrations → Keys → **Issuer ID** |
+| `APPSTORE_KEY_ID` | aynı sayfadaki **Key ID** |
+| `APPSTORE_PRIVATE_KEY` | indirilen `AuthKey_XXX.p8` dosyasının **tam içeriği** |
+| `APPSTORE_TEAM_ID` | Membership → **Team ID** (10 karakter) |
+
+> `.p8` dosyası **bir kez** indirilir, tekrar indirilemez. Yedeğini güvenli bir
+> yerde tut ve depoya asla koyma.
+
+**Yedek yol — Xcode ile elle.** Hat bir sebeple çalışmazsa:
 - Xcode → Product → **Destination: Any iOS Device (arm64)** → **Archive**
 - Organizer → **Distribute App** → App Store Connect → Upload
-- App Store Connect'te build işlendikten sonra (10-30 dk) sürüme ekle
+
+App Store Connect'te build işlendikten sonra (5-30 dk) sürüme eklenir.
 
 ## 7. Gerçek cihazda test
 - Reklamlar "Test Ad" etiketiyle görünmeli

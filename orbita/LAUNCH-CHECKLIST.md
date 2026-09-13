@@ -101,7 +101,10 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 - [ ] IDFA beyanı: **Yes → Serve advertisements within the app**
 - [ ] `remove_ads` ürününü **ilk sürümle birlikte** incelemeye gönder (yoksa 3.1.1 reddi gelir)
 - [ ] App Review notlarını yapıştır (`store/app-store.md` içinde hazır)
-- [ ] Xcode'dan Archive → Upload → sürüme ekle → Gönder
+- [ ] GitHub → Actions → **iOS yayin** → oyunu seç → Run workflow
+      (Mac gerekmez; imzalar, IPA üretir, App Store Connect'e yükler.
+      Önce dört Apple secret'ı girilmiş olmalı — `native/ios.md` bölüm 6)
+- [ ] Build işlendikten sonra (5-30 dk) sürüme ekle → Gönder
 
 ---
 

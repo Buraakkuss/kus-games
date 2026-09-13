@@ -1,0 +1,158 @@
+name: iOS yayin
+
+# ELLE calistirilir: GitHub -> Actions -> "iOS yayin" -> Run workflow.
+# Secilen oyunu imzalar, IPA uretir ve App Store Connect'e (TestFlight) yukler.
+#
+# Her push'ta calisan ios.yml yalnizca "derleniyor mu" sorusunu kapatir; bu dosya
+# gercek yayin hattidir. Ikisi bilerek ayri: her commit'te TestFlight'a build
+# gondermek hem yavas hem de yayin kararini kazayla vermek demek olurdu.
+#
+# Gereken 4 secret (Settings -> Secrets and variables -> Actions):
+#   APPSTORE_ISSUER_ID   App Store Connect -> Integrations -> Keys -> Issuer ID
+#   APPSTORE_KEY_ID      ayni sayfadaki Key ID
+#   APPSTORE_PRIVATE_KEY indirilen AuthKey_XXX.p8 dosyasinin TAM icerigi
+#   APPSTORE_TEAM_ID     Membership -> Team ID (10 karakter)
+# .p8 dosyasi bir kez indirilir, tekrar indirilemez. Depoya ASLA koyma.
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Hangi oyun yayinlanacak'
+        type: choice
+        required: true
+        default: slot
+        options: [slot, latch, orbita]
+      upload:
+        description: 'App Store Connect e yukle (kapali: yalnizca IPA uretir, indirip bakarsin)'
+        type: boolean
+        default: true
+
+jobs:
+  release:
+    runs-on: macos-latest
+    name: ${{ inputs.app }}
+    env:
+      ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+      KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+      KEY_P8: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+      TEAM_ID: ${{ secrets.APPSTORE_TEAM_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Secret'lar tam mi
+        run: |
+          eksik=""
+          [ -n "$ISSUER_ID" ] || eksik="$eksik APPSTORE_ISSUER_ID"
+          [ -n "$KEY_ID" ]    || eksik="$eksik APPSTORE_KEY_ID"
+          [ -n "$KEY_P8" ]    || eksik="$eksik APPSTORE_PRIVATE_KEY"
+          [ -n "$TEAM_ID" ]   || eksik="$eksik APPSTORE_TEAM_ID"
+          if [ -n "$eksik" ]; then
+            echo "::error::Eksik secret:$eksik"
+            echo "Settings -> Secrets and variables -> Actions -> New repository secret"
+            exit 1
+          fi
+          echo "Dort secret de yerinde."
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Bagimliliklar
+        working-directory: ${{ inputs.app }}
+        run: npm install --no-audit --no-fund
+
+      - name: iOS projesini olustur
+        working-directory: ${{ inputs.app }}
+        run: |
+          npx cap add ios
+          npx cap sync ios
+
+      - name: Native ayarlari uygula
+        working-directory: ${{ inputs.app }}
+        run: bash tools/ios-prepare.sh
+
+      - name: Build numarasini benzersiz yap
+        working-directory: ${{ inputs.app }}
+        # App Store Connect ayni (surum, build) ciftini ikinci kez kabul etmez.
+        # run_number her calistirmada artar, boylece "build already exists" hatasi
+        # yapisal olarak imkansiz hale gelir. Kullaniciya gorunen surum
+        # (MARKETING_VERSION) app.config.json'dan gelmeye devam eder.
+        run: |
+          PBX=ios/App/App.xcodeproj/project.pbxproj
+          sed -i.bak -E "s/CURRENT_PROJECT_VERSION = [^;]+;/CURRENT_PROJECT_VERSION = ${{ github.run_number }};/g" "$PBX"
+          rm -f "$PBX.bak"
+          echo "build numarasi: ${{ github.run_number }}"
+          grep -m1 "MARKETING_VERSION" "$PBX"
+
+      - name: API anahtarini yerlestir
+        run: |
+          mkdir -p ~/private_keys
+          printf '%s\n' "$KEY_P8" > ~/private_keys/AuthKey_$KEY_ID.p8
+          chmod 600 ~/private_keys/AuthKey_$KEY_ID.p8
+
+      - name: Arsivle
+        working-directory: ${{ inputs.app }}/ios/App
+        run: |
+          xcodebuild -workspace App.xcworkspace -scheme App \
+            -configuration Release -destination 'generic/platform=iOS' \
+            -archivePath "$PWD/build/App.xcarchive" archive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_$KEY_ID.p8 \
+            -authenticationKeyID "$KEY_ID" \
+            -authenticationKeyIssuerID "$ISSUER_ID" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic | tail -40
+
+      - name: IPA uret
+        working-directory: ${{ inputs.app }}/ios/App
+        # method adi Xcode 16'da "app-store-connect", oncesinde "app-store".
+        # Hangi surumun kurulu oldugunu varsaymak yerine ikisini de deniyoruz.
+        run: |
+          yaz() {
+            cat > ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>$1</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>uploadSymbols</key><true/>
+            <key>destination</key><string>export</string>
+          </dict></plist>
+          PLIST
+          }
+          disar() {
+            xcodebuild -exportArchive \
+              -archivePath "$PWD/build/App.xcarchive" \
+              -exportPath "$PWD/build/ipa" \
+              -exportOptionsPlist ExportOptions.plist \
+              -allowProvisioningUpdates \
+              -authenticationKeyPath ~/private_keys/AuthKey_$KEY_ID.p8 \
+              -authenticationKeyID "$KEY_ID" \
+              -authenticationKeyIssuerID "$ISSUER_ID"
+          }
+          yaz app-store-connect
+          if ! disar; then
+            echo "app-store-connect kabul edilmedi, eski ad deneniyor: app-store"
+            yaz app-store
+            disar
+          fi
+          ls -la build/ipa
+
+      - name: App Store Connect e yukle
+        if: ${{ inputs.upload }}
+        working-directory: ${{ inputs.app }}/ios/App
+        run: |
+          IPA=$(ls build/ipa/*.ipa | head -1)
+          echo "yuklenen: $IPA"
+          xcrun altool --upload-app -t ios -f "$IPA" \
+            --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
+          echo "Yuklendi. App Store Connect -> TestFlight'ta islenmesi 5-30 dk surer."
+
+      - name: IPA'yi sakla
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.app }}-ios-ipa
+          path: ${{ inputs.app }}/ios/App/build/ipa/*.ipa
+          if-no-files-found: error
