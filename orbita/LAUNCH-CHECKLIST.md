@@ -40,6 +40,10 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 - [ ] 14 günü başlat ve **kesintisiz** tamamla
 - [ ] Bu süre AdMob PIN'i beklerken paralel aksın — ikisi de ~2 hafta
 
+> **Sayılan şey kayıtlı kişi sayısı, oynama sayısı değil** — kimsenin her gün
+> oynaması gerekmiyor, 14 gün listede kalması yeterli. Hazır davet mesajları ve
+> pratik ayrıntılar: depo kökündeki `TESTCI-DAVETI.md`.
+
 > Üç oyun için ayrı ayrı değil, **hesap başına bir kez**. İlk oyunda tamamlarsan
 > diğer ikisi doğrudan üretime çıkabilir.
 
