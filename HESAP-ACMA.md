@@ -1,15 +1,25 @@
 # Hesap açma kiti — tek oturumda bitir
 
 Bu üç kayıt **senin kimliğinle, bizzat** yapılır; devredilemez. Ama hazırlıklı
-girersen 40 dakikada biter. Sıra önemli: **AdMob'u ilk yap**, çünkü posta ile
-gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
+girersen 40 dakikada biter.
+
+**Takvimi belirleyen tek madde: Play'in 12 testçi × 14 gün kapalı test şartı.**
+Diğer her şey onun yanında kısa sürüyor, o yüzden Play Console'u ve testçi
+davetlerini mümkün olan en erken günde başlat.
+
+> **AdMob PIN'i hakkında yaygın yanlış:** PIN "istenmez". Google adres doğrulama
+> PIN'ini kendiliğinden, ancak **kazancın 10 dolara ulaştığında** postalar — yani
+> uygulamalar yayınlanıp para kazanmaya başladıktan sonra. Posta 2-4 hafta sürer,
+> ama bu **yayına değil, paranın hesabına geçmesine** engeldir. Yayın öncesi
+> yapılacak iş PIN beklemek değil, **ödeme profilini tamamlamaktır**.
 
 ## Başlamadan önce masada olsun
 
 - [ ] Kimlik (kendin için, kimseye göndermeden — sadece doğrulama ekranına)
 - [ ] Kredi/banka kartı (Apple 99 $/yıl, Play 25 $ tek sefer)
 - [ ] **IBAN** ve banka adı (AdMob ödemeleri için)
-- [ ] Fatura/ikamet adresi — AdMob PIN'i **bu adrese** postalanacak, doğru yaz
+- [ ] Fatura/ikamet adresi — AdMob doğrulama PIN'i ileride **bu adrese**
+      postalanacak, doğru yaz
 - [x] Hesap türü kararı: **ŞAHIS** (gerçek kişi) — verildi
 - [ ] **Mağazada görünecek adres.** Play, gerçek kişi geliştiriciden herkese açık
       bir adres istiyor. Ev adresini yazmak istemiyorsan **kayıttan önce** sanal
@@ -17,11 +27,14 @@ gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
 
 ---
 
-## 1) AdMob — ÖNCE BU (10 dk + 2-4 hafta posta)
+## 1) AdMob (10 dk — sonrası bekleme değil)
 
 1. admob.google.com → Google hesabınla giriş
 2. Ülke: Türkiye · Saat dilimi · Para birimi seç (**para birimi sonradan değişmez**)
-3. Ödemeler → **Ödeme adresini doğrula → PIN iste** ← *asıl amaç bu, atlamadan yap*
+3. Ödemeler → **ödeme profilini tamamla** (ad, adres, IBAN) ← *atlamadan yap:*
+   *AdMob ana sayfasındaki kırmızı bant bunu istiyor ve tamamlanmadan uygulamalar*
+   *inceleme aşamasında takılı kalıyor.* PIN bu adımda gelmez; kazanç 10 doları
+   bulunca kendiliğinden postalanır.
 4. Vergi bilgileri: şahıssan **W-8BEN**, şirketse **W-8BEN-E**
 5. Uygulama ekle → **Android** ve **iOS** için ayrı ayrı, üç oyun için altı kayıt:
 
@@ -39,7 +52,8 @@ gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
 
 Gerçek kişi hesaplarında üretime çıkmadan önce **12 testçi × 14 gün kesintisiz**
 kapalı test şartı var (hesap başına bir kez; ilk oyunda tamamlarsan diğer ikisi
-doğrudan çıkar). AdMob PIN'iyle **paralel** aksın, ikisi de ~2 hafta.
+doğrudan çıkar). **Takvimi belirleyen madde budur** — AdMob tarafında beklenecek
+bir şey yok, o yüzden bu 14 günü mümkün olan en erken gün başlat.
 
 - [ ] 12 kişi bul (her birinin ayrı Google hesabı olmalı ve daveti kabul etmeli)
 - [ ] Play Console → Test → Kapalı test → e-posta listesi
