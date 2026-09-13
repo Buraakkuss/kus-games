@@ -85,5 +85,5 @@ First release.
 | İçerik derecelendirme (IARC) | `store/content-rating.md` |
 
 ## Ülke dağıtımı
-- **Öneri: Türkiye HARİÇ tüm ülkeler.** Gerekçe: KVK 10/1-g "münhasıran yurt dışına hizmet" şartı (bkz. LAUNCH-CHECKLIST.md). Şahıs/gerçek kişi olarak yayımlamaya karar verirsen bu kısıt gerekmez, Türkiye'yi de aç.
+- **Tüm ülkeler, Türkiye dahil.** Hesap **gerçek kişi** olarak açıldığı için kurumsal yolun KVK 10/1-g "münhasıran yurt dışına hizmet" kısıtı geçerli değil (bkz. LAUNCH-CHECKLIST.md AŞAMA 0.2). Türkiye kendi pazarın; ilk geri bildirim ve ilk yorumlar oradan gelir.
 - Fiyat: Ücretsiz + uygulama içi satın alma.

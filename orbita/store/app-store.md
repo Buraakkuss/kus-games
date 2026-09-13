@@ -92,4 +92,4 @@ The app uses App Tracking Transparency; declining the prompt is fully supported 
 | Sign in with Apple gerekli mi? | Hayır (hiçbir giriş yöntemi yok) |
 | App Privacy (nutrition label) | `store/app-privacy.md` |
 | Fiyat | Ücretsiz + IAP |
-| Ülke dağıtımı | Türkiye hariç tüm ülkeler (gerekçe: LAUNCH-CHECKLIST.md) |
+| Ülke dağıtımı | **Tüm ülkeler, Türkiye dahil** (şahıs hesabı — kısıt yok) |

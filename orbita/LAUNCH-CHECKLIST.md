@@ -7,15 +7,16 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 
 ## AŞAMA 0 — Karar (5 dakika)
 
-- [ ] **Kurumsal mı, şahıs mı?** Bu karar iki şeyi belirliyor:
-  - **KUŞ GRUP Ltd (organization):** Play'de 12 testçi/14 gün şartı **yok**, ev adresin görünmez,
-    D-U-N-S doğrulaması 1-3 hafta sürer. KVK 10/1-g ile kurumlar vergisi %0 olabilmesi için
-    uygulamanın **münhasıran yurt dışı** kullanıcılara açık olması gerekir → mağaza dağıtımından
-    **Türkiye'yi çıkar**. `store/*.md` dosyaları bu varsayımla yazıldı.
-  - **Şahıs / gerçek kişi:** hemen başlar, ama Play'de 12 testçi × 14 gün kapalı test şartı var
-    (hesap başına tek sefer) ve ad-adres mağazada görünür. GVK mük. 20/B ile %15 banka stopajı
-    nihai vergi olur, 2026 sınırı 5.300.000 TL — aşarsan istisna geriye dönük tamamen kalkar.
-  - Karar verene kadar **1-5 arası adımların hepsi yapılabilir**; hiçbiri hesaba bağlı değil.
+- [x] **Hesap türü: ŞAHIS** (karar verildi). Somut sonuçları:
+  - **Türkiye dağıtıma DAHİL** — kurumsal yolun KVK 10/1-g "münhasıran yurt dışı"
+    şartı geçerli değil. `store/*.md` buna göre güncellendi.
+  - **D-U-N-S gerekmiyor** → Apple kaydı 1-3 günde açılır.
+  - **Ad ve adres mağazada görünür.** Ev adresi istemiyorsan kayıttan **önce**
+    sanal ofis/PTT kutusu ayarla; sonradan değiştirmek doğrulamayı baştan tetikler.
+  - **Play'de 12 testçi × 14 gün kapalı test şartı var** (hesap başına tek sefer).
+    Takvimi belirleyen madde budur → testçi toplamaya bugün başla.
+  - Vergi: GVK mük. 20/B, %15 banka stopajı nihai vergi, 2026 sınırı 5.300.000 TL
+    (aşarsan istisna geriye dönük kalkar). **Vergi tavsiyesi değildir; muhasebecinle teyit et.**
 
 ---
 
@@ -28,6 +29,19 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 - [ ] Google Play: Ödemeler profili + vergi bilgileri
 - [x] GitHub deposu ve Pages: **tamam** — `kus-games` deposu, Pages `main` / `docs`
 - [x] Gizlilik adresi canlı: `https://buraakkuss.github.io/kus-games/orbita/privacy.html`
+
+### 1b · Play kapalı test grubu (ŞAHIS hesabın zorunlu şartı)
+
+- [ ] **12 testçi bul** — arkadaş, aile, iş arkadaşı olabilir; hepsinin ayrı bir
+      **Google hesabı** olması ve testi **kabul etmesi** gerekiyor
+- [ ] Play Console → Test → Kapalı test → e-posta listesi oluştur (12+ kişi)
+- [ ] Testçilere opt-in bağlantısını gönder, katıldıklarını **teyit et**
+      (katılmayan sayılmıyor; sayı 12'nin altına düşerse 14 gün baştan başlar)
+- [ ] 14 günü başlat ve **kesintisiz** tamamla
+- [ ] Bu süre AdMob PIN'i beklerken paralel aksın — ikisi de ~2 hafta
+
+> Üç oyun için ayrı ayrı değil, **hesap başına bir kez**. İlk oyunda tamamlarsan
+> diğer ikisi doğrudan üretime çıkabilir.
 
 ---
 
@@ -70,7 +84,7 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 - [ ] İçerik derecelendirme: `store/content-rating.md`
 - [ ] Hedef kitle: **13+** (13 yaş altını seçme)
 - [ ] Reklam içeriyor: **Evet**
-- [ ] Ülkeler: karar 0'a göre (kurumsal ise **Türkiye hariç**)
+- [ ] Ülkeler: **Türkiye dahil tüm ülkeler** (şahıs hesabında kısıt yok)
 - [ ] AAB yükle → Kapalı test → sonra Üretim
 
 ### App Store
