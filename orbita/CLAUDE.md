@@ -55,5 +55,6 @@ Depo düzeni ve yeni oyun ekleme: kökteki `CLAUDE.md`.
 - Android `versionCode` her yüklemede artmalı.
 - `orbita-release.jks` imza anahtarı kaybolursa uygulama bir daha güncellenemez.
 - Global `var top` kullanma — `window.top` ile çakışır, sessizce NaN üretir.
-- Mağaza dağıtımından Türkiye çıkarılmışsa bu bir **vergi gereği**dir (KVK 10/1-g), yanlışlıkla açma.
+- Hesap **gerçek kişi** olarak açıldı: Türkiye dağıtıma dahildir, D-U-N-S gerekmez,
+  ama Play'de **12 testçi × 14 gün** kapalı test şartı var (hesap başına tek sefer).
   Gerekçe `LAUNCH-CHECKLIST.md` Aşama 0'da.

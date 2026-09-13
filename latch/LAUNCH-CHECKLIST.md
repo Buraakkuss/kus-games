@@ -19,15 +19,31 @@ Mağaza adı **`Latch: One Tap Swing`** olsun; tek başına "Latch" aramada kayb
 Göndermeden önce her iki mağazada "latch" aratıp çakışma var mı bak. İsim değişimi
 tek yerden yapılır: `app.config.json` + `bash tools/set-identity.sh`.
 
-### 0.2 · Kurumsal mı, şahıs mı?
-- **KUŞ GRUP Ltd (organization):** Play'de 12 testçi/14 gün şartı **yok**, ev adresin görünmez,
-  D-U-N-S doğrulaması 1-3 hafta sürer. KVK 10/1-g ile kurumlar vergisi %0 olabilmesi için
-  uygulamanın **münhasıran yurt dışı** kullanıcılara açık olması gerekir → mağaza dağıtımından
-  **Türkiye'yi çıkar**. `store/*.md` dosyaları bu varsayımla yazıldı.
-- **Şahıs / gerçek kişi:** hemen başlar, ama Play'de 12 testçi × 14 gün kapalı test şartı var
-  (hesap başına tek sefer) ve ad-adres mağazada görünür. GVK mük. 20/B ile %15 banka stopajı
-  nihai vergi olur, 2026 sınırı 5.300.000 TL — aşarsan istisna geriye dönük tamamen kalkar.
-- Karar verene kadar **1-3 arası adımların hepsi yapılabilir**; hiçbiri hesaba bağlı değil.
+### 0.2 · Hesap türü: **ŞAHIS** (karar verildi)
+
+Kayıt gerçek kişi olarak yapılacak. Bu kararın dört somut sonucu var, üçü
+lehine, biri takvimi belirliyor:
+
+- **Türkiye dağıtıma DAHİL.** Kurumsal yolun KVK 10/1-g "münhasıran yurt dışına
+  hizmet" şartı artık geçerli değil, dolayısıyla Türkiye'yi çıkarmak için bir
+  sebep kalmadı. `store/*.md` bu karara göre güncellendi.
+- **D-U-N-S numarası gerekmiyor** → Apple kaydı 1-3 hafta yerine 1-3 günde açılır.
+- **Ad ve adres mağaza sayfasında görünür.** Play, gerçek kişi geliştiriciden
+  herkese açık bir adres istiyor. Ev adresini yazmak istemiyorsan kayıttan
+  **önce** bir sanal ofis/PTT kutusu adresi ayarla; sonradan değiştirmek
+  doğrulamayı baştan tetikliyor.
+- **Play'de 12 testçi × 14 gün kapalı test şartı var** (yeni gerçek kişi
+  hesapları için, hesap başına tek sefer). Üretime çıkmadan önce 12 kişinin
+  kapalı teste katılıp 14 gün **kesintisiz** kalması gerekiyor. Takvimi belirleyen
+  madde budur → AŞAMA 1'de testçi toplamaya bugün başla.
+
+> **Vergi:** GVK mük. 20/B ile %15 banka stopajı nihai vergi olur, 2026 sınırı
+> 5.300.000 TL — aşarsan istisna geriye dönük tamamen kalkar. İstisnadan
+> yararlanmak için uygulama gelirinin elektronik uygulama mağazaları üzerinden
+> elde edilmesi ve kazancın istisna kapsamında beyan edilmesi gerekir.
+> **Bu bir vergi tavsiyesi değil; ilk gelir gelmeden muhasebecinle teyit et.**
+
+- Karar verildiği için **1-3 arası adımların hepsi yapılabilir**; hiçbiri beklemede değil.
 
 ---
 
@@ -42,6 +58,19 @@ tek yerden yapılır: `app.config.json` + `bash tools/set-identity.sh`.
 - [ ] GitHub → Settings → Pages → Source: `main` / `docs` → gizlilik sayfaları yayına girer
 - [ ] Yayına giren adresi doğrula: `https://buraakkuss.github.io/kus-games/latch/privacy.html` açılıyor mu?
 - [ ] Aynı sayfa **stilli** mi görünüyor? (Depoda `docs/.nojekyll` var; olmazsa Jekyll `_style.css` dosyasını yayınlamaz ve sayfalar çıplak HTML olarak açılır.)
+
+### 1b · Play kapalı test grubu (ŞAHIS hesabın zorunlu şartı)
+
+- [ ] **12 testçi bul** — arkadaş, aile, iş arkadaşı olabilir; hepsinin ayrı bir
+      **Google hesabı** olması ve testi **kabul etmesi** gerekiyor
+- [ ] Play Console → Test → Kapalı test → e-posta listesi oluştur (12+ kişi)
+- [ ] Testçilere opt-in bağlantısını gönder, katıldıklarını **teyit et**
+      (katılmayan sayılmıyor; sayı 12'nin altına düşerse 14 gün baştan başlar)
+- [ ] 14 günü başlat ve **kesintisiz** tamamla
+- [ ] Bu süre AdMob PIN'i beklerken paralel aksın — ikisi de ~2 hafta
+
+> Üç oyun için ayrı ayrı değil, **hesap başına bir kez**. İlk oyunda tamamlarsan
+> diğer ikisi doğrudan üretime çıkabilir.
 
 ---
 
@@ -86,7 +115,7 @@ tek yerden yapılır: `app.config.json` + `bash tools/set-identity.sh`.
 - [ ] Hedef kitle: **13+** (13 yaş altını seçme)
 - [ ] Reklam içeriyor: **Evet**
 - [ ] Kategori: Arcade
-- [ ] Ülkeler: karar 0.2'ye göre (kurumsal ise **Türkiye hariç**)
+- [ ] Ülkeler: **Türkiye dahil tüm ülkeler** (şahıs hesabında kısıt yok)
 - [ ] AAB yükle → Kapalı test → sonra Üretim
 
 ### App Store

@@ -10,8 +10,10 @@ gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
 - [ ] Kredi/banka kartı (Apple 99 $/yıl, Play 25 $ tek sefer)
 - [ ] **IBAN** ve banka adı (AdMob ödemeleri için)
 - [ ] Fatura/ikamet adresi — AdMob PIN'i **bu adrese** postalanacak, doğru yaz
-- [ ] Vergi durumu kararı: şahıs mı, KUŞ GRUP Ltd mi
-      (fark ve gerekçe: `slot/LAUNCH-CHECKLIST.md` AŞAMA 0)
+- [x] Hesap türü kararı: **ŞAHIS** (gerçek kişi) — verildi
+- [ ] **Mağazada görünecek adres.** Play, gerçek kişi geliştiriciden herkese açık
+      bir adres istiyor. Ev adresini yazmak istemiyorsan **kayıttan önce** sanal
+      ofis / PTT kutusu ayarla; sonradan değiştirmek doğrulamayı baştan tetikler.
 
 ---
 
@@ -33,10 +35,21 @@ gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
 > Her uygulama için **App ID** + **Interstitial ID** + **Rewarded ID** üretilecek:
 > oyun başına 6, toplam **18 kimlik**. Hepsini bana ver, dosyalara ben yazarım.
 
+## 1b) Play kapalı test grubu — bugün başlat (şahıs hesabının zorunlu şartı)
+
+Gerçek kişi hesaplarında üretime çıkmadan önce **12 testçi × 14 gün kesintisiz**
+kapalı test şartı var (hesap başına bir kez; ilk oyunda tamamlarsan diğer ikisi
+doğrudan çıkar). AdMob PIN'iyle **paralel** aksın, ikisi de ~2 hafta.
+
+- [ ] 12 kişi bul (her birinin ayrı Google hesabı olmalı ve daveti kabul etmeli)
+- [ ] Play Console → Test → Kapalı test → e-posta listesi
+- [ ] Opt-in bağlantısını gönder, katıldıklarını **teyit et**
+      (sayı 12'nin altına düşerse 14 gün baştan başlar)
+
 ## 2) Google Play Console (15 dk + 1-2 gün doğrulama)
 
 1. play.google.com/console → **25 $** tek seferlik ödeme
-2. Hesap türü: şahıs / kuruluş (AŞAMA 0 kararın)
+2. Hesap türü: **Kendim (şahıs)**
 3. Kimlik doğrulama: kimlik yükleme + adres belgesi istenebilir
 4. Ödemeler profili + vergi bilgileri
 5. Uygulama oluştur (üç kez) — adlar:
@@ -47,7 +60,7 @@ gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
 ## 3) Apple Developer (20 dk + 1-3 gün, şirketse D-U-N-S 1-3 hafta)
 
 1. developer.apple.com/programs → **99 $/yıl**
-2. Şirketse önce **D-U-N-S numarası** al (ücretsiz, 1-3 hafta — şirket kararı verdiysen bunu da bugün başlat)
+2. Hesap türü: **Individual** — **D-U-N-S gerekmiyor**, kayıt 1-3 günde açılır
 3. Kimlik doğrulama (Apple ID + iki adımlı doğrulama şart)
 4. Agreements, Tax and Banking → **Paid Apps** sözleşmesi + banka + vergi formu
 5. App Store Connect → yeni uygulama (üç kez), bundle id'ler yukarıdaki tabloda
@@ -65,6 +78,7 @@ gelen PIN 2-4 hafta bekletiyor ve o süre diğer işlerle paralel akmalı.
 | Gizlilik – Orbita | `https://buraakkuss.github.io/kus-games/orbita/privacy.html` |
 | Kategori | Games → Arcade |
 | Yaş hedefi | 13+ (13 yaş altını seçme) |
+| Ülke dağıtımı | Tüm ülkeler, **Türkiye dahil** |
 | Reklam içeriyor | Evet |
 | Uygulama içi satın alma | Evet — `remove_ads`, tek seferlik, ~2,99 $ |
 

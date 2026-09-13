@@ -83,4 +83,5 @@ mesafe tek dokunuşa yetmiyordur. Bu durumda mekaniği değil tabloyu düzelt.
   çağrışımı hem aramayı hem incelemeyi vurur. Gerekçe `LAUNCH-CHECKLIST.md` AŞAMA 0.1'de,
   kumar olmadığı `docs/terms.html` madde 4 ve App Review notunda yazılı.
 - Global `var top` kullanma — `window.top` ile çakışır ve sessizce NaN üretir.
-- Mağaza dağıtımından Türkiye çıkarılmışsa bu bir **vergi gereği**dir (KVK 10/1-g), yanlışlıkla açma.
+- Hesap **gerçek kişi** olarak açıldı: Türkiye dağıtıma dahildir, D-U-N-S gerekmez,
+  ama Play'de **12 testçi × 14 gün** kapalı test şartı var (hesap başına tek sefer).
