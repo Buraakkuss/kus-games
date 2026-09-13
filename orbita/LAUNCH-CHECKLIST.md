@@ -24,7 +24,9 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 
 - [ ] Apple Developer Program kaydı (99 $/yıl) · organization ise D-U-N-S numarası
 - [ ] Google Play Console kaydı (25 $ tek sefer)
-- [ ] AdMob hesabı aç, **ödeme adresi doğrulama PIN'i** iste (posta ile gelir, 2-4 hafta sürer — şimdi başlat)
+- [ ] AdMob hesabı aç ve **ödeme profilini tamamla** (ad, adres, IBAN). Doğrulama
+      PIN'i istenmez: kazanç 10 doları bulunca kendiliğinden postalanır, yani yayına
+      değil yalnızca ödemeye engeldir.
 - [ ] Apple: Agreements, Tax and Banking → Paid Apps sözleşmesi + banka + vergi formları (**W-8BEN-E** kurumsal / **W-8BEN** şahıs)
 - [ ] Google Play: Ödemeler profili + vergi bilgileri
 - [x] GitHub deposu ve Pages: **tamam** — `kus-games` deposu, Pages `main` / `docs`
@@ -38,7 +40,7 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 - [ ] Testçilere opt-in bağlantısını gönder, katıldıklarını **teyit et**
       (katılmayan sayılmıyor; sayı 12'nin altına düşerse 14 gün baştan başlar)
 - [ ] 14 günü başlat ve **kesintisiz** tamamla
-- [ ] Bu süre AdMob PIN'i beklerken paralel aksın — ikisi de ~2 hafta
+- [ ] **Takvimi belirleyen madde budur** — AdMob tarafında beklenecek bir şey yok
 
 > **Sayılan şey kayıtlı kişi sayısı, oynama sayısı değil** — kimsenin her gün
 > oynaması gerekmiyor, 14 gün listede kalması yeterli. Hazır davet mesajları ve
