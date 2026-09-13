@@ -1,9 +1,12 @@
 name: iOS build
 
-# Apple hesabi ACILMADAN once: simulator icin imzasiz derleme yapar.
-# "Uygulama iOS'ta derleniyor mu" sorusunu hesapsiz kapatir.
-# Hesap acildiktan sonra: secret'lar eklenince arsivleyip TestFlight'a yollar
-# (asagidaki "Arsivle" adimi otomatik devreye girer).
+# Her push'ta: simulator icin IMZASIZ derleme. Tek isi "uygulama iOS'ta hala
+# derleniyor mu" sorusunu kapatmak; Apple hesabi gerektirmez.
+#
+# GERCEK YAYIN BU DOSYADA DEGIL: imzalama, IPA ve App Store Connect yuklemesi
+# elle calistirilan .github/workflows/ios-release.yml icindedir. Ikisi bilerek
+# ayri: her commit'te TestFlight'a build gondermek hem yavas olurdu hem de
+# yayin kararini kazayla vermek demekti.
 on:
   push:
     branches: ['**']
@@ -28,11 +31,6 @@ jobs:
           - app: orbita
             dir: orbita
     name: ${{ matrix.app }}
-    env:
-      # DIKKAT: secrets baglami step-level `if` icinde KULLANILAMAZ
-      # ("Unrecognized named-value: 'secrets'"). Is seviyesinde env'e alinip
-      # oyle test edilir.
-      HAS_APPLE: ${{ secrets.APPSTORE_ISSUER_ID != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -69,20 +67,3 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
             build | tail -40
-
-      - name: Arsivle ve TestFlight'a yolla (Apple secret'lari varsa)
-        if: env.HAS_APPLE == 'true'
-        working-directory: ${{ matrix.dir }}/ios/App
-        env:
-          ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
-          KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
-          KEY_P8: ${{ secrets.APPSTORE_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/private_keys
-          echo "$KEY_P8" > ~/private_keys/AuthKey_$KEY_ID.p8
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
-            -archivePath build/App.xcarchive archive \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_$KEY_ID.p8 \
-            -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER_ID"
-          echo "Arsiv hazir: build/App.xcarchive"

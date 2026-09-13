@@ -133,7 +133,10 @@ lehine, biri takvimi belirliyor:
 - [ ] IDFA beyanı: **Yes → Serve advertisements within the app**
 - [ ] App Review notlarını yapıştır — **kumar açıklaması ilk paragrafta olmalı** (`store/app-store.md`)
 - [ ] `remove_ads` ürününü **ilk sürümle birlikte** incelemeye gönder (yoksa 3.1.1 reddi gelir)
-- [ ] Xcode'dan Archive → Upload → sürüme ekle → Gönder
+- [ ] GitHub → Actions → **iOS yayin** → oyunu seç → Run workflow
+      (Mac gerekmez; imzalar, IPA üretir, App Store Connect'e yükler.
+      Önce dört Apple secret'ı girilmiş olmalı — `native/ios.md` bölüm 6)
+- [ ] Build işlendikten sonra (5-30 dk) sürüme ekle → Gönder
 
 ---
 
