@@ -16,6 +16,10 @@ ve `assets/` klasörü vardır. Ortak olan yalnızca `docs/` (GitHub Pages) ve
    değişikliklerde `latch: v1.0.1` biçimi de kabul.
 5. Kimlik bilgileri (bundle id, e-posta, AdMob, Pages adresi) **yalnız
    `<oyun>/app.config.json`** içinde değişir, ardından `bash tools/set-identity.sh`.
+   Betik, dosyalarda **şu an yazılı olan** değerleri `OLD_MAIL / OLD_URL / OLD_ID`
+   sabitlerinden bilir; çalıştırdıktan sonra bu sabitlere de yeni değeri yaz.
+   Bayat kalırlarsa betik sessizce hiçbir şey değiştirmez — `OLD_URL` bir kez böyle
+   bayatladı. Artık `check.js` bunu **hata** olarak yakalıyor.
 6. Token tasarrufu: oyun dosyaları ~1200-1300 satırdır, tamamını okuma; `grep -n` kullan.
 
 ## GitHub Pages

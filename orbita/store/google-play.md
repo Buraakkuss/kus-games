@@ -48,7 +48,7 @@ How far can you get before the arcs catch you?
 - Uygulama türü: **Oyun**
 - Kategori: **Arcade**
 - Etiketler: Arcade, Casual, Single player, Offline, Minimalist
-- E-posta: `t.burakkus@gmail.com`
+- E-posta: `kusgrupgames@gmail.com`
 - Web sitesi: `https://buraakkuss.github.io/kus-games/orbita`
 - Gizlilik politikası: `https://buraakkuss.github.io/kus-games/orbita/privacy.html`
 

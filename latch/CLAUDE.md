@@ -77,6 +77,13 @@ kısıtıyla oyuncuyu da sürükler; bu etkiyi `simChain` modelleyemiyor ve adal
 
 ## Tuzaklar
 
+- `tools/set-identity.sh` içindeki node programı bash'te **tek tırnak** arasında durur;
+  içine düz tek tırnak yazılamaz, gereken yerde `Q` sabiti kullanılır. Bu dosyada üç hata
+  bir kez birlikte yaşandı ve betik **hiç çalışmadı**: (a) `g` değişkeni iki kez tanımlandığı
+  için sözdizimi hatası, (b) AdMob düzenli ifadesinde `[\\\\s\\\\S]` yazıldığı için (doğrusu `[\\s\\S]`)
+  "herhangi bir karakter" yerine "ters bölü, s veya S" araması, (c) `OLD_URL` bayatlaması.
+  Üçü birlikte, gerçek AdMob kimliklerinin ve `useTest: false`'un hiçbir zaman yazılmaması
+  demekti. `check.js` artık betiğin sözdizimini ve sabitlerinin güncelliğini denetliyor.
 - `CFG.ads.useTest` **true** ile yayına çıkarsan gelir olmaz. `tools/check.js` yakalar.
 - Gerçek AdMob kimlikleriyle kendi reklamına tıklamak hesabı kapattırır.
 - Android `versionCode` her yüklemede artmalı; `latch-release.jks` kaybolursa uygulama

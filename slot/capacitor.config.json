@@ -2,8 +2,14 @@
   "appId": "com.kusgrup.slot",
   "appName": "Slot",
   "webDir": "www",
-  "android": { "backgroundColor": "#06080f", "allowMixedContent": false },
-  "ios": { "backgroundColor": "#06080f", "contentInset": "never" },
+  "android": {
+    "backgroundColor": "#06080f",
+    "allowMixedContent": false
+  },
+  "ios": {
+    "backgroundColor": "#06080f",
+    "contentInset": "never"
+  },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 600,
