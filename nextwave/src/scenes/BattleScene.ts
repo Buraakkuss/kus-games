@@ -44,7 +44,7 @@ export class BattleScene extends Phaser.Scene {
       fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '14px', color: '#dce4ec'
     }).setDepth(10);
     /* Sag ustte: siradaki kule ve maliyeti. Hurda yetmiyorsa soluk. */
-    this.towerTag = this.add.text(this.scale.width - 12, 32, '', {
+    this.towerTag = this.add.text(this.scale.width - 12, 30, '', {
       fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '15px', color: '#35b9a4'
     }).setOrigin(1, 0).setDepth(10);
 
@@ -77,6 +77,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   override update(_t: number, deltaMs: number): void {
+    /* Ekran dondugunde/boyutlandiginda HUD sag kenarda kalsin. */
+    this.towerTag.setX(this.scale.width - 12);
     const dt = Math.min(deltaMs / 1000, 1 / 20);   /* sekme koruma */
     const v = this.stick.value;
     this.world.step(dt, v);
@@ -99,6 +101,11 @@ export class BattleScene extends Phaser.Scene {
 
   private draw(): void {
     const g = this.gfx, w = this.world, b = w.bal;
+    /* Olcegi HER KARE hesapla. create() + resize olayi cogu durumda yeterli,
+       ama telefonda adres cubugu kayarken tuval sessizce yeniden boyutlanir.
+       Dort aritmetik islem; her karede yapmanin maliyeti yok.
+       Dunya 1600x900 sabittir: daha genis ekranlarda iki yanda bant kalir. */
+    this.fit();
     g.clear();
 
     /* zemin */
