@@ -27,6 +27,14 @@ Denge değiştirmeden önce §4 (istihbarat) ve §7 (kart teklif kuralları) oku
 | `npm run sim` | **Denge simülasyonu** — görüntüsüz, Node'da, N koşu |
 | `npm run typecheck` | `tsc --noEmit` |
 | `node tools/check.js` | Hepsi + tarayıcı self-test |
+| `bash tools/publish-web.sh` | Derleyip `docs/nextwave/play/` altına koyar (Pages) |
+
+Hata ayıklama: `?scene=intel&lv=7` veya `?scene=battle&lv=5` menüden geçmeden
+doğrudan o ekranı açar — yerleşimi telefon oranında denetlemek için.
+
+**Yayın elle kopyalanmaz.** `docs/nextwave/play/` bir derleme çıktısıdır; kaynak
+değişip yayın adımı unutulursa oyuncular eski sürümü oynar ve kimse fark etmez.
+`nextwave.yml` her push'ta bunu denetler ve bayatsa kırmızı yanar.
 
 `RUNS=1000 npm run sim` ile örneklem büyütülür. `DIAG=1` teşhis satırlarını açar
 (üs yüzde kaç kaldı, bölüm kaç saniye sürdü) — denge ayarlarken asıl işe yarayan bu.

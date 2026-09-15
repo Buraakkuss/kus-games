@@ -39,8 +39,14 @@ https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
 - Ortak stil `docs/_style.css`; vurgu rengi sayfanın `<html data-game="...">`
   niteliğinden gelir. Yeni oyun için CSS'e bir satır ekle.
 
-> `nextwave/` henüz mobil derleme matrisinde **değil**: 0.1.0-a bir web prototipi.
-> Native paketleme 0.1.0-d kesiminde, oynanış doğrulandıktan sonra eklenecek.
+> `nextwave/` mobil derleme matrisinde **değil**: 0.1.x bir web sürümü. Onun yerine
+> `.github/workflows/nextwave.yml` çalışır — mimari kural, tip denetimi, denge
+> simülasyonu, derleme ve **yayındaki paketin bayat olup olmadığı**. Native
+> paketleme oynanış oturduktan sonra eklenecek.
+>
+> Next Wave tarayıcıdan oynanabiliyor:
+> `https://buraakkuss.github.io/kus-games/nextwave/play/`
+> Yayın adımı elle değil betikle: `bash nextwave/tools/publish-web.sh`.
 
 ## Bulutta derleme
 
