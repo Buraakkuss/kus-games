@@ -80,6 +80,20 @@ yapay oyuncu yazman gerekir; şu anki sezgisel oyuncu buna yetmez.
 5. `.github/workflows/android.yml` matrisine `- app: yenioyun / dir: yenioyun` ekle.
 6. Oyunu yaz, `bash tools/gen.sh`, `node tools/check.js`.
 
+**Görsel çıta — bu bir kez pahalıya mal oldu.** Dördüncü bir oyun (strateji/savunma)
+mekaniği ölçülmüş ve dengeli olmasına rağmen **görselliği yüzünden** iptal edildi:
+oynanabilir sürüm, motorun üstüne düz dairelerle çizilmiş bir hata ayıklama
+görünümüyle teslim edildi. Ders şu:
+
+- **Sorun soyutluk değil.** Slot da soyut — kareler ve çokgenler — ama degrade
+  dolgusu, parlaması, parçacıkları ve derinliği var; tasarlanmış görünüyor.
+  Ölçüt bu: `slot/assets/screenshots/` içindeki kareler.
+- **Geçici görünüm oynatılmaz.** Mekaniği doğrulamak için düz şekiller çizmek
+  doğrudur; onu kullanıcıya "oyun" diye sunmak değildir. Sunmadan önce sanat
+  geçişi yapılır: silüetler, parlama, parçacık, vuruş geri bildirimi, ekran
+  sarsıntısı, tasarlanmış HUD.
+- İptal edilen oyunun kodu geçmişte duruyor: `git show ba8caa4`.
+
 ## Bir oyunu kendi deposuna çıkarmak
 
 ```bash
