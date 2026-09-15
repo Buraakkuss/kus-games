@@ -52,6 +52,8 @@ export function button(
 ): void {
   const hex = Phaser.Display.Color.HexStringToColor(accent).color;
   panel(s, x, y, w, h, hex, hex, 0.12);
-  label(s, x + w / 2, y + h / 2 - 11, text, 20, accent, 'center');
+  /* Yazi boyu tus yuksekligine baglidir; sabit 20px kisa tuslarda tasiyordu. */
+  const fs = Math.max(13, Math.min(20, h * 0.40));
+  label(s, x + w / 2, y + (h - fs * 1.3) / 2, text, fs, accent, 'center');
   hit(s, x, y, w, h, onTap);
 }

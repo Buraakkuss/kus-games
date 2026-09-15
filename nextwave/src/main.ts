@@ -54,7 +54,35 @@ game.registry.set('levels', LEVELS);
 game.scene.add('intel', IntelScene, false);
 game.scene.add('battle', BattleScene, false);
 game.scene.add('result', ResultScene, false);
-game.scene.add('menu', MenuScene, true);
+/* ?scene=intel&lv=N — gelistirme kolayligi: dogrudan istihbarat ekranini acar.
+   Diger uc oyundaki ?shot=1 ile ayni fikir; ekran duzenini menuden gecmeden
+   telefon oraninda denetlemek icin. */
+const q = new URLSearchParams(location.search);
+if (q.get('scene') === 'battle') {
+  const run = new Run(DATA, LEVELS, CARDS, 'normal', 99);
+  const lv = Math.max(1, Math.min(LEVELS.length, Number(q.get('lv') ?? 3)));
+  for (let i = 1; i < lv; i++) {
+    const o = run.offer();
+    if (o.length) run.take(o[0]!);
+    run.advance(0.8, 10);
+  }
+  const o = run.offer();
+  if (o.length) run.take(o[0]!);
+  game.scene.add('menu', MenuScene, false);
+  game.scene.start('battle', { run });
+} else if (q.get('scene') === 'intel') {
+  const run = new Run(DATA, LEVELS, CARDS, 'normal', 99);
+  const lv = Math.max(1, Math.min(LEVELS.length, Number(q.get('lv') ?? 1)));
+  for (let i = 1; i < lv; i++) {
+    const o = run.offer();
+    if (o.length) run.take(o[0]!);
+    run.advance(0.8, 10);
+  }
+  game.scene.add('menu', MenuScene, false);
+  game.scene.start('intel', { run });
+} else {
+  game.scene.add('menu', MenuScene, true);
+}
 
 ver.textContent = 'V: ' + __GAME_VERSION__;
 

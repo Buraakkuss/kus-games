@@ -39,42 +39,50 @@ export class IntelScene extends Phaser.Scene {
     label(this, 16, 12, 'SONRAKİ SALDIRI İSTİHBARATI', 13, C.acc);
     label(this, W - 16, 12, `BÖLÜM ${lv.n} / ${this.run.levels.length}`, 13, C.dim, 'right');
 
+    /* Telefon yatay orani ~390px yuksekliktir: her sey oraya SIGMALI.
+       Ilk surumde sabit araliklar kullanildi, kartlar tasti ve ONAYLA tusu
+       kartin ustune bindi. Artik butun olculer yukseklikten turetiliyor. */
+    const compact = H < 460;
+    const fs = (big: number, small: number) => (compact ? small : big);
+
     /* ---- rapor metni ---- */
-    const txt = this.add.text(16, 36, rep.text, {
-      fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '14px',
+    const txt = this.add.text(16, 32, rep.text, {
+      fontFamily: 'ui-monospace, Menlo, monospace', fontSize: fs(14, 12) + 'px',
       color: rep.blackout ? C.dng : C.ink, wordWrap: { width: W - 32 }
     });
 
     /* ---- tehdit eksenleri ---- */
-    let y = txt.y + txt.height + 14;
-    const barX = 92, barW = Math.min(240, W * 0.34);
+    let y = txt.y + txt.height + fs(14, 8);
+    const rowH = fs(20, 15);
+    const barX = 88, barW = Math.min(240, W * 0.30);
     for (const ax of AXES) {
       const v = rep.shown[ax];
-      label(this, 16, y, AXIS_LABEL[ax], 11, C.dim);
+      label(this, 16, y, AXIS_LABEL[ax], fs(11, 10), C.dim);
       for (let i = 0; i < 3; i++) {
         const on = !rep.blackout && i <= v;
         const col = rep.blackout ? 0x2a3a4a : on ? (v === 2 ? C.dngHex : C.accHex) : 0x1f2c39;
-        this.add.rectangle(barX + i * (barW / 3 + 4), y + 5, barW / 3, 9, col).setOrigin(0, 0);
+        this.add.rectangle(barX + i * (barW / 3 + 4), y + 3, barW / 3, fs(9, 7), col).setOrigin(0, 0);
       }
-      label(this, barX + barW + 22, y, rep.blackout ? 'PARAZİT' : LEVEL_LABEL[v]!, 11,
+      label(this, barX + barW + 20, y, rep.blackout ? 'PARAZİT' : LEVEL_LABEL[v]!, fs(11, 10),
         rep.blackout ? C.faint : v === 2 ? C.dng : C.dim);
-      y += 20;
+      y += rowH;
     }
 
     /* ---- guven ---- */
     const confPct = Math.round(rep.confidence * 100);
-    label(this, 16, y + 4, 'İSTİHBARAT GÜVENİ', 11, C.dim);
-    label(this, barX + barW + 22, y + 4, rep.blackout ? '—' : '%' + confPct, 13,
+    label(this, 16, y + 2, 'İSTİHBARAT GÜVENİ', fs(11, 10), C.dim);
+    label(this, barX + barW + 20, y + 2, rep.blackout ? '—' : '%' + confPct, fs(13, 11),
       confPct >= 85 ? C.sig : C.dng);
 
     /* ---- kartlar ---- */
-    const top = y + 34;
-    label(this, 16, top, 'YÜKSELTMENİ SEÇ', 13, C.acc);
+    const top = y + fs(30, 20);
+    label(this, 16, top, 'YÜKSELTMENİ SEÇ', fs(13, 11), C.acc);
     this.offer = this.run.offer();
 
-    const cardTop = top + 22;
-    const cardH = Math.max(120, H - cardTop - 78);
-    const gap = 10;
+    const btnH = fs(48, 40);
+    const cardTop = top + fs(22, 16);
+    const cardH = Math.max(86, H - cardTop - btnH - 14);
+    const gap = 8;
     const cardW = (W - 32 - gap * (this.offer.length - 1)) / this.offer.length;
 
     this.offer.forEach((c, i) => {
@@ -84,27 +92,27 @@ export class IntelScene extends Phaser.Scene {
 
       const rarCol = c.rarity === 'legendary' ? C.dng : c.rarity === 'epic' ? C.dng
         : c.rarity === 'rare' ? C.acc : c.rarity === 'uncommon' ? C.sig : C.faint;
-      label(this, x + 10, cardTop + 8, c.rarity.toUpperCase(), 9, rarCol);
-      this.add.text(x + 10, cardTop + 22, c.name, {
-        fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '15px',
-        color: C.ink, wordWrap: { width: cardW - 20 }
+      label(this, x + 8, cardTop + 6, c.rarity.toUpperCase(), fs(9, 8), rarCol);
+      const nameT = this.add.text(x + 8, cardTop + fs(20, 17), c.name, {
+        fontFamily: 'ui-monospace, Menlo, monospace', fontSize: fs(15, 12) + 'px',
+        color: C.ink, wordWrap: { width: cardW - 16 }
       });
 
-      let ly = cardTop + 62;
-      for (const u of c.up) {
-        const t = this.add.text(x + 10, ly, '+ ' + u, {
-          fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '12px',
-          color: C.sig, wordWrap: { width: cardW - 20 }
+      /* Etkiler kartin ALT SINIRINA kadar yazilir; sigmayan satir yazilmaz —
+         yarim kirpilmis metin okunakszlik uretir. */
+      let ly = nameT.y + nameT.height + fs(8, 5);
+      const limit = cardTop + cardH - 6;
+      const line = (s2: string, col: string) => {
+        if (ly >= limit) return;
+        const t = this.add.text(x + 8, ly, s2, {
+          fontFamily: 'ui-monospace, Menlo, monospace', fontSize: fs(12, 10) + 'px',
+          color: col, wordWrap: { width: cardW - 16 }
         });
-        ly += t.height + 4;
-      }
-      for (const d of c.down) {
-        const t = this.add.text(x + 10, ly, '− ' + d, {
-          fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '12px',
-          color: C.dng, wordWrap: { width: cardW - 20 }
-        });
-        ly += t.height + 4;
-      }
+        if (ly + t.height > limit) { t.destroy(); ly = limit; return; }
+        ly += t.height + 3;
+      };
+      for (const u of c.up) line('+ ' + u, C.sig);
+      for (const d of c.down) line('− ' + d, C.dng);
       hit(this, x, cardTop, cardW, cardH, () => this.select(i));
     });
 
@@ -114,7 +122,7 @@ export class IntelScene extends Phaser.Scene {
 
     /* ---- onay ---- */
     const bw = Math.min(280, W * 0.6);
-    button(this, (W - bw) / 2, H - 62, bw, 48, 'ONAYLA', () => {
+    button(this, (W - bw) / 2, H - btnH - 8, bw, btnH, 'ONAYLA', () => {
       if (this.picked < 0) return;
       this.run.take(this.offer[this.picked]!);
       this.scene.start('battle', { run: this.run });
