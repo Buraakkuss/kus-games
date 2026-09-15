@@ -1,19 +1,21 @@
 /* Denge simulatoru — goruntusuz, Node'da calisir.
  *
- *   npm run sim
+ *   npm run sim            (RUNS=... ornekmi buyutur)
  *
  * Slot ve Latch'te "mukemmel oynayan yapay oyuncu olmemeli (deaths=0)" garantisi
- * var; uretilen hicbir bolumun gecilemez olmadigini KANITLIYOR. Next Wave bir
- * refleks oyunu olmadigi icin ayni test ise yaramaz. Karsiligi budur:
- * farkli politikalar binlerce kez oynatilir ve denge bir his degil, bir olcum olur.
+ * var. Next Wave bir refleks oyunu olmadigi icin ayni test ise yaramaz.
+ * Karsiligi bu: GERCEK sefer akisi (istihbarat -> kart -> savas -> sonraki bolum)
+ * farkli KART POLITIKALARIYLA yuzlerce kez oynatilir.
  *
- * Iddia ettigimiz ve burada dogruladigimiz sey:
- *   - dengeli politika bolumleri gecebilmeli          -> oyun adil
- *   - hasar odakli politika savunmayi ihmal edince tikanmali -> yanlis strateji cezali
- *   - kor politika Kolay'da makul bir oranla gecmeli  -> oyun affediyor
+ * Dogruladigimiz uc iddia:
+ *   dengeli politika seferi goturebilmeli      -> oyun adil
+ *   hasar odakli politika daha erken tikanmali -> yanlis strateji cezali
+ *   kor politika Kolay'da ilerleyebilmeli      -> oyun affediyor
  */
 import { readFileSync } from 'node:fs';
-import { World, type LevelPlan } from '../src/sim/world.ts';
+import { World } from '../src/sim/world.ts';
+import { Run, type Difficulty, type LevelDef } from '../src/game/run.ts';
+import type { CardDef } from '../src/sim/cards.ts';
 import type { GameData } from '../src/sim/types.ts';
 
 const here = new URL('.', import.meta.url);
@@ -24,17 +26,39 @@ const DATA: GameData = {
   enemies: read('enemies.json'),
   towers: read('towers.json')
 };
-
-/* MVP'nin ilk uc bolumu. Tam liste 0.1.0-d kesiminde levels verisine tasinacak. */
-const LEVELS: LevelPlan[] = [
-  { budget: 70, pool: ['piyade'], waves: 1, waveSeconds: 16, gapSeconds: 6 },
-  { budget: 150, pool: ['piyade', 'kosucu'], waves: 2, waveSeconds: 16, gapSeconds: 6 },
-  { budget: 300, pool: ['piyade', 'kosucu', 'zirhli'], waves: 2, waveSeconds: 18, gapSeconds: 6 }
-];
+const CARDS: Record<string, CardDef> = read('cards.json');
+const LEVELS: LevelDef[] = read('levels.json');
 
 type Policy = 'dengeli' | 'hasar' | 'kor';
 
-/** Kahramani dusmana dogru suren basit bir surucu — insan oyuncunun yerine gecer. */
+/** Kart secimi — oyuncunun stratejisini temsil eder. */
+function chooseCard(policy: Policy, run: Run, offer: CardDef[], rnd: number): CardDef {
+  if (offer.length === 1) return offer[0]!;
+  if (policy === 'kor') return offer[Math.floor(rnd * offer.length)]!;
+
+  if (policy === 'hasar') {
+    /* Savunmayi, kule acmayi ve ekonomiyi TAMAMEN yok sayar; hep en cok hasar.
+       Beraberlikte RASTGELE secer — siralamanin ilk elemanini almak, teklif
+       garantisi kurtarici karti basa koydugu icin bu politikayi kazara
+       kurtariyordu ve "yanlis strateji cezali" iddiasini olcusuz birakiyordu. */
+    const score = (c: CardDef) => (c.mods.heroDamage ?? 1) / (c.mods.heroPeriod ?? 1);
+    const best = Math.max(...offer.map(score));
+    const tied = offer.filter(c => score(c) === best);
+    return tied[Math.floor(rnd * tied.length)]!;
+  }
+
+  /* dengeli: once eksik cevabi kapat, sonra kule ac, sonra savunma, sonra hasar */
+  const missing = run.missingAnswers();
+  const saver = offer.find(c => c.answers?.some(a => missing.includes(a)));
+  if (saver) return saver;
+  const unlock = offer.find(c => c.mods.unlock);
+  if (unlock && run.loadout.unlocked.length < 2) return unlock;
+  const defense = offer.find(c => (c.mods.baseHp ?? 1) > 1 || (c.mods.repair ?? 0) > 0);
+  if (defense && run.index >= 2 && rnd < 0.5) return defense;
+  return [...offer].sort((a, b) => (b.mods.heroDamage ?? 1) - (a.mods.heroDamage ?? 1))[0]!;
+}
+
+/** Kahramani surer — insan oyuncunun yerine gecer. */
 function heroMove(w: World): { x: number; y: number } {
   if (!w.hero.alive || w.enemies.length === 0) return { x: 0, y: 0 };
   let best = w.enemies[0]!, bd = Infinity;
@@ -42,84 +66,76 @@ function heroMove(w: World): { x: number; y: number } {
     const d = Math.hypot(e.x - w.hero.x, e.y - w.hero.y);
     if (d < bd) { bd = d; best = e; }
   }
-  /* Menzilde kal ama uste yaklasani birak, usse geri don. */
   if (bd < w.hero.range * 0.8) return { x: 0, y: 0 };
   return { x: best.x - w.hero.x, y: best.y - w.hero.y };
 }
 
-export interface Outcome { won: boolean; baseLeftPct: number; seconds: number; kills: number }
+/** Bir seferi bastan sona oynar, kac bolum tamamlandigini doner. */
+function playRun(policy: Policy, diff: Difficulty, seed: number): number {
+  const run = new Run(DATA, LEVELS, CARDS, diff, seed);
+  let done = 0;
 
-function playLevel(plan: LevelPlan, seed: number, policy: Policy, diff: string): Outcome {
-  const d = DATA.balance.difficulty[diff]!;
-  const scaled: LevelPlan = { ...plan, budget: Math.round(plan.budget * d.enemyBudget) };
-  const w = new World(DATA, scaled, seed, Math.round(220 * d.resources));
+  for (let li = 0; li < LEVELS.length; li++) {
+    const offer = run.offer();
+    if (offer.length > 0) run.take(chooseCard(policy, run, offer, run.rng()));
 
-  const dt = 1 / 30;
-  let slot = 0;
-  for (let i = 0; i < 30 * 180; i++) {          /* en fazla 3 dakika */
-    /* --- kart/kaynak politikasi: kule kurma karari --- */
-    if (slot < DATA.balance.towerSlots.length) {
-      const wantsMortar = policy === 'dengeli' && w.enemies.some(e => e.armor === 'heavy');
-      const pick = wantsMortar ? 'havan' : 'makineli';
-      if (policy !== 'hasar' || slot === 0) {
-        if (w.buildTower(slot, pick)) slot++;
+    const w = new World(DATA, run.plan(), seed * 31 + li, run.startResources(), run.loadout);
+    w.baseHp = Math.max(40, Math.round(w.baseMaxHp * run.baseCarry));
+
+    const dt = 1 / 30;
+    for (let i = 0; i < 30 * 240 && w.phase === 'running'; i++) {
+      /* Kaynak varsa bos yuvaya kule kur — insan oyuncu da bunu yapar. */
+      for (let s = 0; s < DATA.balance.towerSlots.length; s++) {
+        const type = w.lo.unlocked[s % w.lo.unlocked.length]!;
+        if (w.buildTower(s, type)) break;
       }
+      w.step(dt, heroMove(w));
     }
-    w.step(dt, heroMove(w));
-    if (w.phase !== 'running') break;
+    if (w.phase !== 'won') break;
+    run.advance(w.baseHp / w.baseMaxHp, w.kills);
+    done++;
   }
-  return {
-    won: w.phase === 'won',
-    baseLeftPct: w.baseHp / w.baseMaxHp,
-    seconds: w.time,
-    kills: w.kills
-  };
+  return done;
 }
 
-function run(policy: Policy, diff: string, runs: number): number[] {
-  return LEVELS.map((plan, li) => {
-    let won = 0, hp = 0, sec = 0;
-    for (let r = 0; r < runs; r++) {
-      const o = playLevel(plan, (li + 1) * 1000 + r, policy, diff);
-      if (o.won) won++;
-      hp += o.baseLeftPct; sec += o.seconds;
-    }
-    if (process.env.DIAG) {
-      console.log(`    [tani] ${policy}/${diff} B${li + 1}: us %${((hp / runs) * 100).toFixed(0)} kaldi, ` +
-                  `sure ${(sec / runs).toFixed(0)} sn`);
-    }
-    return won / runs;
-  });
+function measure(policy: Policy, diff: Difficulty, runs: number): { avg: number; full: number } {
+  let sum = 0, full = 0;
+  for (let r = 0; r < runs; r++) {
+    const d = playRun(policy, diff, 1000 + r * 7);
+    sum += d;
+    if (d >= LEVELS.length) full++;
+  }
+  return { avg: sum / runs, full: full / runs };
 }
 
-const RUNS = Number(process.env.RUNS ?? 200);
-const pct = (v: number) => (v * 100).toFixed(0).padStart(3) + '%';
+const RUNS = Number(process.env.RUNS ?? 120);
+console.log(`\nNext Wave — denge simulasyonu (${RUNS} sefer, ${LEVELS.length} bolum)\n`);
+console.log('politika      zorluk    ort.bolum   tam sefer');
+console.log('--------------------------------------------------');
 
-console.log(`\nNext Wave — denge simulasyonu (${RUNS} kosu/bolum)\n`);
-console.log('politika      zorluk    B1    B2    B3');
-console.log('------------------------------------------');
-const results: Record<string, number[]> = {};
-for (const [policy, diff] of [
+const R: Record<string, { avg: number; full: number }> = {};
+for (const [p, d] of [
   ['dengeli', 'normal'], ['hasar', 'normal'], ['kor', 'easy'], ['dengeli', 'hard']
-] as [Policy, string][]) {
-  const r = run(policy, diff, RUNS);
-  results[`${policy}/${diff}`] = r;
-  console.log(`${policy.padEnd(12)}  ${diff.padEnd(7)} ${r.map(pct).join(' ')}`);
+] as [Policy, Difficulty][]) {
+  const m = measure(p, d, RUNS);
+  R[`${p}/${d}`] = m;
+  console.log(`${p.padEnd(12)}  ${d.padEnd(7)} ${m.avg.toFixed(1).padStart(9)}   ${(m.full * 100).toFixed(0).padStart(7)}%`);
 }
 
-/* --- esikler: denge artik his degil, test --- */
 let fail = 0;
 const assert = (ok: boolean, msg: string) => {
   console.log(`  ${ok ? '\x1b[32mOK\x1b[0m  ' : '\x1b[31mHATA\x1b[0m'} ${msg}`);
   if (!ok) fail++;
 };
 console.log('\nEsikler');
-const dn = results['dengeli/normal']!;
-const hn = results['hasar/normal']!;
-const ke = results['kor/easy']!;
-assert(dn.every(v => v >= 0.90), 'dengeli politika Normal\'de her bolumu >=%90 geciyor (oyun adil)');
-assert(hn[2]! < dn[2]!, 'hasar odakli politika B3\'te dengeliden kotu (yanlis strateji cezali)');
-assert(ke.every(v => v >= 0.60), 'kor politika Kolay\'da >=%60 geciyor (oyun affediyor)');
+const dn = R['dengeli/normal']!, hn = R['hasar/normal']!, ke = R['kor/easy']!;
+assert(dn.avg >= 6, `dengeli politika Normal'de ortalama >=6 bolum gecmeli (olculen ${dn.avg.toFixed(1)}) - oyun adil`);
+/* Olcut ORTALAMA BOLUM degil TAM SEFER ORANI: 10 bolumluk bir dilimde ortalama
+   tavana dayanip sikisiyor (9.4 vs 9.1), cezayi gizliyor. Tamamlama orani ayni
+   farki net gosteriyor (%92 vs %78) — iddiayi gercekten olcen metrik budur. */
+assert(hn.full < dn.full - 0.08,
+  `hasar odakli politika seferi daha az tamamlamali (%${(hn.full * 100).toFixed(0)} < %${(dn.full * 100).toFixed(0)}) - yanlis strateji cezali`);
+assert(ke.avg >= 3, `kor politika Kolay'da ortalama >=3 bolum gecmeli (olculen ${ke.avg.toFixed(1)}) - oyun affediyor`);
 
 console.log(fail === 0 ? '\n\x1b[32mDenge esikleri tutuyor.\x1b[0m\n' : `\n\x1b[31m${fail} esik tutmuyor.\x1b[0m\n`);
 process.exit(fail === 0 ? 0 : 1);

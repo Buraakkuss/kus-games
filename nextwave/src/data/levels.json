@@ -1,0 +1,22 @@
+[
+  { "n":1,"type":"savunma","budget":70,"pool":["piyade"],"waves":1,"waveSeconds":16,"gapSeconds":6,
+    "ders":"Hareket et, otomatik ateş eder. Sağ yarıya dokun: kule kur." },
+  { "n":2,"type":"savunma","budget":150,"pool":["piyade","kosucu"],"waves":2,"waveSeconds":16,"gapSeconds":6,
+    "ders":"Koşucular sana değil doğrudan üsse gidiyor." },
+  { "n":3,"type":"savunma","budget":300,"pool":["piyade","kosucu","zirhli"],"waves":2,"waveSeconds":18,"gapSeconds":6,
+    "ders":"Makineli ağır zırha yarım hasar veriyor." },
+  { "n":4,"type":"savunma","budget":420,"pool":["piyade","kosucu","zirhli"],"waves":3,"waveSeconds":18,"gapSeconds":6,
+    "ders":"Kaynağını bitirmeden dalgayı karşıla." },
+  { "n":5,"type":"savunma","budget":520,"pool":["piyade","dron","zirhli"],"waves":3,"waveSeconds":18,"gapSeconds":6,
+    "ders":"Havan havayı hiç vuramaz." },
+  { "n":6,"type":"savunma","budget":650,"pool":["kosucu","zirhli","dron"],"waves":3,"waveSeconds":18,"gapSeconds":6,
+    "ders":"Hızlılar ve zırhlılar aynı anda." },
+  { "n":7,"type":"savunma","budget":780,"pool":["piyade","kalkanli","zirhli"],"waves":3,"waveSeconds":20,"gapSeconds":6,
+    "ders":"Kalkan hızlı küçük vuruşları emiyor. Tek büyük vuruş gerek." },
+  { "n":8,"type":"karartma","budget":900,"pool":["piyade","kosucu","dron","zirhli"],"waves":3,"waveSeconds":20,"gapSeconds":6,
+    "ders":"Radar kapalı. İstihbarat yok — tahmin et." },
+  { "n":9,"type":"savunma","budget":1050,"pool":["kalkanli","zirhli","dron","kosucu"],"waves":4,"waveSeconds":20,"gapSeconds":6,
+    "ders":"Her şey bir arada." },
+  { "n":10,"type":"boss","budget":1250,"pool":["zirhli","kalkanli","piyade","dron"],"waves":4,"waveSeconds":20,"gapSeconds":5,
+    "ders":"Dokuz dersin sınavı." }
+]

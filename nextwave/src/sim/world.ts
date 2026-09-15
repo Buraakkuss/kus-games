@@ -2,6 +2,7 @@ import type { ArmorType, Balance, DamageType, GameData, TargetPriority, Vec } fr
 import { canHit, dist, resolveDamage } from './combat.ts';
 import { mulberry32, range, type Rng } from './rng.ts';
 import { buildWave, type SpawnOrder } from './waves.ts';
+import { emptyLoadout, type Loadout } from './cards.ts';
 
 /* Savasin tamami burada. Phaser yok, DOM yok, zamanlayici yok:
    disaridan step(dt) cagrilir. Ekranda 60 fps ile, Node'da 20 Hz ile
@@ -75,19 +76,24 @@ export class World {
   private spawned = 0;
   private clearedAt = -1;
 
-  constructor(data: GameData, plan: LevelPlan, seed: number, startResources: number) {
+  readonly lo: Loadout;
+
+  constructor(data: GameData, plan: LevelPlan, seed: number, startResources: number, loadout?: Loadout) {
     this.data = data;
     this.bal = data.balance;
     this.plan = plan;
     this.seed = seed;
     this.rng = mulberry32(seed);
-    this.baseHp = this.baseMaxHp = this.bal.base.hp;
+    this.lo = loadout ?? emptyLoadout(data.balance);
+    /* Kart etkileri BURADA uygulanir; savas icinde tekrar hesaplanmaz. */
+    this.baseHp = this.baseMaxHp = Math.round(this.bal.base.hp * this.lo.baseHp);
     this.resources = startResources;
     const h = this.bal.hero;
+    const maxHp = Math.round(h.hp * this.lo.heroHp);
     this.hero = {
-      x: h.x, y: h.y, hp: h.hp, maxHp: h.hp, speed: h.speed,
-      damage: h.damage, damageType: h.damageType, range: h.range,
-      period: h.period, cd: 0, alive: true, respawn: 0
+      x: h.x, y: h.y, hp: maxHp, maxHp, speed: h.speed * this.lo.heroSpeed,
+      damage: h.damage * this.lo.heroDamage, damageType: h.damageType, range: h.range,
+      period: h.period * this.lo.heroPeriod, cd: 0, alive: true, respawn: 0
     };
     this.startWave();
   }
@@ -99,6 +105,7 @@ export class World {
     const pos = this.bal.towerSlots[slot];
     const def = this.data.towers[typeId];
     if (!pos || !def) return false;
+    if (!this.lo.unlocked.includes(typeId)) return false;   /* kart ile acilmali */
     if (this.towers.some(t => t.x === pos.x && t.y === pos.y)) return false;
     if (this.resources < def.cost) return false;
     this.resources -= def.cost;
@@ -124,6 +131,9 @@ export class World {
     this.cull();
     this.checkPhase();
   }
+
+  /** Kartlarla degistirilmis matrisi tasiyan denge nesnesi. */
+  private get effBal(): Balance { return { ...this.bal, matrix: this.lo.matrix }; }
 
   /* ---------------- ic isleyis ---------------- */
 
@@ -177,6 +187,10 @@ export class World {
       }
       return;
     }
+    if (this.lo.hpDrain > 0) {
+      h.hp -= h.maxHp * this.lo.hpDrain * dt;
+      if (h.hp <= 0) { h.alive = false; h.respawn = this.bal.hero.respawnSeconds; return; }
+    }
     const len = Math.hypot(move.x, move.y);
     if (len > 0.01) {
       const nx = move.x / len, ny = move.y / len;
@@ -205,7 +219,7 @@ export class World {
       this.shots.push({ fx: t.x, fy: t.y, tx: tgt.x, ty: tgt.y, kind: t.damageType });
       if (t.splash > 0) {
         for (const e of this.enemies) {
-          if (dist(e.x, e.y, tgt.x, tgt.y) <= t.splash && canHit(this.bal, t.damageType, e.armor)) {
+          if (dist(e.x, e.y, tgt.x, tgt.y) <= t.splash && canHit(this.effBal, t.damageType, e.armor)) {
             this.hit(e, t.damage, t.damageType);
           }
         }
@@ -302,7 +316,7 @@ export class World {
   private nearestEnemy(x: number, y: number, rng: number, dmg: DamageType): Enemy | null {
     let best: Enemy | null = null, bd = Infinity;
     for (const e of this.enemies) {
-      if (!canHit(this.bal, dmg, e.armor)) continue;
+      if (!canHit(this.effBal, dmg, e.armor)) continue;
       const d = dist(x, y, e.x, e.y);
       if (d <= rng && d < bd) { bd = d; best = e; }
     }
@@ -310,7 +324,7 @@ export class World {
   }
 
   private hit(e: Enemy, raw: number, dmg: DamageType): void {
-    const real = resolveDamage(this.bal, raw, dmg, e.armor);
+    const real = resolveDamage(this.effBal, raw, dmg, e.armor);
     e.hp -= real;
     this.damageDealt += real;
   }

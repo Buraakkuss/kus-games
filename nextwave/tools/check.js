@@ -125,9 +125,14 @@ try {
       const title = m ? m[1] : '(baslik yok)';
       if (!title.startsWith('SELFTEST:OK')) bad('tarayici self-test: ' + title);
       else {
+        /* Self-test GERCEK akisi oynar: istihbarat -> kart -> savas -> sonraki bolum.
+           Pasif oyuncu (kahraman hic hareket etmiyor) ilk bolumleri gecmeli;
+           gecemiyorsa zincirde bir yer kopmustur. */
         const kills = Number((title.match(/olen=(\d+)/) || [])[1] || 0);
-        const phase = (title.match(/faz=(\w+)/) || [])[1];
-        if (phase === 'running') bad('self-test bolumu bitiremedi (sonsuz dongu riski): ' + title);
+        const done = Number((title.match(/bolum=(\d+)/) || [])[1] || 0);
+        const picks = Number((title.match(/kart=(\d+)/) || [])[1] || 0);
+        if (picks === 0) bad('self-test hic kart teklif edilemedi - kart havuzu kopuk: ' + title);
+        else if (done === 0) bad('self-test ilk bolumu bile gecemedi: ' + title);
         else if (kills <= 0) bad('self-test hic dusman olduremedi - hasar hatti kopuk: ' + title);
         else ok(title.replace('SELFTEST:OK ', ''));
       }

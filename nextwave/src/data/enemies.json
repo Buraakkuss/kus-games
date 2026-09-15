@@ -34,5 +34,29 @@
     "attackRange": 110,
     "attackPeriod": 1.4,
     "target": "towers"
+  },
+  "dron": {
+    "id": "dron",
+    "name": "Dron",
+    "cost": 20,
+    "hp": 70,
+    "speed": 95,
+    "armor": "air",
+    "damage": 9,
+    "attackRange": 130,
+    "attackPeriod": 1.1,
+    "target": "hero"
+  },
+  "kalkanli": {
+    "id": "kalkanli",
+    "name": "Kalkanlı",
+    "cost": 35,
+    "hp": 150,
+    "speed": 52,
+    "armor": "shield",
+    "damage": 18,
+    "attackRange": 60,
+    "attackPeriod": 1.2,
+    "target": "base"
   }
 }

@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
-import { World, type LevelPlan } from '../sim/world.ts';
-import type { GameData } from '../sim/types.ts';
+import { World } from '../sim/world.ts';
 import { Joystick } from '../ui/Joystick.ts';
+import { hit } from '../ui/kit.ts';
+import type { Run } from '../game/run.ts';
 
 /* Bu dosya YALNIZCA cizer ve girdi toplar. Tek bir hasar/menzil/hedef karari
    burada verilmez — hepsi src/sim icindedir. Kural bu; sebebi tools/sim.ts. */
@@ -18,27 +19,34 @@ export class BattleScene extends Phaser.Scene {
   private gfx!: Phaser.GameObjects.Graphics;
   private hud!: Phaser.GameObjects.Text;
   private stick!: Joystick;
-  private data_!: GameData;
-  private plan!: LevelPlan;
+  private run!: Run;
   private scaleF = 1;
   private offX = 0;
   private offY = 0;
   private buildIx = 0;
   private endText?: Phaser.GameObjects.Text;
+  private towerTag!: Phaser.GameObjects.Text;
 
   constructor() { super('battle'); }
 
-  init(args: { data: GameData; plan: LevelPlan; resources: number }): void {
-    this.data_ = args.data;
-    this.plan = args.plan;
-    this.world = new World(args.data, args.plan, Date.now() & 0xffff, args.resources);
+  init(args: { run: Run }): void {
+    this.run = args.run;
+    const r = this.run;
+    this.world = new World(r.data, r.plan(), (Date.now() & 0xffff) || 3, r.startResources(), r.loadout);
+    /* Us cani bolumler arasi TASINIR: sizan her dusman gelecek bolumun borcudur.
+       Alan Tamiri karti bu tasimayi kismen geri alir. */
+    this.world.baseHp = Math.max(40, Math.round(this.world.baseMaxHp * r.baseCarry));
   }
 
   create(): void {
     this.gfx = this.add.graphics();
     this.hud = this.add.text(12, 10, '', {
-      fontFamily: 'monospace', fontSize: '15px', color: '#dce4ec'
+      fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '14px', color: '#dce4ec'
     }).setDepth(10);
+    /* Sag ustte: siradaki kule ve maliyeti. Hurda yetmiyorsa soluk. */
+    this.towerTag = this.add.text(this.scale.width - 12, 32, '', {
+      fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '15px', color: '#35b9a4'
+    }).setOrigin(1, 0).setDepth(10);
 
     this.stick = new Joystick(this);
     this.fit();
@@ -48,11 +56,23 @@ export class BattleScene extends Phaser.Scene {
        Surukleme yok: tek dokunus, cunku dalga gelirken menu acmak islemiyor. */
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
       if (p.x <= this.scale.width * 0.5) return;
-      const types = Object.keys(this.data_.towers);
+      /* Yalnizca KART ile acilmis kuleler kurulabilir. */
+      const types = this.world.lo.unlocked;
+      if (types.length === 0) return;
       const type = types[this.buildIx % types.length]!;
-      for (let s = 0; s < this.world.bal.towerSlots.length; s++) {
-        if (this.world.buildTower(s, type)) { this.buildIx++; return; }
-      }
+      /* Dokunulan noktaya en yakin bos yuva. */
+      let best = -1, bd = Infinity;
+      this.world.bal.towerSlots.forEach((sl, i) => {
+        if (this.world.towers.some(t => t.x === sl.x && t.y === sl.y)) return;
+        const d = Math.hypot(this.sx(sl.x) - p.x, this.sy(sl.y) - p.y);
+        if (d < bd) { bd = d; best = i; }
+      });
+      if (best >= 0 && this.world.buildTower(best, type)) this.buildIx++;
+    });
+
+    /* Kule tipini degistir: sag ustteki rozete dokun. */
+    hit(this, this.scale.width - 132, 30, 124, 34, () => {
+      if (this.world.lo.unlocked.length > 1) this.buildIx++;
     });
   }
 
@@ -144,23 +164,29 @@ export class BattleScene extends Phaser.Scene {
 
   private drawHud(): void {
     const w = this.world;
+    const next = w.lo.unlocked[this.buildIx % w.lo.unlocked.length];
+    const cost = next ? this.run.data.towers[next]!.cost : 0;
     this.hud.setText(
+      `BÖLÜM ${this.run.level.n}   ` +
       `ÜS ${Math.max(0, Math.round(w.baseHp))}/${w.baseMaxHp}   ` +
       `HURDA ${Math.round(w.resources)}   ` +
-      `DÜŞMAN ${w.enemies.length}   ÖLEN ${w.kills}   ` +
-      `SÜRE ${w.time.toFixed(0)}s`
+      `DÜŞMAN ${w.enemies.length}   ÖLEN ${w.kills}`
     );
+    this.towerTag.setText(next ? `${this.run.data.towers[next]!.name.toUpperCase()}  ${cost}` : '—');
+    this.towerTag.setColor(w.resources >= cost ? '#35b9a4' : '#67757f');
   }
 
   private showEnd(): void {
-    const won = this.world.phase === 'won';
-    this.endText = this.add.text(
-      this.scale.width / 2, this.scale.height / 2,
-      (won ? 'BÖLÜM TAMAM' : 'ÜS DÜŞTÜ') + '\n\nyeniden başlamak için dokun',
-      { fontFamily: 'monospace', fontSize: '28px', color: won ? '#35b9a4' : '#e8695c', align: 'center' }
-    ).setOrigin(0.5).setDepth(20);
-    this.input.once('pointerdown', () => {
-      this.scene.restart({ data: this.data_, plan: this.plan, resources: 220 });
+    const w = this.world;
+    const won = w.phase === 'won';
+    const basePct = Math.max(0, w.baseHp / w.baseMaxHp);
+    this.endText = this.add.text(0, 0, '', {}).setVisible(false);   /* bir kez calissin */
+    if (won) this.run.advance(basePct, w.kills);
+    this.time.delayedCall(450, () => {
+      this.scene.start('result', {
+        run: this.run, won,
+        stats: { kills: w.kills, seconds: w.time, basePct }
+      });
     });
   }
 }

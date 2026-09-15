@@ -1,17 +1,22 @@
 import Phaser from 'phaser';
+import { MenuScene } from './scenes/MenuScene.ts';
+import { IntelScene } from './scenes/IntelScene.ts';
 import { BattleScene } from './scenes/BattleScene.ts';
-import { World } from './sim/world.ts';
+import { ResultScene } from './scenes/ResultScene.ts';
+import { Run, type LevelDef } from './game/run.ts';
 import type { GameData } from './sim/types.ts';
+import type { CardDef } from './sim/cards.ts';
 import balance from './data/balance.json';
 import enemies from './data/enemies.json';
 import towers from './data/towers.json';
+import cards from './data/cards.json';
+import levels from './data/levels.json';
 
 declare const __GAME_VERSION__: string;
 
 const DATA = { balance, enemies, towers } as unknown as GameData;
-
-/* 0.1.0-a kesimi: tek bolum. Tam bolum listesi 0.1.0-d'de levels verisine gecer. */
-const PLAN = { budget: 300, pool: ['piyade', 'kosucu', 'zirhli'], waves: 2, waveSeconds: 18, gapSeconds: 6 };
+const CARDS = cards as unknown as Record<string, CardDef>;
+const LEVELS = levels as unknown as LevelDef[];
 
 /* Telefonda konsol yok: hata ekranin altina YAZILIR.
    Bu satir olmadan "siyah ekran" tek bilgi kaynagi olurdu. */
@@ -39,29 +44,46 @@ const game = new Phaser.Game({
   scene: []
 });
 
-/* Sahne BURADA, verisiyle birlikte eklenir.
-   scene:[BattleScene] yazilsaydi Phaser onu veri GELMEDEN kendiliginden
-   baslatir, init() bos argumanla cagrilir ve oyun siyah ekrana duserdi. */
-game.scene.add('battle', BattleScene, true, { data: DATA, plan: PLAN, resources: 220 });
+/* Veri sahnelere registry uzerinden gecer; her sahne kendi kopyasini tasimaz. */
+game.registry.set('data', DATA);
+game.registry.set('cards', CARDS);
+game.registry.set('levels', LEVELS);
+
+/* Sahneler BURADA eklenir. scene:[...] yazilsaydi Phaser ilkini veri GELMEDEN
+   kendiliginden baslatir, init() bos argumanla cagrilir ve oyun siyah ekrana duserdi. */
+game.scene.add('intel', IntelScene, false);
+game.scene.add('battle', BattleScene, false);
+game.scene.add('result', ResultScene, false);
+game.scene.add('menu', MenuScene, true);
 
 ver.textContent = 'V: ' + __GAME_VERSION__;
 
-/* ?selftest=1 — diger uc oyundaki ile ayni fikir, ama burada refleks degil
-   BUTUNLUK sinaniyor: tarayicida yuklenen GERCEK paket, gercek veriyle,
-   gercek World sinifini kare kare oynatabiliyor mu? Sonuc document.title'a
-   yazilir, tools/check.js onu okur. Ekran goruntusu almak yerine bunu
-   kullaniyoruz: sanal zamanda Phaser'in kare dongusu ilerlemiyor. */
+/* ?selftest=1 — gercek paketi, gercek veriyle, bastan sona oynatir.
+   Ekran goruntusu yerine bunu kullaniyoruz: sanal zamanda Phaser'in kare
+   dongusu ilerlemiyor. Sonuc document.title'a yazilir, tools/check.js okur. */
 if (new URLSearchParams(location.search).get('selftest') === '1') {
-  try {
-    const w = new World(DATA, PLAN, 4242, 220);
-    const dt = 1 / 30;
-    for (let i = 0; i < 30 * 180 && w.phase === 'running'; i++) {
-      w.step(dt, { x: 0, y: 0 });
-      if (i === 30) w.buildTower(0, 'makineli');
+  void import('./sim/world.ts').then(({ World }) => {
+    try {
+      const run = new Run(DATA, LEVELS, CARDS, 'normal', 4242);
+      let levelsDone = 0, picks = 0;
+      for (let i = 0; i < LEVELS.length; i++) {
+        const offer = run.offer();
+        if (offer.length === 0) break;
+        run.take(offer[0]!);
+        picks++;
+        const w = new World(DATA, run.plan(), 1000 + i, run.startResources(), run.loadout);
+        w.baseHp = Math.max(40, Math.round(w.baseMaxHp * run.baseCarry));
+        for (let k = 0; k < 30 * 240 && w.phase === 'running'; k++) {
+          if (k === 60) w.buildTower(0, w.lo.unlocked[0]!);
+          w.step(1 / 30, { x: 0, y: 0 });
+        }
+        if (w.phase !== 'won') break;
+        run.advance(w.baseHp / w.baseMaxHp, w.kills);
+        levelsDone++;
+      }
+      document.title = `SELFTEST:OK bolum=${levelsDone} kart=${picks} olen=${run.totalKills}`;
+    } catch (err) {
+      document.title = 'SELFTEST:FAIL ' + (err as Error).message;
     }
-    document.title = `SELFTEST:OK faz=${w.phase} olen=${w.kills} ` +
-      `usHP=${Math.max(0, Math.round(w.baseHp))} sure=${w.time.toFixed(0)}`;
-  } catch (err) {
-    document.title = 'SELFTEST:FAIL ' + (err as Error).message;
-  }
+  });
 }
