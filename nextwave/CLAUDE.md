@@ -2,7 +2,8 @@
 
 Strateji/savunma oyunu. **Bu oyun deponun tek dosya kuralının DIŞINDADIR**
 (kök `CLAUDE.md` istisnayı yazar): modüler TypeScript + Phaser 3 + Vite.
-Güncel sürüm: **v0.1.0** (kesim `0.1.0-a` — oynanabilir iskelet).
+Güncel sürüm: **v0.1.0** — menü, istihbarat, kart seçimi, 10 bölüm oynanabilir.
+Tarayıcıdan: `https://buraakkuss.github.io/kus-games/nextwave/play/`
 
 Tasarım belgesi (GDD V1, onaylı): oyunun neden böyle kurulduğu orada yazılı.
 Denge değiştirmeden önce §4 (istihbarat) ve §7 (kart teklif kuralları) okunmalı.
@@ -27,6 +28,14 @@ Denge değiştirmeden önce §4 (istihbarat) ve §7 (kart teklif kuralları) oku
 | `npm run sim` | **Denge simülasyonu** — görüntüsüz, Node'da, N koşu |
 | `npm run typecheck` | `tsc --noEmit` |
 | `node tools/check.js` | Hepsi + tarayıcı self-test |
+| `bash tools/publish-web.sh` | Derleyip `docs/nextwave/play/` altına koyar (Pages) |
+
+Hata ayıklama: `?scene=intel&lv=7` veya `?scene=battle&lv=5` menüden geçmeden
+doğrudan o ekranı açar — yerleşimi telefon oranında denetlemek için.
+
+**Yayın elle kopyalanmaz.** `docs/nextwave/play/` bir derleme çıktısıdır; kaynak
+değişip yayın adımı unutulursa oyuncular eski sürümü oynar ve kimse fark etmez.
+`nextwave.yml` her push'ta bunu denetler ve bayatsa kırmızı yanar.
 
 `RUNS=1000 npm run sim` ile örneklem büyütülür. `DIAG=1` teşhis satırlarını açar
 (üs yüzde kaç kaldı, bölüm kaç saniye sürdü) — denge ayarlarken asıl işe yarayan bu.
@@ -37,11 +46,23 @@ Slot ve Latch'te "mükemmel oynayan yapay oyuncu ölmemeli (`deaths=0`)" garanti
 var. Next Wave bir refleks oyunu olmadığı için o test işe yaramaz. Karşılığı şu:
 üç farklı **politika** yüzlerce kez oynatılır ve üç iddia ölçülür.
 
+Simülatör **gerçek akışı** oynar: istihbarat → kart → savaş → sonraki bölüm.
+Yani kart teklif kurallarını da sınar.
+
 | Politika | Ne yapar | Eşik | Neyi kanıtlar |
 |---|---|---|---|
-| dengeli | tehdide göre kule seçer | Normal'de ≥%90 | oyun adil |
-| hasar | savunmayı ihmal eder | B3'te dengeliden kötü | yanlış strateji cezalı |
-| kör | rastgele | Kolay'da ≥%60 | oyun affediyor |
+| dengeli | eksik cevabı kapatır, sonra savunma | ort. ≥6 bölüm | oyun adil |
+| hasar | savunmayı ve kule açmayı yok sayar | tam sefer oranı dengeliden ≥8 puan düşük | yanlış strateji cezalı |
+| kör | rastgele | Kolay'da ort. ≥3 bölüm | oyun affediyor |
+
+**Ölçüt ortalama bölüm değil `tam sefer oranı`dır.** 10 bölümlük bir dilimde
+ortalama tavana dayanıp sıkışıyor (9.4 vs 9.1) ve cezayı gizliyor; tamamlama
+oranı aynı farkı net gösteriyor (%88 vs %78).
+
+İki ölçüm tuzağı yaşandı, ikisi de simülatörün kendisindeydi:
+`hasar` politikası beraberlikte listenin **ilk** kartını alıyordu ve teklif
+garantisi kurtarıcı kartı başa koyduğu için politika kazara kurtuluyordu.
+Politika artık beraberlikte rastgele seçiyor.
 
 **Denge artık his değil, test.** Bir sayıyı değiştirdiğinde `npm run sim` çalıştır:
 eşikler tutmuyorsa değişiklik yanlıştır.
@@ -49,11 +70,17 @@ eşikler tutmuyorsa değişiklik yanlıştır.
 ## Mimari
 
 ```
-src/sim/     saf TS — World.step(dt) dışarıdan çağrılır, zamanlayıcı yok
-src/scenes/  Phaser — YALNIZCA çizer ve girdi toplar
-src/ui/      joystick, HUD
-src/data/    balance / enemies / towers JSON
-tools/sim.ts başsız denge simülasyonu
+src/sim/       saf TS — Phaser YOK, DOM YOK
+  world.ts     World.step(dt) dışarıdan çağrılır, zamanlayıcı yok
+  combat.ts    hasar matrisi + kalkanın sabit emilimi
+  cards.ts     kart etkileri + TEKLİF KURALLARI (kilitlenme garantisi)
+  intel.ts     tehdit eksenleri + güven örneklemesi
+  waves.ts     bütçeden dalga üretimi (kümeler hâlinde)
+src/game/run.ts  bir seferin durumu: bölüm, kartlar, üs canı taşıması
+src/scenes/    Phaser — YALNIZCA çizer ve girdi toplar
+src/ui/        joystick, ortak arayüz parçaları
+src/data/      balance / enemies / towers / cards / levels JSON
+tools/sim.ts   başsız denge simülasyonu
 ```
 
 `World` deterministiktir: aynı tohum + aynı `dt` dizisi = aynı sonuç. Ekranda
@@ -79,8 +106,15 @@ emilir, tek büyük vuruş deler. "Hızlı ateş her zaman iyidir" sezgisini kı
 - Paket ~1.5 MB (345 KB gzip) — neredeyse tamamı Phaser. Faz 2'de kod bölme
   değerlendirilecek; şimdilik kabul edilebilir.
 
+## Kilitlenme garantisi
+
+Makineli ve kahraman kalkana **tam sıfır** hasar verir (`9 × 0.6 − 8 < 0`).
+Havan ve nişancı yalnızca kartla açılır. Yani 7. bölümde doğru kartı almamış
+oyuncu kilitlenirdi. `offerCards()` bunu engeller: sıradaki bölümde cevabı
+olmayan bir zırh varsa tekliflerden biri **mutlaka** o cevabı taşır.
+Bu kural GDD §7'den gelir; gevşetilirse oyun kazanılamaz hâle gelebilir.
+
 ## Sonraki kesimler
 
-`0.1.0-b` savaş çekirdeği tamamlanır (kaynak kazanımı, tamir, daha çok düşman) ·
-`0.1.0-c` istihbarat + kart ekranı + sinerji · `0.1.0-d` 10 bölüm + boss + kayıt ·
-`0.1.0` menü, tr/en, 3 zorluk, ses.
+Kayıt/devam · ses (WebAudio, dosya yok) · İngilizce (`src/i18n/`) ·
+boss mekanikleri · sinerji rozetleri · AdMob + `remove_ads` · native paketleme.
