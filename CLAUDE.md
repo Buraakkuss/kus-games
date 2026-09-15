@@ -9,6 +9,10 @@ ve `assets/` klasörü vardır. Ortak olan yalnızca `docs/` (GitHub Pages) ve
 
 1. **Oyun mantığı tek dosyada kalır:** `<oyun>/www/index.html`. Yeni dosya açma;
    kullanıcı yazılımcı değil, tek dosyayı kopyalayarak güncelleme yapabilmeli.
+   **İSTİSNA — `nextwave/`:** strateji oyunu bu ölçeği taşımıyor (100 bölüm, kart
+   havuzu, iki dil, veri dosyaları). Modüler TypeScript + Phaser 3 + Vite kullanır
+   ve kendi `CLAUDE.md`'sinde kendi kuralları yazılıdır. Diğer üç oyun tek dosya
+   kalmaya devam eder; bu istisna genişletilmez.
 2. Bir oyunda çalışırken **o oyunun kendi `CLAUDE.md`'sini oku** — denge, adalet
    garantisi ve tuzaklar orada yazılı. Bu dosya yalnızca depo düzenini anlatır.
 3. Her değişiklikten sonra ilgili oyunda `node tools/check.js`. Yeşil değilse commit yok.
@@ -35,6 +39,9 @@ https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
 - Ortak stil `docs/_style.css`; vurgu rengi sayfanın `<html data-game="...">`
   niteliğinden gelir. Yeni oyun için CSS'e bir satır ekle.
 
+> `nextwave/` henüz mobil derleme matrisinde **değil**: 0.1.0-a bir web prototipi.
+> Native paketleme 0.1.0-d kesiminde, oynanış doğrulandıktan sonra eklenecek.
+
 ## Bulutta derleme
 
 `.github/workflows/android.yml` her push'ta matristeki tüm oyunları derler:
@@ -54,6 +61,7 @@ https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
 | `slot/` | Slot: Fit the Shape | şekli döndür, duvardaki deliğe otur |
 | `latch/` | Latch: One Tap Swing | ipi at, salın, 45°'de bırak |
 | `orbita/` | Orbita: One Tap Orbit Jump | yörüngeden teğet boyunca fırla |
+| `nextwave/` | Next Wave: Read the Enemy | eksik istihbaratı oku, kartını seç, üssü savun |
 
 Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
 
@@ -64,6 +72,11 @@ Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
 | `slot/` | mükemmel | `deaths=0` zorunlu → üretim adaletli |
 | `latch/` | mükemmel | `deaths=0` **ve** `fallback=0` zorunlu → her çengel ulaşılabilir |
 | `orbita/` | sezgisel (ölebilir) | yalnızca oyun döngüsünün çalıştığı ve çökmediği |
+| `nextwave/` | üç **politika** × yüzlerce koşu | dengeli politika geçer, hasar odaklı tıkanır, kör oyuncu Kolay'da geçer |
+
+Next Wave'inki farklı bir cinstir: refleks değil **denge** sınanır. `npm run sim`
+görüntüsüz koşar ve üç eşiği ölçer — "yanlış strateji cezalandırılmalı ama oyun
+kurtarılamaz hale gelmemeli" iddiası orada teste dönüşür.
 
 Orbita'nınki daha zayıf bir güvence: ölüm sayısı > 0 olması hata değildir. Orbita'ya
 "adaletsiz bölüm üretilmiyor" güvencesi eklemek istersen önce mükemmel oynayan bir

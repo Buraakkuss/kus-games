@@ -1,0 +1,12 @@
+{
+  "makineli": {
+    "id": "makineli", "name": "Makineli", "cost": 50,
+    "damage": 9, "damageType": "kinetic", "range": 260,
+    "period": 0.30, "splash": 0, "slowPct": 0
+  },
+  "havan": {
+    "id": "havan", "name": "Havan", "cost": 120,
+    "damage": 55, "damageType": "explosive", "range": 380,
+    "period": 2.0, "splash": 90, "slowPct": 0
+  }
+}

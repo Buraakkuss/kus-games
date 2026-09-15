@@ -1,0 +1,38 @@
+{
+  "piyade": {
+    "id": "piyade",
+    "name": "Piyade",
+    "cost": 10,
+    "hp": 60,
+    "speed": 55,
+    "armor": "light",
+    "damage": 8,
+    "attackRange": 90,
+    "attackPeriod": 1.0,
+    "target": "nearest"
+  },
+  "kosucu": {
+    "id": "kosucu",
+    "name": "Koşucu",
+    "cost": 8,
+    "hp": 40,
+    "speed": 115,
+    "armor": "light",
+    "damage": 7,
+    "attackRange": 40,
+    "attackPeriod": 0.9,
+    "target": "base"
+  },
+  "zirhli": {
+    "id": "zirhli",
+    "name": "Zırhlı",
+    "cost": 30,
+    "hp": 240,
+    "speed": 38,
+    "armor": "heavy",
+    "damage": 22,
+    "attackRange": 110,
+    "attackPeriod": 1.4,
+    "target": "towers"
+  }
+}
