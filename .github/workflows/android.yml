@@ -11,6 +11,7 @@ on:
       - 'slot/**'
       - 'latch/**'
       - 'orbita/**'
+      - 'lull/**'
   workflow_dispatch:
 
 jobs:
@@ -26,6 +27,8 @@ jobs:
             dir: latch
           - app: orbita
             dir: orbita
+          - app: lull
+            dir: lull
     name: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4

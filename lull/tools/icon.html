@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Lull mark</title>
+<style>html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+/* Lull marka isareti: nefesin kendisi — isiyan bir kure ve etrafindaki halka.
+   TUZAKLAR (ikisi de bu depoda bir kez yasandi):
+   1) Global `var top` KULLANMA — window.top ile carkisir, sessizce NaN uretir.
+      Burada wTop / wBot gibi adlar kullaniliyor.
+   2) Yol baslatan ve baslatmayan cizim islevlerini karistirma. Asagida her
+      sekil kendi beginPath'ini acikca cagirir; paylasilan yardimci yok. */
+(function () {
+  var q = new URLSearchParams(location.search);
+  var S = parseInt(q.get('s') || '0', 10);
+  var W = parseInt(q.get('w') || '0', 10) || S || 1024;
+  var H = parseInt(q.get('h') || '0', 10) || S || 1024;
+  var wide = q.get('wide') === '1';
+  var round = q.get('round') === '1';
+  var drawBg = q.get('bg') !== '0';
+  var scale = parseFloat(q.get('scale') || '0.70');
+
+  var cv = document.getElementById('c');
+  cv.width = W; cv.height = H;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  var x = cv.getContext('2d');
+
+  var cx = wide ? W * 0.30 : W / 2;
+  var cy = H / 2;
+  var R = Math.min(W, H) * 0.5 * scale;
+
+  /* --- zemin --- */
+  if (drawBg) {
+    if (round) {
+      x.save();
+      x.beginPath();
+      x.arc(W / 2, H / 2, Math.min(W, H) / 2, 0, 6.2832);
+      x.clip();
+    }
+    var wTop = '#101a36', wBot = '#05070d';
+    var g = x.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, wTop);
+    g.addColorStop(1, wBot);
+    x.fillStyle = g;
+    x.fillRect(0, 0, W, H);
+
+    /* merkeze dogru hafif isik — duz zemin cansiz duruyor */
+    var lift = x.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.62);
+    lift.addColorStop(0, 'rgba(60,96,160,0.42)');
+    lift.addColorStop(1, 'rgba(60,96,160,0)');
+    x.fillStyle = lift;
+    x.fillRect(0, 0, W, H);
+  }
+
+  /* --- dis parlama --- */
+  var glow = x.createRadialGradient(cx, cy, R * 0.5, cx, cy, R * 1.95);
+  glow.addColorStop(0, 'rgba(126,178,222,0.42)');
+  glow.addColorStop(0.5, 'rgba(110,150,205,0.14)');
+  glow.addColorStop(1, 'rgba(110,150,205,0)');
+  x.fillStyle = glow;
+  x.beginPath();
+  x.arc(cx, cy, R * 1.95, 0, 6.2832);
+  x.fill();
+
+  /* --- kure --- */
+  var orb = x.createRadialGradient(cx, cy - R * 0.30, R * 0.08, cx, cy, R * 0.74);
+  orb.addColorStop(0, '#d8ecff');
+  orb.addColorStop(0.42, '#84b6e4');
+  orb.addColorStop(1, '#3c6096');
+  x.fillStyle = orb;
+  x.beginPath();
+  x.arc(cx, cy, R * 0.74, 0, 6.2832);
+  x.fill();
+
+  /* --- cevresindeki halka: nefesin genisleyen hali --- */
+  x.lineWidth = Math.max(1, R * 0.055);
+  x.strokeStyle = 'rgba(200,226,252,0.80)';
+  x.beginPath();
+  x.arc(cx, cy, R * 0.97, 0, 6.2832);
+  x.stroke();
+
+  x.lineWidth = Math.max(1, R * 0.028);
+  x.strokeStyle = 'rgba(160,200,240,0.34)';
+  x.beginPath();
+  x.arc(cx, cy, R * 1.24, 0, 6.2832);
+  x.stroke();
+
+  if (drawBg && round) x.restore();
+
+  /* --- genis afis (Play feature graphic): isaretin yanina isim --- */
+  if (wide) {
+    var fs = H * 0.20;
+    x.fillStyle = '#eaf2fb';
+    x.font = '600 ' + fs + 'px -apple-system, "Segoe UI", Roboto, system-ui, sans-serif';
+    x.textBaseline = 'alphabetic';
+    x.letterSpacing = (fs * 0.16) + 'px';
+    x.fillText('LULL', W * 0.50, H * 0.50);
+    x.letterSpacing = '0px';
+    x.fillStyle = '#8d9ab3';
+    x.font = '400 ' + (H * 0.078) + 'px -apple-system, "Segoe UI", Roboto, system-ui, sans-serif';
+    x.fillText('nefesini yavaşça indirir', W * 0.505, H * 0.665);
+  }
+
+  document.title = 'ICON:' + W + 'x' + H;
+})();
+</script>
+</body>
+</html>
