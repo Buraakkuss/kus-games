@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#05070d">
+<meta name="description" content="Lull — nefesini bulunduğun yerden alıp yavaşça indirir. Uykuya geçmek için.">
+<title>Lull</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:#05070d;overflow:hidden;
+    -webkit-user-select:none;user-select:none;overscroll-behavior:none;touch-action:manipulation}
+  body{font:400 16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+    color:#e8ecf4}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .ui{position:fixed;inset:0;display:flex;flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 20px) 22px calc(env(safe-area-inset-bottom,0px) + 22px)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .spacer{flex:1}
+  .brand{font:600 15px/1 -apple-system,system-ui,sans-serif;letter-spacing:.24em;color:#7d8aa3}
+  .mini{font:500 12px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#5a6780}
+  .center{position:fixed;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;pointer-events:none;padding:0 26px;transition:top .45s ease}
+  /* Halka kucukken yazi onun uzerine biniyor ve carpisma gibi duruyordu.
+     Ana ekran ve olcumde halka yukari alinir, yazi altina gecer; nefes ve
+     bitis ekranlarinda yazinin halka ICINDE olmasi dogru calisiyor. */
+  body.split .center{top:66%}
+  .cue{font:300 clamp(26px,7.2vw,40px)/1.15 -apple-system,system-ui,sans-serif;
+    letter-spacing:.02em;color:#dfe6f2;transition:opacity .5s}
+  .sub{margin-top:10px;font:400 clamp(13px,3.6vw,15px)/1.5 -apple-system,system-ui,sans-serif;
+    color:#7d8aa3;transition:opacity .5s}
+  /* Nefes ve bitis ekranlarinda yazi PARLAK kurenin uzerinde duruyor; sonuk gri
+     orada okunmuyordu. Ayrik yerlesimde (karanlik zemin) sonuk kalmasi dogru. */
+  body:not(.split) .sub{color:#cfe0f5;text-shadow:0 1px 10px rgba(6,12,26,.65)}
+  body:not(.split) .cue{text-shadow:0 2px 18px rgba(6,12,26,.55)}
+  .btn{appearance:none;border:1px solid rgba(160,180,215,.28);background:rgba(160,180,215,.07);
+    color:#dfe6f2;border-radius:999px;padding:15px 30px;min-height:52px;
+    font:500 16px/1 -apple-system,system-ui,sans-serif;letter-spacing:.02em;cursor:pointer;
+    transition:background .2s,border-color .2s,opacity .3s}
+  .btn:active{background:rgba(160,180,215,.16)}
+  .btn.primary{border-color:rgba(126,178,222,.55);background:rgba(126,178,222,.14);color:#eaf2fb}
+  .btn:focus-visible{outline:2px solid #7eb2de;outline-offset:3px}
+  .stack{display:flex;flex-direction:column;gap:12px;align-items:stretch;max-width:340px;
+    margin:0 auto;width:100%}
+  .opts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .chip{appearance:none;border:1px solid rgba(160,180,215,.2);background:transparent;color:#8d9ab3;
+    border-radius:999px;padding:11px 17px;min-height:44px;font:500 14px/1 system-ui,sans-serif;cursor:pointer}
+  .chip[aria-pressed="true"]{border-color:rgba(126,178,222,.6);color:#eaf2fb;background:rgba(126,178,222,.12)}
+  .hide{opacity:0;pointer-events:none}
+  .gone{display:none}
+  .sheet{position:fixed;inset:0;background:rgba(5,7,13,.94);backdrop-filter:blur(8px);
+    padding:calc(env(safe-area-inset-top,0px) + 26px) 24px calc(env(safe-area-inset-bottom,0px) + 26px);
+    overflow-y:auto;z-index:5}
+  .sheet h2{font:600 20px/1.3 system-ui,sans-serif;margin:0 0 14px;color:#eaf2fb}
+  .sheet p{color:#8d9ab3;font-size:14.5px;margin:0 0 12px;max-width:52ch}
+  .sheet .btn{margin-top:10px}
+  .stat{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(160,180,215,.1);
+    font:500 15px/1 system-ui,sans-serif}
+  .stat b{color:#eaf2fb;font-variant-numeric:tabular-nums}
+  .stat span{color:#7d8aa3;font-weight:400}
+  @media (prefers-reduced-motion:reduce){.cue,.sub,.btn{transition:none}}
+  /* Film kipi: altyaziya AYRI bir bant. Ilk denemede altyazi tuslarin ustune
+     biniyordu; uygulamayi yukari sikistirmak carpismayi yapisal olarak onler. */
+  /* DIKKAT: yuzdelik padding YUKSEKLIGE degil GENISLIGE gore hesaplanir.
+     17% ilk denemede 85px verdi (bandin 183px'ine karsi) ve altyazi tusun
+     ustune bindi. vh kullan. */
+  body.film .ui{padding-bottom:calc(18vh + 18px)}
+  body.film #filmcap{position:fixed;left:0;right:0;bottom:0;height:18vh;margin:0;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:0 8%;background:linear-gradient(to top,#05070d 55%,rgba(5,7,13,0));
+    font:500 clamp(15px,3.7vw,25px)/1.4 -apple-system,system-ui,sans-serif;
+    color:#cddcf0;z-index:9}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+
+<div class="ui" id="ui">
+  <div class="row">
+    <div class="brand" id="brand">L U L L</div>
+    <div class="mini" id="hud"></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="stack" id="controls"></div>
+</div>
+
+<div class="center" id="center">
+  <div class="cue" id="cue"></div>
+  <div class="sub" id="sub"></div>
+</div>
+
+<script>
+'use strict';
+/* ---------------------------------------------------------------------------
+   LULL — nefesini BULUNDUGUN yerden alip yavasca indirir.
+   Tek dosya, cevrimdisi, izin istemez, sunucu yok. Ses dosyasi yok (WebAudio).
+
+   Neden bu mekanik: piyasadaki nefes uygulamalari sabit bir tempo dayatir
+   (4-7-8, kutu nefesi). Nefesin dakikada 18'ken "6'da nefes al" denirse
+   vucut direnir, kisi basaramaz ve daha da gerilir. Lull once SENIN temponu
+   olcer, sonra oradan asagi indirir. Dayatma degil, surukleme.
+
+   Fizyolojik dayanak: yavaslamanin kendisi degil, NEFES VERMENIN uzamasi
+   parasempatik sistemi devreye sokar. Bu yuzden inis boyunca veris/alis
+   orani 1.0'dan ~1.6'ya cikar. Hedef ~6 nefes/dk (rezonans frekansi).
+--------------------------------------------------------------------------- */
+
+var CFG = {
+  version: '1.0.0',
+  bundleId: 'com.kusgrup.lull',
+  privacyUrl: 'https://buraakkuss.github.io/kus-games/lull/privacy.html',
+  syncSeconds: 30,      /* olcum asamasi */
+  minTaps: 3,           /* bundan az dokunusla olcum guvenilir degil */
+  startRateMin: 8,      /* dk/nefes alt-ust sinirlari (olcum sacmalarsa) */
+  startRateMax: 22,
+  targetRate: 6,        /* rezonans frekansi */
+  ratioStart: 1.0,      /* veris/alis orani baslangic */
+  ratioEnd: 1.6,        /* ... ve bitis */
+  descentShare: 0.55,   /* seansin ilk %55'i inis, kalani sabit tempo */
+  lengths: [5, 9, 15],  /* dakika secenekleri */
+  defaultLength: 9,
+  ads: { useTest: true, real: { android: { app:'', interstitial:'', rewarded:'' },
+                                ios: { app:'', interstitial:'', rewarded:'' } } },
+  iap: { removeAds: 'remove_ads', subMonthly: 'lull_plus_monthly', subYearly: 'lull_plus_yearly' }
+};
+
+/* ---------- kalici kucuk durum ---------- */
+var S = { sessions: 0, lastRate: 0, minutes: 0, sound: true, len: CFG.defaultLength, streak: 0, lastDay: '' };
+try { var raw = localStorage.getItem('lull.v1'); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+function save() { try { localStorage.setItem('lull.v1', JSON.stringify(S)); } catch (e) {} }
+
+/* ---------- ogeler ---------- */
+var cv = document.getElementById('c'), ctx = cv.getContext('2d');
+var elCue = document.getElementById('cue'), elSub = document.getElementById('sub');
+var elCtl = document.getElementById('controls'), elHud = document.getElementById('hud');
+var elCenter = document.getElementById('center'), elBrand = document.getElementById('brand');
+
+var W = 0, H = 0, DPR = 1, U = 1;
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  U = Math.min(W, H) / 400;          /* tek olcek birimi — ciplak piksel yazma */
+  buildMotes();
+}
+window.addEventListener('resize', resize);
+
+/* ---------- durum makinesi ---------- */
+var MODE = 'home';    /* home · sync · breathe · done */
+var G = {
+  t: 0,               /* seans saati (sn) */
+  taps: [],           /* olcum asamasindaki dokunus zamanlari */
+  rate0: 0,           /* olculen baslangic temposu (nefes/dk) */
+  phase: 0,           /* 0..1 nefes dongusu icinde konum */
+  inhale: true,
+  cycles: 0,
+  total: 0,           /* seans uzunlugu (sn) */
+  fade: 0,            /* ekranin kararma miktari 0..1 */
+  lastCue: ''
+};
+
+/* ---------- ses: dosya yok, WebAudio ile uretiliyor ---------- */
+var Snd = (function () {
+  var ac = null, master = null;
+  function ensure() {
+    if (ac) return true;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      ac = new AC();
+      master = ac.createGain(); master.gain.value = 0.0; master.connect(ac.destination);
+    } catch (e) { return false; }
+    return true;
+  }
+  return {
+    start: function () {
+      if (!S.sound || !ensure()) return;
+      if (ac.state === 'suspended') ac.resume();
+      if (master.gain.value > 0) return;
+      /* Nefes sesi: dar bantli pembe-benzeri gurultu. Tek osilator degil,
+         cunku saf ton gece boyunca rahatsiz edici oluyor. */
+      var len = 2 * ac.sampleRate, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+      var b0 = 0, b1 = 0, b2 = 0;
+      for (var i = 0; i < len; i++) {
+        var w = Math.random() * 2 - 1;
+        b0 = 0.99765 * b0 + w * 0.0990460;
+        b1 = 0.96300 * b1 + w * 0.2965164;
+        b2 = 0.57000 * b2 + w * 1.0526913;
+        d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.06;
+      }
+      var src = ac.createBufferSource(); src.buffer = buf; src.loop = true;
+      var f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 420; f.Q.value = 0.7;
+      src.connect(f); f.connect(master); src.start();
+      this._f = f;
+      master.gain.setTargetAtTime(0.5, ac.currentTime, 1.2);
+    },
+    /* Nefesle birlikte parlaklik ve ses birlikte hareket eder */
+    breathe: function (amp, inhale) {
+      if (!ac || !master) return;
+      master.gain.setTargetAtTime(0.10 + amp * 0.42, ac.currentTime, 0.28);
+      if (this._f) this._f.frequency.setTargetAtTime(inhale ? 360 + amp * 240 : 300 + amp * 120, ac.currentTime, 0.4);
+    },
+    stop: function () {
+      if (!ac || !master) return;
+      master.gain.setTargetAtTime(0, ac.currentTime, 0.8);
+    }
+  };
+})();
+
+function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
+
+/* ---------- nefes matematigi -------------------------------------------
+   İki egri var ve ikisi de onemli:
+   rateAt(t)  : o an dakikada kac nefes (olculenden hedefe iniyor)
+   ratioAt(t) : veris suresi / alis suresi (1.0 -> 1.6)
+   Ikisi easeInOut ile degisir; dogrusal inis "basamak" gibi hissediliyor. ---- */
+function easeInOut(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+
+function progress() {
+  var d = G.total * CFG.descentShare;
+  return d <= 0 ? 1 : Math.min(1, G.t / d);
+}
+function rateAt() { var k = easeInOut(progress()); return G.rate0 + (CFG.targetRate - G.rate0) * k; }
+function ratioAt() { var k = easeInOut(progress()); return CFG.ratioStart + (CFG.ratioEnd - CFG.ratioStart) * k; }
+
+/* Bir nefesin toplam suresi ve alis/veris paylari */
+function cycleSeconds() { return 60 / rateAt(); }
+function inhaleSeconds() { return cycleSeconds() / (1 + ratioAt()); }
+
+/* phase 0..1 -> halkanin yaricap carpani 0..1 (alista buyur, veriste kucul) */
+function amplitudeFor(phase, inhaleFrac) {
+  if (phase < inhaleFrac) {
+    var a = phase / inhaleFrac;
+    return easeInOut(a);                    /* alis */
+  }
+  var b = (phase - inhaleFrac) / (1 - inhaleFrac);
+  return 1 - easeInOut(b);                  /* veris */
+}
+
+/* ---------- arka plan zerrecikleri ---------- */
+var motes = [];
+function buildMotes() {
+  var n = Math.round(Math.min(46, (W * H) / 26000));
+  motes = [];
+  for (var i = 0; i < n; i++) {
+    motes.push({ x: Math.random() * W, y: Math.random() * H,
+                 r: (0.5 + Math.random() * 1.6) * U * 0.9,
+                 s: 0.06 + Math.random() * 0.22, a: 0.10 + Math.random() * 0.28,
+                 p: Math.random() * Math.PI * 2 });
+  }
+}
+
+/* ---------- cizim ---------- */
+function draw(dt) {
+  var cx = W / 2, cy = H * ringY();
+
+  /* gece gradyani — merkeze dogru hafif isik */
+  var bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.78);
+  var lift = MODE === 'breathe' ? (1 - G.fade) : 1;
+  bg.addColorStop(0, 'rgba(19,29,50,' + (0.85 * lift + 0.08) + ')');
+  bg.addColorStop(0.55, 'rgba(9,13,24,' + (0.92 * lift + 0.08) + ')');
+  bg.addColorStop(1, '#05070d');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  /* zerrecikler */
+  for (var i = 0; i < motes.length; i++) {
+    var m = motes[i];
+    m.y -= m.s * dt * 12 * U; m.p += dt * 0.5;
+    if (m.y < -10) { m.y = H + 10; m.x = Math.random() * W; }
+    var tw = 0.65 + 0.35 * Math.sin(m.p);
+    ctx.globalAlpha = m.a * tw * (1 - G.fade * 0.75);
+    ctx.fillStyle = '#9fb8e6';
+    ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.2832); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  var amp = currentAmp();
+  var base = Math.min(W, H) * (MODE === 'home' ? 0.225 : 0.19);
+  var R = base * (0.62 + amp * 0.55);
+
+  /* dis parlama — katmanli, tek stroke degil (tek stroke yassı duruyor) */
+  var glow = ctx.createRadialGradient(cx, cy, R * 0.55, cx, cy, R * 2.25);
+  var gi = (0.16 + amp * 0.30) * (1 - G.fade * 0.72);
+  glow.addColorStop(0, 'rgba(126,178,222,' + gi + ')');
+  glow.addColorStop(0.45, 'rgba(110,150,205,' + gi * 0.35 + ')');
+  glow.addColorStop(1, 'rgba(110,150,205,0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath(); ctx.arc(cx, cy, R * 2.25, 0, 6.2832); ctx.fill();
+
+  /* ic dolgu */
+  var fill = ctx.createRadialGradient(cx, cy - R * 0.28, R * 0.1, cx, cy, R);
+  var fa = (0.30 + amp * 0.34) * (1 - G.fade * 0.68);
+  fill.addColorStop(0, 'rgba(163,206,244,' + fa + ')');
+  fill.addColorStop(0.7, 'rgba(96,140,200,' + fa * 0.55 + ')');
+  fill.addColorStop(1, 'rgba(70,108,168,' + fa * 0.22 + ')');
+  ctx.fillStyle = fill;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fill();
+
+  /* kenar cizgisi */
+  ctx.lineWidth = Math.max(1, 1.4 * U);
+  ctx.strokeStyle = 'rgba(197,224,252,' + (0.42 + amp * 0.34) * (1 - G.fade * 0.7) + ')';
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.stroke();
+
+  /* ilerleme yayi — seansin ne kadari gecti (sadece nefes asamasinda) */
+  if (MODE === 'breathe' && G.total > 0) {
+    var pr = Math.min(1, G.t / G.total);
+    ctx.lineWidth = Math.max(1, 2.2 * U);
+    ctx.strokeStyle = 'rgba(126,178,222,' + 0.22 * (1 - G.fade * 0.85) + ')';
+    ctx.beginPath();
+    ctx.arc(cx, cy, base * 1.62, -Math.PI / 2, -Math.PI / 2 + pr * 6.2832);
+    ctx.stroke();
+  }
+
+  /* olcum asamasinda dokunus halkalari */
+  if (MODE === 'sync') {
+    for (var k = 0; k < ripples.length; k++) {
+      var rp = ripples[k];
+      rp.t += dt;
+      var q = rp.t / 1.1;
+      if (q >= 1) { ripples.splice(k--, 1); continue; }
+      ctx.globalAlpha = (1 - q) * 0.5;
+      ctx.lineWidth = Math.max(1, 1.6 * U);
+      ctx.strokeStyle = '#9fd0f5';
+      ctx.beginPath(); ctx.arc(cx, cy, R + q * base * 1.5, 0, 6.2832); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+var ripples = [];
+
+/* Halkanin dusey merkezi: ayrik yerlesimde yukarida, birlesikte ortada. */
+var ringYNow = 0.5;
+function ringY() {
+  var want = (MODE === 'home' || MODE === 'sync') ? 0.38 : 0.5;
+  ringYNow += (want - ringYNow) * 0.12;      /* gecis yumusak olsun */
+  return ringYNow;
+}
+function setSplit(on) { document.body.classList.toggle('split', !!on); }
+
+function currentAmp() {
+  if (MODE === 'breathe') return amplitudeFor(G.phase, G.inhaleFrac);
+  /* ana ekran ve olcumde sakin bir nefes gosterisi: 12/dk */
+  var c = 5, p = (G.t % c) / c;
+  return amplitudeFor(p, 0.5);
+}
+
+/* ---------- ana dongu ---------- */
+var last = 0;
+function loop(ts) {
+  var dt = last ? Math.min((ts - last) / 1000, 0.05) : 0.016;
+  last = ts;
+  if (FILM) { requestAnimationFrame(loop); return; }   /* kare donduruldu */
+  G.t += dt;
+
+  if (MODE === 'breathe') step(dt);
+  draw(dt);
+  requestAnimationFrame(loop);
+}
+
+function step(dt) {
+  var cyc = cycleSeconds();
+  G.inhaleFrac = inhaleSeconds() / cyc;
+  var before = G.phase;
+  G.phase += dt / cyc;
+  if (G.phase >= 1) { G.phase -= 1; G.cycles++; }
+
+  /* faz degisimi: alis -> veris gecisi */
+  var wasInhale = before < G.inhaleFrac;
+  var isInhale = G.phase < G.inhaleFrac;
+  if (wasInhale !== isInhale || G.phase < before) {
+    buzz(isInhale ? 14 : 22);
+  }
+  G.inhale = isInhale;
+
+  var amp = amplitudeFor(G.phase, G.inhaleFrac);
+  Snd.breathe(amp, isInhale);
+
+  /* son ucte ekran kararir — goz yormasin, uyku gelsin */
+  var tail = Math.max(0, (G.t / G.total - 0.62) / 0.38);
+  G.fade = Math.min(1, tail) * 0.92;
+
+  setCue(isInhale ? 'Nefes al' : 'Bırak',
+         isInhale ? '' : 'yavaşça, sonuna kadar');
+
+  elHud.textContent = Math.round(rateAt() * 10) / 10 + ' /dk   ·   ' +
+                      fmt(Math.max(0, G.total - G.t));
+  elHud.style.opacity = String(0.85 - G.fade * 0.75);
+  elBrand.style.opacity = String(0.7 - G.fade * 0.65);
+  elCenter.style.opacity = String(1 - G.fade * 0.55);
+
+  if (G.t >= G.total) finish();
+}
+
+function setCue(a, b) {
+  if (G.lastCue === a + '|' + b) return;
+  G.lastCue = a + '|' + b;
+  elCue.textContent = a; elSub.textContent = b || '';
+}
+
+function fmt(s) {
+  var m = Math.floor(s / 60), r = Math.round(s % 60);
+  if (r === 60) { m++; r = 0; }
+  return m + ':' + (r < 10 ? '0' : '') + r;
+}
+
+/* ---------- ekranlar ---------- */
+function btn(label, cls, fn) {
+  var b = document.createElement('button');
+  b.className = 'btn' + (cls ? ' ' + cls : '');
+  b.textContent = label;
+  b.addEventListener('click', fn);
+  return b;
+}
+
+function home() {
+  MODE = 'home'; G.t = 0; G.fade = 0; setSplit(true);
+  elCenter.style.opacity = '1'; elBrand.style.opacity = '0.7'; elHud.style.opacity = '0.85';
+  setCue('İyi geceler', 'Nefesini bulunduğun yerden alıp yavaşça indireceğim.');
+  elHud.textContent = S.sessions ? S.sessions + ' seans' : '';
+  elCtl.innerHTML = '';
+
+  var opts = document.createElement('div');
+  opts.className = 'opts';
+  CFG.lengths.forEach(function (m) {
+    var c = document.createElement('button');
+    c.className = 'chip'; c.textContent = m + ' dk';
+    c.setAttribute('aria-pressed', String(S.len === m));
+    c.addEventListener('click', function () {
+      S.len = m; save();
+      Array.prototype.forEach.call(opts.children, function (x) { x.setAttribute('aria-pressed', 'false'); });
+      c.setAttribute('aria-pressed', 'true');
+    });
+    opts.appendChild(c);
+  });
+  elCtl.appendChild(opts);
+  elCtl.appendChild(btn('Başla', 'primary', startSync));
+
+  var foot = document.createElement('div');
+  foot.style.cssText = 'display:flex;gap:10px;justify-content:center;align-items:center';
+  var s = document.createElement('button');
+  s.className = 'chip';
+  s.textContent = S.sound ? 'Ses açık' : 'Ses kapalı';
+  s.addEventListener('click', function () { S.sound = !S.sound; save(); s.textContent = S.sound ? 'Ses açık' : 'Ses kapalı'; });
+  foot.appendChild(s);
+  /* Gizlilik metnine uygulama ICINDEN erisim: her iki magaza da bunu istiyor. */
+  var pv = document.createElement('a');
+  pv.className = 'chip';
+  pv.href = CFG.privacyUrl; pv.target = '_blank'; pv.rel = 'noopener';
+  pv.textContent = 'Gizlilik';
+  pv.style.cssText += ';text-decoration:none;display:inline-flex;align-items:center';
+  foot.appendChild(pv);
+  elCtl.appendChild(foot);
+}
+
+/* --- 1) OLCUM: kullanici kendi temposunu veriyor --- */
+function startSync() {
+  MODE = 'sync'; G.t = 0; G.taps = []; ripples = []; setSplit(true);
+  Snd.start();
+  setCue('Normal nefes al', 'Her nefes verişinde bir kez dokun.');
+  elCtl.innerHTML = '';
+  elCtl.appendChild(btn('Dokunmadan geç', '', function () { beginBreath(0); }));
+  elHud.textContent = '';
+  tapArmed = true;
+  syncTimer = setTimeout(endSync, CFG.syncSeconds * 1000);
+}
+var syncTimer = null, tapArmed = false;
+
+function onTap() {
+  if (MODE !== 'sync' || !tapArmed) return;
+  var now = performance.now() / 1000;
+  G.taps.push(now);
+  ripples.push({ t: 0 });
+  buzz(10);
+  var n = G.taps.length;
+  elHud.textContent = n + ' nefes';
+  if (n >= 2) {
+    var r = measuredRate();
+    setCue('Normal nefes al', 'Ölçülen tempo: ' + (Math.round(r * 10) / 10) + ' /dk');
+  }
+  /* 6 dokunus yeterli — beklemeye gerek yok */
+  if (n >= 6) endSync();
+}
+
+function measuredRate() {
+  if (G.taps.length < 2) return 0;
+  var gaps = [];
+  for (var i = 1; i < G.taps.length; i++) gaps.push(G.taps[i] - G.taps[i - 1]);
+  gaps.sort(function (a, b) { return a - b; });
+  /* ortanca: tek bir gec dokunus ortalamayi bozmasin */
+  var mid = gaps.length % 2 ? gaps[(gaps.length - 1) / 2]
+                            : (gaps[gaps.length / 2 - 1] + gaps[gaps.length / 2]) / 2;
+  if (!mid || mid <= 0) return 0;
+  return 60 / mid;
+}
+
+function endSync() {
+  if (MODE !== 'sync') return;
+  clearTimeout(syncTimer); tapArmed = false;
+  beginBreath(G.taps.length >= CFG.minTaps ? measuredRate() : 0);
+}
+
+/* --- 2) INIS + SABIT TEMPO --- */
+function beginBreath(measured) {
+  MODE = 'breathe'; setSplit(false);
+  var r = measured > 0 ? measured : 14;             /* olcum yoksa makul varsayilan */
+  G.rate0 = Math.max(CFG.startRateMin, Math.min(CFG.startRateMax, r));
+  G.total = S.len * 60;
+  G.t = 0; G.phase = 0; G.cycles = 0; G.fade = 0;
+  G.inhaleFrac = inhaleSeconds() / cycleSeconds();
+  G.lastCue = '';
+  Snd.start();
+  elCtl.innerHTML = '';
+  var b = btn('Bitir', '', finish);
+  b.style.opacity = '.45';
+  elCtl.appendChild(b);
+}
+
+/* --- 3) BITIS --- */
+function finish() {
+  if (MODE === 'done') return;
+  var wasBreath = MODE === 'breathe';
+  MODE = 'done'; setSplit(false);
+  Snd.stop();
+  var mins = Math.round(G.t / 60 * 10) / 10;
+
+  if (wasBreath && G.t > 45) {
+    S.sessions++; S.minutes = Math.round((S.minutes + mins) * 10) / 10;
+    S.lastRate = Math.round(G.rate0 * 10) / 10;
+    var day = new Date().toISOString().slice(0, 10);
+    if (S.lastDay !== day) {
+      var y = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      S.streak = (S.lastDay === y) ? S.streak + 1 : 1;
+      S.lastDay = day;
+    }
+    save();
+  }
+
+  G.fade = 0;
+  elCenter.style.opacity = '1'; elBrand.style.opacity = '0.7';
+  elHud.textContent = '';
+  setCue('Bitti', '');
+
+  elCtl.innerHTML = '';
+  var box = document.createElement('div');
+  box.style.cssText = 'width:100%;margin-bottom:8px';
+  function row(k, v) {
+    var d = document.createElement('div'); d.className = 'stat';
+    d.innerHTML = '<span></span><b></b>';
+    d.children[0].textContent = k; d.children[1].textContent = v;
+    box.appendChild(d);
+  }
+  row('Başlangıç temposu', (S.lastRate || Math.round(G.rate0 * 10) / 10) + ' /dk');
+  row('Bitiş temposu', CFG.targetRate + ' /dk');
+  row('Süre', mins + ' dk');
+  if (S.streak > 1) row('Üst üste gün', String(S.streak));
+  elCtl.appendChild(box);
+  elCtl.appendChild(btn('Tekrar', 'primary', home));
+  buzz([12, 60, 12]);
+}
+
+/* ---------- girdi ---------- */
+function tapTarget(e) {
+  if (e.target.closest && e.target.closest('button')) return;   /* butonlar kendi isini yapar */
+  if (MODE === 'sync') { onTap(); e.preventDefault(); }
+}
+document.addEventListener('pointerdown', tapTarget, { passive: false });
+
+/* Ekran kapanmasin (destekleyen tarayicilarda) */
+var wake = null;
+async function keepAwake(on) {
+  try {
+    if (on && 'wakeLock' in navigator) wake = await navigator.wakeLock.request('screen');
+    else if (wake) { wake.release(); wake = null; }
+  } catch (e) {}
+}
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'visible' && MODE === 'breathe') keepAwake(true);
+});
+
+/* ---------- reklam / abonelik koprusu ----------
+   Native degilse sessizce devre disi kalir; tarayicida test hep calisir.
+   Ucretsiz katman TAM seansi verir; abonelik uzun programlar ve gecmis icindir.
+   Reklam seans SIRASINDA asla gosterilmez — amaci sakinlestirmek olan bir
+   uygulamada bu urunu yok eder. Yalnizca bitis ekraninda, seyrek. */
+var Ads = {
+  ready: false,
+  init: function () { this.ready = !!(window.Capacitor && window.Capacitor.isNativePlatform &&
+                                      window.Capacitor.isNativePlatform()); },
+  maybeInterstitial: function () { /* bitis ekraninda, 3 seansta bir — native koprusu burada */ }
+};
+Ads.init();
+
+/* ---------- self-test ------------------------------------------------------
+   ?selftest=1 — gorunmeden, hizlandirilmis bir seans oynatir ve egrilerin
+   dogru davrandigini dogrular. Sonuc document.title'a yazilir; tools/check.js
+   okur. Iddialar:
+     - tempo olculen degerden hedefe INIYOR, asla artmiyor
+     - veris her zaman alisten kisa degil (oran >= 1)
+     - bir nefes dongusu asla 0 veya negatif olmuyor
+     - seans tam suresinde bitiyor
+--------------------------------------------------------------------------- */
+function selftest() {
+  var errs = [];
+  var samples = [];
+  S.len = 9;
+  beginBreath(17);                       /* 17 /dk olculmus gibi basla */
+  var dt = 1 / 20, guard = 0, prevRate = Infinity;
+  while (G.t < G.total && guard++ < 200000) {
+    var cyc = cycleSeconds();
+    if (!(cyc > 0)) { errs.push('dongu suresi ' + cyc); break; }
+    var r = rateAt();
+    if (r > prevRate + 1e-9) errs.push('tempo artti: ' + prevRate + ' -> ' + r);
+    prevRate = r;
+    if (ratioAt() < 1 - 1e-9) errs.push('veris/alis orani 1 altina dustu');
+    var inf = inhaleSeconds() / cyc;
+    if (!(inf > 0.2 && inf < 0.8)) errs.push('alis payi makul degil: ' + inf);
+    G.phase += dt / cyc; if (G.phase >= 1) { G.phase -= 1; G.cycles++; }
+    G.t += dt;
+    if (samples.length < 3 || G.t > G.total - dt * 2) samples.push(Math.round(r * 10) / 10);
+  }
+  if (Math.abs(rateAt() - CFG.targetRate) > 0.05) errs.push('hedef tempoya inilmedi: ' + rateAt());
+  if (G.cycles < 20) errs.push('cok az nefes dongusu: ' + G.cycles);
+  var ok = errs.length === 0;
+  document.title = ok
+    ? 'SELFTEST:OK baslangic=' + samples[0] + ' bitis=' + Math.round(rateAt() * 10) / 10 +
+      ' dongu=' + G.cycles + ' sure=' + Math.round(G.t) + 's'
+    : 'SELFTEST:FAIL ' + errs.slice(0, 3).join(' | ');
+  MODE = 'home';
+  return ok;
+}
+
+/* ---------- film kipi ---------------------------------------------------
+   ?film=1&t=12.5 — o saniyedeki kareyi TEKRARLANABILIR sekilde kurar ve
+   dondurur. tools/film.sh her kare icin bir kez cagirir, ffmpeg birlestirir.
+   Zerrecikler tohumlanir; yoksa her karede yerleri degisir ve video titrer. --- */
+var FILM = false;
+function seeded(seed) { var a = seed >>> 0; return function () {
+  a = (a + 0x6d2b79f5) >>> 0; var t = Math.imul(a ^ (a >>> 15), 1 | a);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+function filmCaption(txt) {
+  var el = document.getElementById('filmcap');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'filmcap';
+    document.body.appendChild(el);
+  }
+  el.textContent = txt || '';
+}
+
+function filmFrame(T) {
+  FILM = true;
+  document.body.classList.add('film');
+  /* zerrecikleri sabitle */
+  var r = seeded(1234);
+  for (var i = 0; i < motes.length; i++) {
+    var m = motes[i];
+    m.x = r() * W; m.y = ((r() * H) - T * 12 * U * m.s) % H; if (m.y < 0) m.y += H;
+    m.p = r() * 6.2832 + T * 0.5;
+  }
+  var cap = '';
+  if (T < 3) {                                   /* 1) acilis karti */
+    home(); MODE = 'home'; setSplit(false); ringYNow = 0.5;
+    G.t = T; elCtl.style.opacity = '0'; elHud.textContent = '';
+    setCue('LULL', '');
+    cap = 'Nefesini bulunduğun yerden alıp yavaşça indirir.';
+  } else if (T < 7.5) {                          /* 2) ana ekran */
+    home(); ringYNow = 0.38;
+    G.t = T; elCtl.style.opacity = '1';
+    setCue('İyi geceler', 'Nefesini bulunduğun yerden alıp yavaşça indireceğim.');
+    elHud.textContent = '';
+    cap = 'Süreyi seç, başla.';
+  } else if (T < 14) {                           /* 3) olcum */
+    startSync(); clearTimeout(syncTimer); tapArmed = false;
+    ringYNow = 0.38; G.t = T;
+    var n = Math.min(6, Math.max(0, Math.floor((T - 8.2) / 0.95) + 1));
+    elHud.textContent = n > 0 ? n + ' nefes' : '';
+    setCue('Normal nefes al', n >= 2 ? 'Ölçülen tempo: 16.4 /dk'
+                                      : 'Her nefes verişinde bir kez dokun.');
+    ripples.length = 0;
+    var since = (T - 8.2) % 0.95;
+    if (n > 0 && since >= 0) ripples.push({ t: Math.max(0, since) });
+    cap = 'Önce seni ölçer: her nefes verişinde bir kez dokun.';
+  } else if (T < 21) {                           /* 4) inis basliyor */
+    if (MODE !== 'breathe') beginBreath(16.4);
+    setSplit(false); ringYNow = 0.5;
+    G.t = 40 + (T - 14) * 26;                    /* seans saatini hizlandirilmis akit */
+    G.inhaleFrac = inhaleSeconds() / cycleSeconds();
+    G.phase = ((T - 14) * 0.42) % 1;
+    G.fade = 0;
+    setCue(G.phase < G.inhaleFrac ? 'Nefes al' : 'Bırak',
+           G.phase < G.inhaleFrac ? '' : 'yavaşça, sonuna kadar');
+    elCtl.style.opacity = '0';
+    elHud.textContent = (Math.round(rateAt() * 10) / 10) + ' /dk   ·   ' + fmt(Math.max(0, G.total - G.t));
+    cap = 'Sonra senin temponu yavaşlatır.';
+  } else if (T < 25.5) {                         /* 5) derinlesme */
+    if (MODE !== 'breathe') beginBreath(16.4);
+    setSplit(false); ringYNow = 0.5;
+    G.t = G.total * (0.72 + (T - 21) / 4.5 * 0.26);
+    G.inhaleFrac = inhaleSeconds() / cycleSeconds();
+    G.phase = ((T - 21) * 0.16) % 1;
+    G.fade = Math.min(0.88, (T - 21) / 4.5 * 0.88);
+    setCue(G.phase < G.inhaleFrac ? 'Nefes al' : 'Bırak',
+           G.phase < G.inhaleFrac ? '' : 'yavaşça, sonuna kadar');
+    elCtl.style.opacity = '0';
+    elHud.textContent = (Math.round(rateAt() * 10) / 10) + ' /dk   ·   ' + fmt(Math.max(0, G.total - G.t));
+    elHud.style.opacity = String(0.85 - G.fade * 0.75);
+    elCenter.style.opacity = String(1 - G.fade * 0.55);
+    cap = 'Nefes verme uzar, ekran kararır.';
+  } else {                                       /* 6) bitis */
+    if (MODE !== 'done') { S.lastRate = 16.4; G.rate0 = 16.4; G.t = 540; MODE = 'breathe'; finish(); }
+    setSplit(false); ringYNow = 0.5; G.t = T;
+    elCtl.style.opacity = '1';
+    cap = 'Hesap yok, internet yok — her şey cihazında kalır.';
+  }
+  filmCaption(cap);
+  draw(0);
+  document.title = 'FILM:' + T.toFixed(2);
+}
+
+/* ---------- acilis ---------- */
+var q = new URLSearchParams(location.search);
+resize();
+home();
+requestAnimationFrame(loop);
+
+if (q.get('selftest') === '1') { selftest(); }
+if (q.get('film') === '1') { filmFrame(parseFloat(q.get('t') || '0')); }
+/* ?shot=1&s=... — magaza gorselleri icin sabit kareler (tools/gen.sh kullanir) */
+if (q.get('shot') === '1') {
+  var s = q.get('s') || 'home';
+  /* Sabit kare isteniyor: yumusak gecisleri atla, son hali dogrudan kur. */
+  document.documentElement.style.setProperty('--noanim', '1');
+  var _snap = function () { ringYNow = (MODE === 'home' || MODE === 'sync') ? 0.38 : 0.5; };
+  if (s === 'sync') { startSync(); tapArmed = false; G.taps = [{}, {}, {}]; elHud.textContent = '3 nefes';
+                      setCue('Normal nefes al', 'Ölçülen tempo: 16.4 /dk'); }
+  if (s === 'breathe') { beginBreath(16.4); G.t = 120; G.phase = 0.28;
+                         G.inhaleFrac = inhaleSeconds() / cycleSeconds();
+                         setCue('Nefes al', ''); elHud.textContent = '11.2 /dk   ·   7:00'; }
+  if (s === 'deep') { beginBreath(16.4); G.t = G.total * 0.86; G.phase = 0.72;
+                      G.inhaleFrac = inhaleSeconds() / cycleSeconds(); G.fade = 0.55;
+                      setCue('Bırak', 'yavaşça, sonuna kadar'); elHud.textContent = '6.0 /dk   ·   1:15'; }
+  if (s === 'done') { S.lastRate = 16.4; G.rate0 = 16.4; G.t = 540; MODE = 'breathe'; finish(); }
+  _snap();
+  /* Magaza karesi: uste baslik, alta alt-baslik. Oyunlardaki ile ayni usul. */
+  var hl = q.get('headline');
+  if (hl) {
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:0;right:0;bottom:11%;text-align:center;' +
+      'padding:0 7%;pointer-events:none;z-index:6';
+    var h1 = document.createElement('div');
+    h1.textContent = hl;
+    h1.style.cssText = 'font:700 clamp(22px,5.6vw,46px)/1.16 -apple-system,system-ui,sans-serif;' +
+      'color:#eaf2fb;letter-spacing:.01em';
+    box.appendChild(h1);
+    var sb = q.get('sub');
+    if (sb) {
+      var h2 = document.createElement('div');
+      h2.textContent = sb;
+      h2.style.cssText = 'margin-top:2.2%;font:400 clamp(12px,2.9vw,22px)/1.4 -apple-system,' +
+        'system-ui,sans-serif;color:#8fa0bd';
+      box.appendChild(h2);
+    }
+    document.body.appendChild(box);
+    elCtl.style.opacity = '0';           /* butonlar magaza karesinde gorunmesin */
+  }
+}
+</script>
+</body>
+</html>

@@ -1,13 +1,17 @@
-# KUŞ GRUP oyun deposu
+# KUŞ GRUP uygulama deposu
 
-Birden çok oyun, tek depo. Her oyun kendi klasöründe **bağımsızdır**: kendi
+Birden çok ürün, tek depo. Her ürün kendi klasöründe **bağımsızdır**: kendi
 `www/index.html`, `app.config.json`, `tools/`, `store/`, `native/`, `marketing/`
 ve `assets/` klasörü vardır. Ortak olan yalnızca `docs/` (GitHub Pages) ve
 `.github/workflows/`.
 
+**Hepsi oyun değil.** `slot`, `latch`, `orbita` oyundur; `lull` bir nefes/uyku
+uygulamasıdır. Altyapı aynı, ürün tipi farklı — bir klasörde çalışırken önce
+onun kendi `CLAUDE.md`'sini oku.
+
 ## Değişmez kurallar
 
-1. **Oyun mantığı tek dosyada kalır:** `<oyun>/www/index.html`. Yeni dosya açma;
+1. **Ürün mantığı tek dosyada kalır:** `<ürün>/www/index.html`. Yeni dosya açma;
    kullanıcı yazılımcı değil, tek dosyayı kopyalayarak güncelleme yapabilmeli.
 2. Bir oyunda çalışırken **o oyunun kendi `CLAUDE.md`'sini oku** — denge, adalet
    garantisi ve tuzaklar orada yazılı. Bu dosya yalnızca depo düzenini anlatır.
@@ -54,6 +58,7 @@ https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
 | `slot/` | Slot: Fit the Shape | şekli döndür, duvardaki deliğe otur |
 | `latch/` | Latch: One Tap Swing | ipi at, salın, 45°'de bırak |
 | `orbita/` | Orbita: One Tap Orbit Jump | yörüngeden teğet boyunca fırla |
+| `lull/` | Lull: Breathe Yourself Down | **oyun değil** — nefesini ölçüp yavaşlatır |
 
 Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
 
@@ -64,12 +69,23 @@ Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
 | `slot/` | mükemmel | `deaths=0` zorunlu → üretim adaletli |
 | `latch/` | mükemmel | `deaths=0` **ve** `fallback=0` zorunlu → her çengel ulaşılabilir |
 | `orbita/` | sezgisel (ölebilir) | yalnızca oyun döngüsünün çalıştığı ve çökmediği |
+| `lull/` | hızlandırılmış seans | tempo **iniyor** (artmıyor), veriş/alış oranı 1'in altına düşmüyor, seans tam süresinde bitiyor |
 
 Orbita'nınki daha zayıf bir güvence: ölüm sayısı > 0 olması hata değildir. Orbita'ya
 "adaletsiz bölüm üretilmiyor" güvencesi eklemek istersen önce mükemmel oynayan bir
 yapay oyuncu yazman gerekir; şu anki sezgisel oyuncu buna yetmez.
 
-## Yeni oyun eklemek
+## Sağlıkla ilişkili ürünler
+
+`lull` gibi nefes/uyku/gevşeme ürünlerinde **tıbbi sorumluluk reddi zorunludur**
+ve silinmemelidir: tıbbi cihaz olmadığı, teşhis/tedavi etmediği, baş dönmesinde
+bırakılması gerektiği, araç kullanırken kullanılmaması. `docs/<ürün>/terms.html`,
+`privacy.html` ve `gizlilik.html` içinde yazılıdır; App Review bunu sorar.
+
+Mağaza metinlerinde ve tanıtımda **sağlık iddiası yapma** — "uykusuzluğu tedavi
+eder", "anksiyeteyi geçirir" hem yanlış hem de mağaza reddi sebebidir.
+
+## Yeni ürün eklemek
 
 1. En yakın oyunun klasörünü kopyala: `cp -r latch yenioyun`
 2. `yenioyun/app.config.json`: `gameId`, `appName`, `bundleId`, `pagesBaseUrl`
@@ -94,7 +110,7 @@ görünümüyle teslim edildi. Ders şu:
   sarsıntısı, tasarlanmış HUD.
 - İptal edilen oyunun kodu geçmişte duruyor: `git show ba8caa4`.
 
-## Bir oyunu kendi deposuna çıkarmak
+## Bir ürünü kendi deposuna çıkarmak
 
 ```bash
 cd latch && bash tools/extract-repo.sh ~/latch-game
