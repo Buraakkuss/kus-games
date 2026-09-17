@@ -174,10 +174,19 @@ var Snd = (function () {
     return true;
   }
   return {
+    _on: false,
     start: function () {
       if (!S.sound || !ensure()) return;
       if (ac.state === 'suspended') ac.resume();
-      if (master.gain.value > 0) return;
+      if (this._on) {
+        /* Kaynak zaten calisiyor; yalnizca kazanci geri yukselt.
+           Onceki surumde burada "gain > 0 ise cik" vardi: stop() kazanci
+           asimptotik olarak dusurdugu icin deger tam sifir olmuyor, bu yuzden
+           IKINCI SEANS SESSIZ kaliyordu. */
+        master.gain.setTargetAtTime(0.5, ac.currentTime, 1.2);
+        return;
+      }
+      this._on = true;
       /* Nefes sesi: dar bantli pembe-benzeri gurultu. Tek osilator degil,
          cunku saf ton gece boyunca rahatsiz edici oluyor. */
       var len = 2 * ac.sampleRate, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
@@ -511,6 +520,7 @@ function beginBreath(measured) {
   G.inhaleFrac = inhaleSeconds() / cycleSeconds();
   G.lastCue = '';
   Snd.start();
+  keepAwake(true);        /* 9 dakikalik seansta ekranin kapanmamasi sart */
   elCtl.innerHTML = '';
   var b = btn('Bitir', '', finish);
   b.style.opacity = '.45';
@@ -523,6 +533,7 @@ function finish() {
   var wasBreath = MODE === 'breathe';
   MODE = 'done'; setSplit(false);
   Snd.stop();
+  keepAwake(false);
   var mins = Math.round(G.t / 60 * 10) / 10;
 
   if (wasBreath && G.t > 45) {
