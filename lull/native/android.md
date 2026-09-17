@@ -56,7 +56,7 @@ android:screenOrientation="portrait"
 <string name="package_name">com.kusgrup.lull</string>
 <string name="custom_url_scheme">com.kusgrup.lull</string>
 ```
-> Cihazın ana ekranında görünen ad `app_name`. Play mağaza adı ("Lull: One Tap Swing")
+> Cihazın ana ekranında görünen ad `app_name`. Play mağaza adı ("Lull: Breathe Yourself Down")
 > ile aynı olmak zorunda değil; ana ekranda kısa ad daha iyi durur.
 
 ## 5. `android/variables.gradle`
