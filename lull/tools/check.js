@@ -165,12 +165,34 @@ console.log('\n5) Surum ve kimlik tutarliligi');
     const s = fs.readFileSync(path.join(DOCS, f), 'utf8');
     if (/orbita|nakitpilot|\bslot\b|\blatch\b|kumar|gambling/i.test(s))
       bad('docs/' + GAME + '/' + f + ' icinde baska projeden kalan metin var');
+    /* Oyun ADI gecmeden de sablon metni kalabilir: support.html bastan asagi
+       Latch'in SSS'siydi ("hook", "rope", "PERFECT") ve ad taramasi bunu kacirdi.
+       Lull'da olmamasi gereken mekanik kelimeleri de ariyoruz. */
+    const oyunSozcugu = s.match(/\b(hook|rope|swing|respawn|leaderboard|high score|skor tablosu|\bcengel\b|\bcengeli\b)\b/i);
+    if (oyunSozcugu)
+      bad('docs/' + GAME + '/' + f + ' icinde oyun sablonundan kalan metin var: "' + oyunSozcugu[0] + '"');
+    /* Reklamsiz/satin almasiz bir uygulamada bu cumleler yalan beyandir. */
+    if (cfg.admob && cfg.admob.enabled === false) {
+      const rek = s.match(/remove ads|restore purchase|rewarded|advertising identifier|reklam kimligini|reklam onayini|satin almayi geri/i);
+      if (rek)
+        bad('docs/' + GAME + '/' + f + ' reklamsiz uygulamada reklam/satin alma metni iceriyor: "' + rek[0] + '"');
+    }
   });
 }
 
 console.log('\n6) Yayin oncesi ayarlar');
 {
-  if (/useTest:\s*true/.test(html)) wrn('CFG.ads.useTest = true - TEST reklamlari aktif. Yayindan once false yap.');
+  /* Reklam kapaliyken useTest anlamsiz. Onun yerine TUTARLILIK denetlenir:
+     reklamsiz bir uygulamada kodda reklam koprusu kalmamali. Play, "veri
+     toplamiyorum" beyaniyla AD_ID iznini dogrudan CELISKI olarak isaretliyor. */
+  if (cfg.admob && cfg.admob.enabled === false) {
+    if (/\bAds\s*=|googleads|AdMob\.|admob\./i.test(html))
+      bad('reklam kapali ama www/index.html icinde reklam koprusu var');
+    else ok('reklamsiz: uygulama kodunda reklam koprusu yok');
+    if (cfg.iap && cfg.iap.enabled === false) ok('satin alma kapali (v1 tamamen ucretsiz)');
+  } else if (/useTest:\s*true/.test(html)) {
+    wrn('CFG.ads.useTest = true - TEST reklamlari aktif. Yayindan once false yap.');
+  }
   else {
     ok('gercek reklam kimlikleri aktif');
     ['android', 'ios'].forEach(p => ['app', 'interstitial', 'rewarded'].forEach(k => {

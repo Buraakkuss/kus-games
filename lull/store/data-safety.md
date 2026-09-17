@@ -2,33 +2,35 @@
 
 Play Console → Politika → Uygulama içeriği → **Veri güvenliği**
 
-## Veri toplama
+## Ana soru
 
 | Soru | Cevap |
 |---|---|
-| Uygulamanız kullanıcı verisi topluyor veya paylaşıyor mu? | **Evet** (yalnızca reklam SDK'sı nedeniyle) |
-| Aktarım sırasında şifreleniyor mu? | **Evet** |
-| Kullanıcı silinmesini isteyebilir mi? | **Evet** — destek e-postası üzerinden |
+| Uygulamanız kullanıcı verisi topluyor veya paylaşıyor mu? | **HAYIR** |
 
-> Uygulamanın **kendisi** hiçbir veri toplamaz. Seans geçmişi, ses tercihi ve seri
-> sayısı yalnızca cihazdaki `localStorage` içinde durur, hiçbir yere gönderilmez.
-> "Evet" cevabının tek sebebi AdMob'dur.
+Form burada biter. Tek bir veri türü işaretlenmez.
 
-## Toplanan veri türleri (AdMob kaynaklı)
+## Neden "hayır"
 
-| Tür | Toplanır | Paylaşılır | Amaç | Zorunlu mu |
-|---|---|---|---|---|
-| Uygulama etkileşimleri | ✔ | ✔ | Reklam, Analiz | Hayır — reklamsız sürüm satın alınabilir |
-| Cihaz veya diğer kimlikler | ✔ | ✔ | Reklam | Hayır |
-| Yaklaşık konum | ✖ | ✖ | — | — |
-| Kişisel bilgiler (ad, e-posta) | ✖ | ✖ | — | — |
-| **Sağlık ve fitness** | ✖ | ✖ | — | — |
+Lull **hiçbir veri toplamaz**:
 
-> **Sağlık verisi işaretlenMEmeli.** Ölçülen nefes temposu cihazdan çıkmaz ve
-> hiçbir yere yazılmaz. Apple Sağlık / Google Fit entegrasyonu **yoktur**.
-> İleride eklenirse bu satır değişmeli.
+- Reklam SDK'sı **yok** → reklam kimliği (AD_ID) izni istenmiyor
+- Analitik **yok**
+- Hesap, giriş, e-posta **yok**
+- Sunucu **yok** — gönderilecek bir yer bile bulunmuyor
+- Seans geçmişi, ses tercihi ve seri sayısı yalnızca cihazdaki `localStorage`
+  içinde durur; uygulama silinince onlar da gider
+
+`tools/android-prepare.sh`, `app.config.json` içinde `admob.enabled: false`
+olduğu için manifest'e **AD_ID iznini eklemez.** Bu önemli: reklam kimliği izni
+beyan edip "veri toplamıyorum" demek Play'in doğrudan çelişki olarak işaretlediği
+bir durumdur. İkisi tutarlı.
 
 ## Güvenlik uygulamaları
-- [x] Veri aktarımda şifrelenir
-- [x] Kullanıcı veri silinmesini isteyebilir
-- [ ] Bağımsız güvenlik denetiminden geçti — *hayır, işaretleme*
+- [x] Veri aktarımda şifrelenir — *soru sorulmuyor çünkü aktarılan veri yok*
+- [x] Kullanıcı veri silinmesini isteyebilir — uygulamayı silmek yeterli
+- [ ] Bağımsız güvenlik denetiminden geçti — **hayır, işaretleme**
+
+## İleride değişirse
+Abonelik veya analitik eklenirse bu form **derhal** güncellenmelidir. Yanlış beyan,
+uygulamanın mağazadan kaldırılma sebebidir.

@@ -32,18 +32,15 @@ cp assets/splash-2732.png android/app/src/main/res/drawable/splash.png
 ```
 
 ## 3. `android/app/src/main/AndroidManifest.xml`
-`<manifest>` etiketinin içine, `<application>` etiketinden **önce**:
-```xml
-<uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
-<uses-permission android:name="com.android.vending.BILLING"/>
-```
-`<application>` etiketinin **içine** (AdMob uygulama kimliği — test kimliğiyle geliyor,
-gerçek hesabın açılınca değiştir):
-```xml
-<meta-data
-    android:name="com.google.android.gms.ads.APPLICATION_ID"
-    android:value="ca-app-pub-3940256099942544~3347511713"/>
-```
+
+> **Lull reklamsız ve satın almasızdır.** Bu yüzden `AD_ID` ve `BILLING` izinleri
+> ile AdMob `APPLICATION_ID` meta-data'sı **eklenmez**. `tools/android-prepare.sh`
+> bunu `app.config.json` içindeki `admob.enabled` / `iap.enabled` bayraklarından
+> okuyup otomatik uyguluyor; elle ekleme.
+>
+> Neden önemli: Play, `AD_ID` iznini gören uygulamanın Veri Güvenliği formunda
+> "hiçbir veri toplanmıyor" demesini **çelişki** sayıp yayını durduruyor.
+
 `MainActivity` etiketine dikey moda kilitleme ekle:
 ```xml
 android:screenOrientation="portrait"
@@ -133,9 +130,6 @@ ve Manifest'teki `APPLICATION_ID` satırını kontrol et.
 ## Sık karşılaşılan hatalar
 | Belirti | Sebep / çözüm |
 |---|---|
-| Uygulama açılışta çöküyor, logcat'te "Invalid application ID" | Manifest'e AdMob `APPLICATION_ID` meta-data'sı eklenmemiş |
-| Reklam hiç gelmiyor, hata kodu 3 | Yeni AdMob birimi; ilk envanter için birkaç saat gerekir. Test kimlikleriyle doğrula |
-| `remove_ads` bulunamıyor | Ürün Play Console'da **etkin** değil veya uygulama henüz hiçbir kanala yüklenmemiş. IAP testi için en az bir kapalı test sürümü yayında olmalı |
-| Play "Ad ID izni eksik" uyarısı | `com.google.android.gms.permission.AD_ID` izni eklenmemiş |
+| Play "AD_ID izni ile veri beyanı çelişiyor" uyarısı | Manifest'e elle `AD_ID` izni eklenmiş. Kaldır: Lull reklamsız |
 | Uygulama yatay dönüyor | `MainActivity` içine `android:screenOrientation="portrait"` eklenmemiş |
 | Parmak basılı tutulunca ip kopuyor | Bazı cihazlarda uzun basış sistem olayina donusuyor; `touch-action:none` ve `user-scalable=no` ayarlarini silme |

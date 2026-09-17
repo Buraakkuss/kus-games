@@ -119,9 +119,8 @@ var CFG = {
   descentShare: 0.55,   /* seansin ilk %55'i inis, kalani sabit tempo */
   lengths: [5, 9, 15],  /* dakika secenekleri */
   defaultLength: 9,
-  ads: { useTest: true, real: { android: { app:'', interstitial:'', rewarded:'' },
-                                ios: { app:'', interstitial:'', rewarded:'' } } },
-  iap: { removeAds: 'remove_ads', subMonthly: 'lull_plus_monthly', subYearly: 'lull_plus_yearly' }
+  adsEnabled: false,    /* v1 reklamsiz — gerekcesi asagida */
+  iapEnabled: false
 };
 
 /* ---------- kalici kucuk durum ---------- */
@@ -590,18 +589,16 @@ document.addEventListener('visibilitychange', function () {
   if (document.visibilityState === 'visible' && MODE === 'breathe') keepAwake(true);
 });
 
-/* ---------- reklam / abonelik koprusu ----------
-   Native degilse sessizce devre disi kalir; tarayicida test hep calisir.
-   Ucretsiz katman TAM seansi verir; abonelik uzun programlar ve gecmis icindir.
-   Reklam seans SIRASINDA asla gosterilmez — amaci sakinlestirmek olan bir
-   uygulamada bu urunu yok eder. Yalnizca bitis ekraninda, seyrek. */
-var Ads = {
-  ready: false,
-  init: function () { this.ready = !!(window.Capacitor && window.Capacitor.isNativePlatform &&
-                                      window.Capacitor.isNativePlatform()); },
-  maybeInterstitial: function () { /* bitis ekraninda, 3 seansta bir — native koprusu burada */ }
-};
-Ads.init();
+/* ---------- reklam yok, satin alma yok ---------------------------------------
+   Lull v1'de REKLAM YOKTUR ve bu bilincli bir urun kararidir: seans sonunda
+   kullanici uyumak uzeredir; o anda tam ekran reklam acmak urunun verdigi sozu
+   dogrudan yok eder. Sonucu: uygulama HICBIR VERI TOPLAMAZ — ATT istemi yok,
+   reklam kimligi izni yok, analitik yok, sunucu yok.
+
+   Abonelik karsiligindaki ozellikler yazildiginda acilacak; app.config.json
+   icinde iap.enabled = false oldugu surece native betikler BILLING iznini de
+   eklemez.
+--------------------------------------------------------------------------- */
 
 /* ---------- self-test ------------------------------------------------------
    ?selftest=1 — gorunmeden, hizlandirilmis bir seans oynatir ve egrilerin

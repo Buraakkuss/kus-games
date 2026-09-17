@@ -26,7 +26,7 @@ olursun. Lull önce **senin** temponu ölçer, sonra oradan aşağı indirir.
 
 ```
 www/index.html   uygulamanın tamamı (tek dosya)
-app.config.json  kimlik: bundle, sürüm, AdMob, abonelik ürünleri
+app.config.json  kimlik: bundle, sürüm, reklam/satın alma bayrakları (ikisi de kapalı)
 tools/           üretim ve doğrulama araçları
 store/           Play ve App Store metinleri
 native/          iOS/Android elle adımlar (betikler bunları uygular)

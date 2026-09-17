@@ -16,7 +16,16 @@ USETEST=$(node -p "require('$ROOT/app.config.json').admob.useTest")
 REALAPP=$(node -p "require('$ROOT/app.config.json').admob.real.android.app || ''")
 ADMOB_APP_ID="ca-app-pub-3940256099942544~3347511713"
 if [ "$USETEST" = "false" ] && [ -n "$REALAPP" ]; then ADMOB_APP_ID="$REALAPP"; fi
-echo "AdMob app id: $ADMOB_APP_ID  (useTest=$USETEST)"
+# admob.enabled / iap.enabled yoksa (eski app.config) varsayilan ACIK kabul edilir,
+# boylece diger uc urunun davranisi degismez.
+ADS_ON=$(node -p "String(require('$ROOT/app.config.json').admob.enabled !== false ? 1 : 0)")
+IAP_ON=$(node -p "String(require('$ROOT/app.config.json').iap && require('$ROOT/app.config.json').iap.enabled === false ? 0 : 1)")
+if [ "$ADS_ON" = "1" ]; then
+  echo "AdMob app id: $ADMOB_APP_ID  (useTest=$USETEST)"
+else
+  echo "Reklam KAPALI: AD_ID izni ve AdMob kimligi manifest'e eklenmeyecek"
+fi
+[ "$IAP_ON" = "1" ] || echo "Satin alma KAPALI: BILLING izni eklenmeyecek"
 
 # 1) simgeler
 if [ -d "$ROOT/assets/android/res" ]; then
@@ -26,18 +35,25 @@ mkdir -p "$AND/app/src/main/res/drawable"
 [ -f "$ROOT/assets/splash-2732.png" ] && cp "$ROOT/assets/splash-2732.png" "$AND/app/src/main/res/drawable/splash.png"
 
 # 2) AndroidManifest: izinler, AdMob kimligi, dikey kilit
-node - "$AND/app/src/main/AndroidManifest.xml" "$ADMOB_APP_ID" <<'NODEEOF'
-const fs=require('fs'), [,,f,adId]=process.argv;
+node - "$AND/app/src/main/AndroidManifest.xml" "$ADMOB_APP_ID" "$ADS_ON" "$IAP_ON" <<'NODEEOF'
+const fs=require('fs'), [,,f,adId,adsOn,iapOn]=process.argv;
 let s=fs.readFileSync(f,'utf8');
-const perms=['com.google.android.gms.permission.AD_ID','com.android.vending.BILLING'];
+/* Izinler KOSULLU. Reklam yokken AD_ID iznini beyan etmek, Play'in Veri
+   Guvenligi formuyla DOGRUDAN CELISIR: "veri toplamiyorum" deyip reklam
+   kimligi izni istemek politika ihlali olarak isaretlenir. */
+const perms=[];
+if (adsOn === '1') perms.push('com.google.android.gms.permission.AD_ID');
+if (iapOn === '1') perms.push('com.android.vending.BILLING');
 for (const p of perms){
   if (!s.includes(p)) s=s.replace('<application', '<uses-permission android:name="'+p+'"/>\n\n    <application');
 }
-if (!s.includes('com.google.android.gms.ads.APPLICATION_ID')){
-  s=s.replace('</application>',
-    '    <meta-data\n        android:name="com.google.android.gms.ads.APPLICATION_ID"\n        android:value="'+adId+'"/>\n\n    </application>');
-} else {
-  s=s.replace(/(APPLICATION_ID"\s*\n\s*android:value=")[^"]*(")/, '$1'+adId+'$2');
+if (adsOn === '1') {
+  if (!s.includes('com.google.android.gms.ads.APPLICATION_ID')){
+    s=s.replace('</application>',
+      '    <meta-data\n        android:name="com.google.android.gms.ads.APPLICATION_ID"\n        android:value="'+adId+'"/>\n\n    </application>');
+  } else {
+    s=s.replace(/(APPLICATION_ID"\s*\n\s*android:value=")[^"]*(")/, '$1'+adId+'$2');
+  }
 }
 if (!/android:screenOrientation/.test(s)){
   s=s.replace(/(<activity[^>]*android:name="\.MainActivity")/, '$1\n            android:screenOrientation="portrait"');

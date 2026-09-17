@@ -1,7 +1,7 @@
 # Google Play — mağaza girişi (kopyala-yapıştır)
 
 Paket: `com.kusgrup.lull` · Sürüm 1.0.0 (versionCode 1) · Kategori: **Sağlık ve Fitness**
-İçerik derecelendirmesi: **3+** · Reklam içerir: **Evet** · Uygulama içi satın alma: **Evet**
+İçerik derecelendirmesi: **3+** · Reklam içerir: **Hayır** · Uygulama içi satın alma: **Hayır**
 
 ## Uygulama adı (max 30)
 ```
@@ -41,7 +41,7 @@ Son üçte birde ekran neredeyse tamamen kararır. Hiçbir şey gözünü tekrar
 • Hesap yok, kayıt yok, e-posta yok
 • İnternet gerekmez
 • Hiçbir veri cihazından çıkmaz — gönderecek bir sunucu yok
-• Seans sırasında asla reklam gösterilmez
+• Hiç reklam yok — seans sırasında da, sonrasında da
 • 5, 9 veya 15 dakika
 
 ÖNEMLİ
@@ -63,8 +63,7 @@ nefes, uyku, rahatlama, meditasyon, stres, sakinleşme, gece, nefes egzersizi
 - Tanıtım videosu: `marketing/lull-tanitim.mp4` (YouTube'a yükleyip bağlantısını ver)
 
 ## Uygulama içi ürünler
-| Ürün | Tür | Not |
-|---|---|---|
-| `remove_ads` | Tek seferlik | Reklamları kaldırır |
-| `lull_plus_monthly` | Abonelik | **Henüz oluşturma** — özellikleri yazılmadı |
-| `lull_plus_yearly` | Abonelik | **Henüz oluşturma** |
+
+**Yok.** v1 tamamen ücretsiz ve reklamsız. Abonelik (`lull_plus_monthly`,
+`lull_plus_yearly`) karşılığındaki özellikler yazılmadan mağazada **oluşturulmamalı**
+— boş abonelik satmak hem yanlış hem reddedilme sebebidir.

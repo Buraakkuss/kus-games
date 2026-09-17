@@ -20,7 +20,7 @@ npx cap open ios
 
 ## 3. Signing & Capabilities
 - Team'i seç, "Automatically manage signing" açık
-- `+ Capability` → **In-App Purchase** ekle
+- ~~`+ Capability` → In-App Purchase~~ — **gerekmiyor**, Lull v1 ücretsiz ve satın almasız
 
 ## 4. Simge ve açılış ekranı
 - `assets/icon-1024.png` → Xcode `Assets.xcassets` → `AppIcon` (tek kutu, 1024×1024)
@@ -28,12 +28,6 @@ npx cap open ios
 
 ## 5. `ios/App/App/Info.plist` — eklenecek anahtarlar
 ```xml
-<key>GADApplicationIdentifier</key>
-<string>ca-app-pub-3940256099942544~1458002511</string>
-
-<key>NSUserTrackingUsageDescription</key>
-<string>Your choice here only affects how relevant the ads in Lull are. The game itself works exactly the same either way.</string>
-
 <key>ITSAppUsesNonExemptEncryption</key>
 <false/>
 
@@ -44,18 +38,12 @@ npx cap open ios
 <array>
   <string>UIInterfaceOrientationPortrait</string>
 </array>
-
-<key>SKAdNetworkItems</key>
-<array>
-  <dict><key>SKAdNetworkIdentifier</key><string>cstr6suwn9.skadnetwork</string></dict>
-  <!-- Buraya Google'ın güncel tam listesini yapıştır:
-       https://developers.google.com/admob/ios/quick-start#update_your_infoplist
-       Liste eksik olursa reklam gelirin düşer, uygulama reddedilmez. -->
-</array>
 ```
-> `GADApplicationIdentifier` şu an **test** kimliğidir. Gerçek AdMob hesabın açılınca
-> hem burayı hem `app.config.json` içindeki `admob.real.ios` alanını doldur,
-> `useTest: false` yap ve `bash tools/set-identity.sh` çalıştır.
+> **Lull reklamsızdır:** `GADApplicationIdentifier`, `NSUserTrackingUsageDescription`
+> ve `SKAdNetworkItems` **eklenmez**. `tools/ios-prepare.sh` bunu `app.config.json`
+> içindeki `admob.enabled: false` bayrağından okuyup otomatik atlıyor. Elle ekleme:
+> ATT istemi çıkan bir uygulamanın App Privacy formunda "veri toplanmıyor" demesi
+> çelişki sayılır.
 
 > `ITSAppUsesNonExemptEncryption = false` sayesinde her yüklemede ihracat uyumluluğu sorusu sorulmaz.
 > Bu doğru bir beyandır: uygulama yalnızca işletim sisteminin standart HTTPS'ini kullanır.
@@ -93,8 +81,7 @@ App Store Connect'te build işlendikten sonra (5-30 dk) sürüme eklenir.
 ## Sık karşılaşılan hatalar
 | Belirti | Sebep / çözüm |
 |---|---|
-| Build "GADApplicationIdentifier missing" diye çöküyor | Info.plist anahtarı eklenmemiş |
-| ATT istemi hiç çıkmıyor | iOS Ayarlar → Gizlilik → İzleme → "Uygulamaların istemesine izin ver" kapalı olabilir; ayrıca istem uygulama başına yalnız bir kez gösterilir (silip yeniden kur) |
-| Reddedilme: "Guideline 3.1.1 — IAP" | "Remove Ads" ürünü App Store Connect'te oluşturulmamış veya incelemeye gönderilmemiş. Ürünü ilk sürümle birlikte gönder |
+| ATT istemi çıkıyor | Reklam kodu sızmış demektir. Lull'da bu istem **hiç çıkmamalı**; Info.plist'ten `NSUserTrackingUsageDescription` anahtarını kaldır |
+| Reddedilme: "Guideline 1.4.1 — sağlık iddiası" | Mağaza metninde tedavi/teşhis çağrıştıran cümle var. `store/app-store.md` içindeki onaylı metni kullan |
 | Reddedilme: "Guideline 2.1 — Information Needed / IDFA" | App Store Connect'te IDFA kullanımı beyan edilmemiş. `store/app-store.md` formuna bak |
 | Basılı tutma algılanmıyor | WKWebView'de `pointerup` bazı durumlarda gelmez; uygulama `pointercancel` olayını da dinliyor, bu satırı silme |
