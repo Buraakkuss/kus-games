@@ -76,7 +76,7 @@ Nasıl denenir:
 SAĞLIK BEYANI: Uygulama hiçbir tıbbi iddiada bulunmaz. Ana ekranda ve mağaza
 metninde tıbbi cihaz olmadığı, teşhis/tedavi etmediği, baş dönmesi durumunda
 bırakılması gerektiği ve araç kullanırken kullanılmaması gerektiği yazılıdır.
-Ayrıntı: https://buraakkuss.github.io/kus-games/lull/terms.html
+Ayrıntı: https://kusgrupgames.github.io/lull/terms.html
 
 Uygulamada REKLAM YOKTUR ve hiçbir veri toplanmaz: reklam SDK'sı, analitik,
 hesap ve sunucu bulunmuyor. Bu yüzden ATT izin istemi de gösterilmez.

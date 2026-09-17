@@ -1,6 +1,6 @@
 # Lull — nasıl kullanılır
 
-**Aç:** https://buraakkuss.github.io/kus-games/lull/play/
+**Aç:** https://kusgrupgames.github.io/lull/play/
 Kurulum yok, hesap yok. Telefonu dik tut, sessiz bir yerde ol, tercihen yatakta.
 
 ---

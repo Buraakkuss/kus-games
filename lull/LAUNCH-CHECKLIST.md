@@ -8,7 +8,7 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
 ## AŞAMA 0 — İki karar (10 dakika)
 
 ### 0.1 · Depo ve isim
-Uygulama şu an `kus-games` deposunda `lull/` klasöründe. Kendi deposuna taşı:
+Uygulama şu an `kusgrupgames.github.io` deposunda `lull/` klasöründe. Kendi deposuna taşı:
 
 ```bash
 bash tools/extract-repo.sh ~/lull-game
@@ -73,7 +73,7 @@ Lull oyun değil; **Sağlık ve Fitness** kategorisinde. Bu üç şeyi değişti
 - [ ] Google Play: Ödemeler profili + vergi bilgileri
 - [ ] `bash tools/extract-repo.sh ~/lull-game` ile kendi deposuna taşı, GitHub'a gönder
 - [ ] GitHub → Settings → Pages → Source: `main` / `docs` → gizlilik sayfaları yayına girer
-- [ ] Yayına giren adresi doğrula: `https://buraakkuss.github.io/kus-games/lull/privacy.html` açılıyor mu?
+- [ ] Yayına giren adresi doğrula: `https://kusgrupgames.github.io/lull/privacy.html` açılıyor mu?
 - [ ] Aynı sayfa **stilli** mi görünüyor? (Depoda `docs/.nojekyll` var; olmazsa Jekyll `_style.css` dosyasını yayınlamaz ve sayfalar çıplak HTML olarak açılır.)
 
 ### 1b · Play kapalı test grubu (ŞAHIS hesabın zorunlu şartı)

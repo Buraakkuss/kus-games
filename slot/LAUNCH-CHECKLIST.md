@@ -59,7 +59,7 @@ lehine, biri takvimi belirliyor:
 - [ ] Google Play: Ödemeler profili + vergi bilgileri
 - [ ] GitHub: bu depo (`slot-game`) zaten hazır, `main` dalına gönder
 - [ ] GitHub → Settings → Pages → Source: `main` / `docs` → gizlilik sayfaları yayına girer
-- [ ] Yayına giren adresi doğrula: `https://buraakkuss.github.io/kus-games/slot/privacy.html` açılıyor mu?
+- [ ] Yayına giren adresi doğrula: `https://kusgrupgames.github.io/slot/privacy.html` açılıyor mu?
 - [ ] Aynı sayfa **stilli** mi görünüyor? (Depoda `docs/.nojekyll` var; olmazsa Jekyll `_style.css` dosyasını yayınlamaz ve sayfalar çıplak HTML olarak açılır.)
 
 ### 1b · Play kapalı test grubu (ŞAHIS hesabın zorunlu şartı)

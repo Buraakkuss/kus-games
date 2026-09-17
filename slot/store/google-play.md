@@ -56,8 +56,8 @@ How many walls can you fit through before your fingers fall behind?
 - Etiketler: Arcade, Casual, Reflex, Single player, Offline, Minimalist
 - **Kumar / Casino etiketi ASLA seçme.**
 - E-posta: `kusgrupgames@gmail.com`
-- Web sitesi: `https://buraakkuss.github.io/kus-games/slot`
-- Gizlilik politikası: `https://buraakkuss.github.io/kus-games/slot/privacy.html`
+- Web sitesi: `https://kusgrupgames.github.io/slot`
+- Gizlilik politikası: `https://kusgrupgames.github.io/slot/privacy.html`
 
 ## Grafikler (assets/ klasöründe hazır)
 | Alan | Dosya | Ölçü |

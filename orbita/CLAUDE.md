@@ -1,7 +1,7 @@
 # Orbita — oyun projesi
 
 Tek dokunuşlu sonsuz arcade oyunu. **Tek HTML dosyası** (`www/index.html`) + Capacitor.
-Güncel sürüm: **v1.0.1**. `kus-games` deposunda `orbita/` klasöründe yaşar; hukuki
+Güncel sürüm: **v1.0.1**. `kusgrupgames.github.io` deposunda `orbita/` klasöründe yaşar; hukuki
 sayfaları depo kökündeki ortak `docs/orbita/` altındadır (Pages tek yerden yayınlanır).
 Depo düzeni ve yeni oyun ekleme: kökteki `CLAUDE.md`.
 

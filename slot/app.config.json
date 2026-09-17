@@ -6,7 +6,7 @@
   "versionCode": 1,
   "bundleId": "com.kusgrup.slot",
   "supportEmail": "kusgrupgames@gmail.com",
-  "pagesBaseUrl": "https://buraakkuss.github.io/kus-games/slot",
+  "pagesBaseUrl": "https://kusgrupgames.github.io/slot",
   "iap": {
     "removeAds": {
       "id": "remove_ads",

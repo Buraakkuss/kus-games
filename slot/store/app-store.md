@@ -62,9 +62,9 @@ shape,fit,rotate,onetap,reflex,timing,arcade,endless,tap,minimal,offline,hyperca
 > Uygulama adı zaten "Slot" içeriyor; kumar kelime kümesine girmenin tek sonucu yanlış kitle ve inceleme sorusu olur.
 
 ## URL'ler
-- Support URL: `https://buraakkuss.github.io/kus-games/slot/support.html`
-- Marketing URL: `https://buraakkuss.github.io/kus-games/slot`
-- Privacy Policy URL: `https://buraakkuss.github.io/kus-games/slot/privacy.html`
+- Support URL: `https://kusgrupgames.github.io/slot/support.html`
+- Marketing URL: `https://kusgrupgames.github.io/slot`
+- Privacy Policy URL: `https://kusgrupgames.github.io/slot/privacy.html`
 
 ## Kategori ve derecelendirme
 - Primary: **Games → Arcade**, Secondary: **Games → Puzzle**

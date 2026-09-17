@@ -56,9 +56,9 @@ swing,rope,hook,grapple,arc,timing,reflex,onetap,arcade,endless,physics,offline,
 ```
 
 ## URL'ler
-- Support URL: `https://buraakkuss.github.io/kus-games/latch/support.html`
-- Marketing URL: `https://buraakkuss.github.io/kus-games/latch`
-- Privacy Policy URL: `https://buraakkuss.github.io/kus-games/latch/privacy.html`
+- Support URL: `https://kusgrupgames.github.io/latch/support.html`
+- Marketing URL: `https://kusgrupgames.github.io/latch`
+- Privacy Policy URL: `https://kusgrupgames.github.io/latch/privacy.html`
 
 ## Kategori ve derecelendirme
 - Primary: **Games → Arcade**, Secondary: **Games → Action**
