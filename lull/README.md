@@ -3,7 +3,7 @@
 Uykuya geçişi kolaylaştıran nefes uygulaması. **Bu bir oyun değil** — depodaki
 diğer üç klasör oyundur, Lull aynı altyapıyı kullanan farklı bir üründür.
 
-**Tarayıcıdan dene:** https://buraakkuss.github.io/kus-games/lull/play/
+**Tarayıcıdan dene:** https://kusgrupgames.github.io/lull/play/
 
 ## Fikir
 

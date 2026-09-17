@@ -5,7 +5,7 @@ Depodaki diğer üç klasör oyundur; Lull aynı altyapıyı (tek dosya, Capacit
 `docs/` sayfaları, CI) kullanır ama ürün tipi farklıdır.
 
 Tek HTML dosyası (`www/index.html`) + Capacitor. Güncel sürüm: **v1.0.0**.
-Tarayıcıdan: `https://buraakkuss.github.io/kus-games/lull/play/`
+Tarayıcıdan: `https://kusgrupgames.github.io/lull/play/`
 
 ## Çalışma kuralları
 

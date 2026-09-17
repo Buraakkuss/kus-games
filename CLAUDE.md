@@ -31,7 +31,7 @@ onun kendi `CLAUDE.md`'sini oku.
 Tek ayar: **Settings → Pages → `main` / `docs`**. Yayınlanan adres:
 
 ```
-https://buraakkuss.github.io/kus-games/<oyun>/privacy.html
+https://kusgrupgames.github.io/<oyun>/privacy.html
 ```
 
 - `docs/.nojekyll` **silinmemeli**: Jekyll alt çizgiyle başlayan `_style.css`
@@ -89,7 +89,7 @@ eder", "anksiyeteyi geçirir" hem yanlış hem de mağaza reddi sebebidir.
 
 1. En yakın oyunun klasörünü kopyala: `cp -r latch yenioyun`
 2. `yenioyun/app.config.json`: `gameId`, `appName`, `bundleId`, `pagesBaseUrl`
-   (`.../kus-games/yenioyun`), `version` 1.0.0, `versionCode` 1.
+   (`https://kusgrupgames.github.io/yenioyun`), `version` 1.0.0, `versionCode` 1.
 3. `bash tools/set-identity.sh` (yenioyun içinde) — adresleri her yere yazar.
 4. `docs/yenioyun/` klasörünü aç, `docs/latch/` sayfalarını kopyalayıp oyuna göre
    yaz; `docs/index.html` listesine kart ekle; `docs/_style.css` içine renk satırı.

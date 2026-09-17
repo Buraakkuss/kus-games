@@ -6,7 +6,7 @@
   "versionCode": 1,
   "bundleId": "com.kusgrup.latch",
   "supportEmail": "kusgrupgames@gmail.com",
-  "pagesBaseUrl": "https://buraakkuss.github.io/kus-games/latch",
+  "pagesBaseUrl": "https://kusgrupgames.github.io/latch",
   "iap": {
     "removeAds": { "id": "remove_ads", "type": "non-consumable", "priceTierUSD": 2.99 }
   },

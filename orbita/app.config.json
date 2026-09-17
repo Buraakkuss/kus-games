@@ -6,7 +6,7 @@
   "versionCode": 1,
   "bundleId": "com.kusgrup.orbita",
   "supportEmail": "kusgrupgames@gmail.com",
-  "pagesBaseUrl": "https://buraakkuss.github.io/kus-games/orbita",
+  "pagesBaseUrl": "https://kusgrupgames.github.io/orbita",
   "iap": {
     "removeAds": {
       "id": "remove_ads",

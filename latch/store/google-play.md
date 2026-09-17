@@ -51,8 +51,8 @@ How far can you get before your thumb lets go a fraction too late?
 - Uygulama türü: **Oyun** · Kategori: **Arcade**
 - Etiketler: Arcade, Casual, Reflex, Physics, Single player, Offline
 - E-posta: `kusgrupgames@gmail.com`
-- Web sitesi: `https://buraakkuss.github.io/kus-games/latch`
-- Gizlilik politikası: `https://buraakkuss.github.io/kus-games/latch/privacy.html`
+- Web sitesi: `https://kusgrupgames.github.io/latch`
+- Gizlilik politikası: `https://kusgrupgames.github.io/latch/privacy.html`
 
 ## Grafikler (assets/ klasöründe hazır)
 | Alan | Dosya | Ölçü |

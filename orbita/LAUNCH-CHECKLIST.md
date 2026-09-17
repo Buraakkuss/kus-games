@@ -29,8 +29,8 @@ Yazılım tarafı bitti; kalan her şey hesap, imza ve gönderim işi — bunlar
       değil yalnızca ödemeye engeldir.
 - [ ] Apple: Agreements, Tax and Banking → Paid Apps sözleşmesi + banka + vergi formları (**W-8BEN-E** kurumsal / **W-8BEN** şahıs)
 - [ ] Google Play: Ödemeler profili + vergi bilgileri
-- [x] GitHub deposu ve Pages: **tamam** — `kus-games` deposu, Pages `main` / `docs`
-- [x] Gizlilik adresi canlı: `https://buraakkuss.github.io/kus-games/orbita/privacy.html`
+- [x] GitHub deposu ve Pages: **tamam** — `kusgrupgames.github.io` deposu, Pages `main` / `docs`
+- [x] Gizlilik adresi canlı: `https://kusgrupgames.github.io/orbita/privacy.html`
 
 ### 1b · Play kapalı test grubu (ŞAHIS hesabın zorunlu şartı)
 

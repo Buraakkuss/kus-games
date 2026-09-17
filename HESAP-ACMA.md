@@ -86,10 +86,10 @@ bir şey yok, o yüzden bu 14 günü mümkün olan en erken gün başlat.
 | Alan | Değer |
 |---|---|
 | Destek e-postası | `kusgrupgames@gmail.com` |
-| Web sitesi | `https://buraakkuss.github.io/kus-games` |
-| Gizlilik – Slot | `https://buraakkuss.github.io/kus-games/slot/privacy.html` |
-| Gizlilik – Latch | `https://buraakkuss.github.io/kus-games/latch/privacy.html` |
-| Gizlilik – Orbita | `https://buraakkuss.github.io/kus-games/orbita/privacy.html` |
+| Web sitesi | `https://kusgrupgames.github.io` |
+| Gizlilik – Slot | `https://kusgrupgames.github.io/slot/privacy.html` |
+| Gizlilik – Latch | `https://kusgrupgames.github.io/latch/privacy.html` |
+| Gizlilik – Orbita | `https://kusgrupgames.github.io/orbita/privacy.html` |
 | Kategori | Games → Arcade |
 | Yaş hedefi | 13+ (13 yaş altını seçme) |
 | Ülke dağıtımı | Tüm ülkeler, **Türkiye dahil** |

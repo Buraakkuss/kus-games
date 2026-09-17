@@ -55,9 +55,9 @@ orbit,onetap,arcade,endless,space,planet,jump,reflex,timing,hypercasual,offline,
 ```
 
 ## URL'ler
-- Support URL: `https://buraakkuss.github.io/kus-games/orbita/support.html`
-- Marketing URL: `https://buraakkuss.github.io/kus-games/orbita`
-- Privacy Policy URL: `https://buraakkuss.github.io/kus-games/orbita/privacy.html`
+- Support URL: `https://kusgrupgames.github.io/orbita/support.html`
+- Marketing URL: `https://kusgrupgames.github.io/orbita`
+- Privacy Policy URL: `https://kusgrupgames.github.io/orbita/privacy.html`
 
 ## Kategori ve derecelendirme
 - Primary: **Games → Arcade**, Secondary: **Games → Action**

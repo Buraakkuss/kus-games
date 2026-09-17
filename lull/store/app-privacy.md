@@ -23,7 +23,7 @@ hiçbirini eklemez. Beyan ile binary tutarlı.
 
 ## Privacy Policy URL (zorunlu alan)
 ```
-https://buraakkuss.github.io/kus-games/lull/privacy.html
+https://kusgrupgames.github.io/lull/privacy.html
 ```
 
 ## İleride değişirse
