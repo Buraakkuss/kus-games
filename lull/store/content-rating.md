@@ -14,8 +14,8 @@ Kategori: **Yardımcı Program / Üretkenlik / Sağlık**
 | Kullanıcılar arası etkileşim | Hayır |
 | Konum paylaşımı | Hayır |
 | Kişisel bilgi paylaşımı | Hayır |
-| Dijital satın alma | **Evet** (reklamsız sürüm) |
-| Reklam içerir | **Evet** |
+| Dijital satın alma | **Hayır** (v1 tamamen ücretsiz) |
+| Reklam içerir | **Hayır** |
 
 Beklenen sonuç: **3+ / Everyone**
 

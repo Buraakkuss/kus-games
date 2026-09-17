@@ -16,6 +16,8 @@ APPNAME=$(node -p "require('$ROOT/app.config.json').appName")
 USETEST=$(node -p "require('$ROOT/app.config.json').admob.useTest")
 REALAPP=$(node -p "require('$ROOT/app.config.json').admob.real.ios.app || ''")
 GAD="ca-app-pub-3940256099942544~1458002511"
+# Reklam kapaliysa ATT istemi, AdMob kimligi ve SKAdNetwork listesi HIC eklenmez.
+ADS_ON=$(node -p "String(require('$ROOT/app.config.json').admob.enabled !== false ? 1 : 0)")
 if [ "$USETEST" = "false" ] && [ -n "$REALAPP" ]; then GAD="$REALAPP"; fi
 echo "AdMob iOS app id: $GAD  (useTest=$USETEST)"
 
@@ -27,14 +29,17 @@ $PB -c "Delete :UIRequiresFullScreen" "$PLIST" 2>/dev/null
 $PB -c "Delete :UISupportedInterfaceOrientations" "$PLIST" 2>/dev/null
 $PB -c "Delete :SKAdNetworkItems" "$PLIST" 2>/dev/null
 set -e
-$PB -c "Add :GADApplicationIdentifier string $GAD" "$PLIST"
-$PB -c "Add :NSUserTrackingUsageDescription string 'Your choice here only affects how relevant the ads in $APPNAME are. The game itself works exactly the same either way.'" "$PLIST"
+if [ "$ADS_ON" = "1" ]; then
+  $PB -c "Add :GADApplicationIdentifier string $GAD" "$PLIST"
+  $PB -c "Add :NSUserTrackingUsageDescription string 'Your choice here only affects how relevant the ads in $APPNAME are. The app itself works exactly the same either way.'" "$PLIST"
+fi
 $PB -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PLIST"
 $PB -c "Add :UIRequiresFullScreen bool true" "$PLIST"
 $PB -c "Add :UISupportedInterfaceOrientations array" "$PLIST"
 $PB -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationPortrait" "$PLIST"
 # SKAdNetwork: gelir icin onemli, eksikligi reddedilme sebebi DEGIL.
 # Google'in guncel tam listesi: developers.google.com/admob/ios/quick-start
+if [ "$ADS_ON" = "1" ]; then
 $PB -c "Add :SKAdNetworkItems array" "$PLIST"
 i=0
 for NET in cstr6suwn9 4fzdc2evr5 2fnua5tdw4 ydx93a7ass p78axxw29g v72qych5uu ludvb6z3bs cp8zw746q7 3sh42y64q3 c6k4g5qg8m s39g8k73mm 3qy4746246 hs6bdukanm; do
@@ -42,6 +47,9 @@ for NET in cstr6suwn9 4fzdc2evr5 2fnua5tdw4 ydx93a7ass p78axxw29g v72qych5uu lud
   $PB -c "Add :SKAdNetworkItems:$i:SKAdNetworkIdentifier string $NET.skadnetwork" "$PLIST"
   i=$((i+1))
 done
+else
+  echo "Reklam KAPALI: GADApplicationIdentifier, ATT istemi ve SKAdNetwork listesi eklenmedi"
+fi
 
 # sadece iPhone, dikey, surum
 if [ -f "$PBX" ]; then
@@ -50,4 +58,9 @@ if [ -f "$PBX" ]; then
                  s/CURRENT_PROJECT_VERSION = [^;]+;/CURRENT_PROJECT_VERSION = $VCODE;/g" "$PBX"
   rm -f "$PBX.bak"
 fi
-echo "iOS projesi hazir. Xcode'da: Signing & Capabilities -> In-App Purchase ekle."
+IAP_ON=$(node -p "String(require('$ROOT/app.config.json').iap && require('$ROOT/app.config.json').iap.enabled === false ? 0 : 1)")
+if [ "$IAP_ON" = "1" ]; then
+  echo "iOS projesi hazir. Xcode'da: Signing & Capabilities -> In-App Purchase ekle."
+else
+  echo "iOS projesi hazir. Satin alma kapali; ek capability gerekmiyor."
+fi

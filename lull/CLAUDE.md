@@ -9,7 +9,7 @@ Tarayıcıdan: `https://buraakkuss.github.io/kus-games/lull/play/`
 
 ## Çalışma kuralları
 
-1. Uygulama mantığı, arayüz, reklam ve satın alma köprüsü **tek dosyada** kalır.
+1. Uygulama mantığı ve arayüzün tamamı **tek dosyada** kalır.
    Yeni dosya açma; kullanıcı yazılımcı değil.
 2. Her değişiklikten sonra `node tools/check.js`. Yeşil değilse commit yok.
 3. Görsel değiştiyse `bash tools/gen.sh`, tanıtım videosu için `bash tools/film.sh`.
@@ -73,8 +73,13 @@ demek yetmez.
 
 ## Tuzaklar
 
-- **Seans sırasında reklam gösterme.** Amacı sakinleştirmek olan bir uygulamada
-  bu ürünü yok eder. `Ads.maybeInterstitial` yalnızca bitiş ekranı içindir.
+- **Lull reklamsızdır ve hiçbir veri toplamaz — bu bir özelliktir, eksik değil.**
+  `app.config.json` içinde `admob.enabled=false` ve `iap.enabled=false`; native
+  hazırlık betikleri bu bayrakları okuyup AD_ID/BILLING iznini, ATT istemini ve
+  SKAdNetwork listesini **hiç eklemez**. Uygulama koduna reklam köprüsü geri
+  eklersen `check.js` hata verir. Amacı seni uyutmak olan bir uygulamada seans
+  sonunda geçiş reklamı göstermek ürünü yok eder; ayrıca mağaza beyanları
+  ("veri toplanmıyor") bir anda yanlış beyana döner.
 - **Sağlık uyarısı yasal olarak gerekli.** `docs/lull/terms.html`, `privacy.html`
   ve `gizlilik.html` içindeki "tıbbi tavsiye değildir" bölümü silinmemeli;
   baş dönmesi uyarısı ve araç kullanma yasağı mağaza incelemesinde de sorulur.

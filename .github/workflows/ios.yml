@@ -55,12 +55,25 @@ jobs:
         working-directory: ${{ matrix.dir }}
         run: bash tools/ios-prepare.sh
 
+      # Reklamli urunlerde AdMob anahtari BULUNMALI; reklamsiz olanlarda (lull)
+      # BULUNMAMALI. Ikincisi daha onemli: ATT istemi cikaran bir uygulamanin
+      # App Privacy formunda "veri toplanmiyor" demesi celiskidir.
       - name: Info.plist dogrula
         working-directory: ${{ matrix.dir }}
         run: |
-          /usr/libexec/PlistBuddy -c "Print :GADApplicationIdentifier" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Print :ITSAppUsesNonExemptEncryption" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Print :UISupportedInterfaceOrientations" ios/App/App/Info.plist
+          ADS_ON=$(node -p "String(require('./app.config.json').admob.enabled !== false ? 1 : 0)")
+          if [ "$ADS_ON" = "1" ]; then
+            /usr/libexec/PlistBuddy -c "Print :GADApplicationIdentifier" ios/App/App/Info.plist
+          else
+            for K in GADApplicationIdentifier NSUserTrackingUsageDescription SKAdNetworkItems; do
+              if /usr/libexec/PlistBuddy -c "Print :$K" ios/App/App/Info.plist >/dev/null 2>&1; then
+                echo "::error::reklamsiz urun ama Info.plist icinde $K var"; exit 1
+              fi
+            done
+            echo "reklamsiz: GADApplicationIdentifier, ATT istemi ve SKAdNetwork yok (dogrulandi)"
+          fi
 
       - name: Derle (simulator, imzasiz)
         working-directory: ${{ matrix.dir }}/ios/App

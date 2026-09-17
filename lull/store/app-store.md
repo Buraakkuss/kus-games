@@ -45,7 +45,7 @@ By the last third it is nearly dark. Nothing invites your eyes back open.
 • No account, no sign-up, no email
 • No internet connection required
 • Nothing leaves your phone — there is no server to send it to
-• No ads during a session, ever
+• No ads at all — not during a session, not after
 • 5, 9 or 15 minutes
 
 IMPORTANT
@@ -78,14 +78,10 @@ metninde tıbbi cihaz olmadığı, teşhis/tedavi etmediği, baş dönmesi durum
 bırakılması gerektiği ve araç kullanırken kullanılmaması gerektiği yazılıdır.
 Ayrıntı: https://buraakkuss.github.io/kus-games/lull/terms.html
 
-Reklamlar seans sırasında GÖSTERİLMEZ; yalnızca seans bittikten sonraki özet
-ekranında gösterilir.
+Uygulamada REKLAM YOKTUR ve hiçbir veri toplanmaz: reklam SDK'sı, analitik,
+hesap ve sunucu bulunmuyor. Bu yüzden ATT izin istemi de gösterilmez.
 ```
 
 ## App Privacy cevapları
-| Soru | Cevap |
-|---|---|
-| Veri topluyor musunuz? | **Hayır** (uygulamanın kendisi hiçbir veri toplamaz) |
-| Üçüncü taraf SDK (AdMob) | Reklam için **Tanımlayıcılar** ve **Kullanım Verileri** — İzlemeye **bağlı** |
-| Veriler kullanıcıya bağlı mı? | Hayır |
-| İzleme var mı? | AdMob kişiselleştirilmiş reklam açıksa **evet** (ATT istemi gösterilir) |
+
+**"Do you collect data?" → No.** Ayrıntı ve gerekçe: `store/app-privacy.md`.

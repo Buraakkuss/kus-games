@@ -2,31 +2,31 @@
 
 App Store Connect → Uygulama → **App Privacy** → Get Started
 
-## 1. "Do you or your third-party partners collect data from this app?"
-**Yes** — yalnızca AdMob nedeniyle. Uygulamanın kendisi veri toplamaz.
+## Ana soru
 
-## 2. Toplanan veri türleri
+| Soru | Cevap |
+|---|---|
+| "Do you or your third-party partners collect data from this app?" | **No** |
 
-| Kategori | Seç | Amaç | Kimliğe bağlı | İzleme |
-|---|---|---|---|---|
-| **Identifiers → Device ID** | ✔ | Third-Party Advertising | Hayır | **Evet** |
-| **Usage Data → Advertising Data** | ✔ | Third-Party Advertising | Hayır | **Evet** |
-| Health & Fitness | ✖ | — | — | — |
-| Contact Info | ✖ | — | — | — |
-| User Content | ✖ | — | — | — |
-| Location | ✖ | — | — | — |
+Sonuç: mağaza sayfasında **"Data Not Collected"** rozeti görünür. Bu rozet bu
+kategoride gerçek bir satış argümanıdır — Calm ve Headspace'te yoktur.
 
-> **Health & Fitness işaretlenMEmeli.** Nefes temposu ölçülür ama cihazdan çıkmaz,
-> HealthKit'e yazılmaz, hiçbir sunucuya gönderilmez. HealthKit ileride eklenirse
-> bu form güncellenmelidir.
+## Neden "No"
 
-## 3. Tracking (ATT)
-Kişiselleştirilmiş reklam açıkken **evet**. Uygulama ilk açılışta ATT iznini ister
-(`NSUserTrackingUsageDescription` metni `tools/ios-prepare.sh` içinde yazılı).
-Kullanıcı reddederse AdMob kişiselleştirilmemiş reklam gösterir; uygulama çalışmaya
-devam eder.
+- Reklam SDK'sı yok → **ATT izin istemi yok**, `NSUserTrackingUsageDescription`
+  Info.plist'e eklenmiyor, SKAdNetwork listesi yok
+- Analitik yok, hesap yok, sunucu yok
+- Ölçülen nefes temposu cihazdan çıkmaz; **HealthKit'e yazılmaz**
 
-## 4. Privacy Policy URL
+`tools/ios-prepare.sh`, `admob.enabled: false` olduğu için bu anahtarların
+hiçbirini eklemez. Beyan ile binary tutarlı.
+
+## Privacy Policy URL (zorunlu alan)
 ```
 https://buraakkuss.github.io/kus-games/lull/privacy.html
 ```
+
+## İleride değişirse
+HealthKit entegrasyonu eklenirse **Health & Fitness** işaretlenmeli ve
+`NSHealthShareUsageDescription` / `NSHealthUpdateUsageDescription` yazılmalıdır.
+Abonelik eklenirse "Purchases" bölümü doldurulur.

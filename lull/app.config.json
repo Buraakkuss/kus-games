@@ -8,11 +8,28 @@
   "version": "1.0.0",
   "versionCode": 1,
   "admob": {
+    "_not": "Lull v1 REKLAMSIZ. Seans sonunda kullanici uyumak uzere; o anda reklam acmak urunun sozunu bozar. enabled=false iken native hazirlik betikleri AD_ID iznini ve AdMob kimligini HIC eklemez.",
+    "enabled": false,
     "useTest": true,
     "real": {
-      "android": { "app": "", "interstitial": "", "rewarded": "" },
-      "ios": { "app": "", "interstitial": "", "rewarded": "" }
+      "android": {
+        "app": "",
+        "interstitial": "",
+        "rewarded": ""
+      },
+      "ios": {
+        "app": "",
+        "interstitial": "",
+        "rewarded": ""
+      }
     }
   },
-  "iap": { "removeAds": "remove_ads", "subMonthly": "lull_plus_monthly", "subYearly": "lull_plus_yearly" }
+  "iap": {
+    "_not": "v1'de satin alma YOK. Abonelik (lull_plus_*) karsiligindaki ozellikler yazilinca acilacak; o zaman BILLING izni de eklenecek.",
+    "enabled": false,
+    "planned": {
+      "subMonthly": "lull_plus_monthly",
+      "subYearly": "lull_plus_yearly"
+    }
+  }
 }
