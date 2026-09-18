@@ -1,0 +1,32 @@
+# KNOWN ISSUES
+
+Bilinen eksikler ve engeller. Kapanan madde `CHANGELOG.md`'ye taşınır.
+
+## Engelleyiciler — insan/hesap eylemi gerektirir
+
+| # | Konu | Engellediği kapsam | Gereken |
+|---|---|---|---|
+| B1 | Türkçe **meal** lisansı yok | §22 Günün Âyeti, §28 Reader meal modu, §35 meal araması, §51 global arama | Hak sahibinden yazılı izin veya lisans |
+| B2 | **Tefsir** lisansı yok | §34 Tefsir | Adı belirtilen bir tefsir için lisans |
+| B3 | **Hadis** külliyatı lisansı yok | §23 Günün Hadisi, §52 Hadis kütüphanesi | Lisanslı hadis veri kümesi |
+| B4 | **Kıraat kayıtları** lisansı yok | §32 Kur'an Audio, §33 offline audio | Okuyucu/yapımcı izni |
+| B5 | **Supabase** production projesi yok | §57–59 hesap/sync, §70–72 veritabanı/RLS/admin | Supabase projesi + anahtarlar |
+| B6 | **Apple Developer** hesabı bu ortamda yok | §18 Live Activities, §19 iOS widget, §67 StoreKit | Apple hesabı + sertifika + ürün tanımları |
+| B7 | **Google Play** ürünleri tanımlı değil | §67 abonelik | Play Console'da abonelik ürünleri |
+| B8 | **AI sağlayıcı anahtarı** yok | §56 AI asistan | LLM API anahtarı + vektör deposu |
+
+> Bu engeller şartname §104 uyarınca **diğer geliştirmeyi durdurmaz**. İlgili
+> modüllerin şeması, içe aktarma boruhattı, doğrulaması ve arayüzü tamamlanır;
+> yalnız veri/kimlik yuvası boş kalır.
+
+## Ortam sınırlamaları
+
+| # | Konu | Etki |
+|---|---|---|
+| E1 | Bu kapsayıcıda **macOS/Xcode yok** | iOS derlemesi yalnız CI'da (macOS runner) doğrulanabilir |
+| E2 | Bu kapsayıcıda **Android SDK yok** | Android derlemesi yalnız CI'da doğrulanabilir |
+| E3 | Simülatör/emülatör yok | Ekran görüntüleri web hedefi (react-native-web) üzerinden alınır |
+
+## Açık teknik borç
+
+_(henüz yok — FAZ 0)_
