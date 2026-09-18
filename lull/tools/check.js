@@ -71,7 +71,8 @@ console.log('\n3) Magaza gorselleri');
   };
   for (let i = 1; i <= 5; i++) {
     need['assets/screenshots/android-' + i + '-1080x1920.png'] = [1080, 1920];
-    need['assets/screenshots/ios67-' + i + '-1290x2796.png'] = [1290, 2796];
+    need['assets/screenshots/ios69-' + i + '-1290x2796.png'] = [1290, 2796];
+    need['assets/screenshots/ios65-' + i + '-1284x2778.png'] = [1284, 2778];
   }
   for (const f in need) {
     const p = path.join(ROOT, f);
