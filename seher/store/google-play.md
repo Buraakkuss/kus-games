@@ -36,6 +36,9 @@ Bulunduğun yerden Kâbe'ye giden en kısa yolun açısı ve Kâbe'ye uzaklığ�
 ZİKİRMATİK
 33, 99 veya sınırsız hedef. Halka ilerledikçe dolar, hedefe ulaşınca titrer. Sayaç uygulamayı kapatsan da yerinde durur.
 
+30 GÜNLÜK LİSTE
+Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer; yazdırmaya gerek yok, internetsiz açılır.
+
 ESMÂÜ'L-HÜSNÂ
 Doksan dokuz ismin okunuşu ve Türkçe anlamı.
 
@@ -62,12 +65,12 @@ Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 |---|---|
 | Uygulama simgesi (512×512) | `assets/icon-512.png` |
 | Öne çıkan grafik (1024×500) | `assets/feature-graphic-1024x500.png` |
-| Telefon ekran görüntüleri | `assets/screenshots/android-1..5-1080x1920.png` |
+| Telefon ekran görüntüleri | `assets/screenshots/android-1..6-1080x1920.png` |
 
 ## Kategori ve etiketler
 
 - Kategori: **Yaşam Tarzı** (alternatif: Referans)
-- Etiketler: namaz vakti, ezan, kıble, zikirmatik, esmaül hüsna, imsakiye
+- Etiketler: namaz vakti, ezan, kıble, zikirmatik, esmaül hüsna, imsakiye, 30 günlük vakit
 - Web sitesi: `https://kusgrupgames.github.io/seher/`
 - Gizlilik politikası: `https://kusgrupgames.github.io/seher/privacy.html`
 - E-posta: `kusgrupgames@gmail.com`
@@ -75,7 +78,7 @@ Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 ## Sürüm notları (v1.0.0)
 
 ```
-İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, kıble pusulası, zikirmatik ve Esmâü'l-Hüsnâ. Tamamı internetsiz çalışır.
+İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, 30 günlük liste, kıble pusulası, zikirmatik ve Esmâü'l-Hüsnâ. Tamamı internetsiz çalışır.
 ```
 
 ## Yayın öncesi

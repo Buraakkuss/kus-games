@@ -92,6 +92,7 @@ declare -a SH=(
  "s=zikir&zikir=21&h1=Zikirmatik&h2=33%20ve%2099%20hedefi%20%C2%B7%20hedefte%20titre%C5%9Fim"
  "s=esma&h1=Esm%C3%A2%C3%BC%27l-H%C3%BCsn%C3%A2&h2=Doksan%20dokuz%20ismin%20okunu%C5%9Fu%20ve%20anlam%C4%B1"
  "s=ayar&sc=412&h1=Kendi%20takvimine%20oturt&h2=Yedi%20hesap%20y%C3%B6ntemi%20%C2%B7%20%C5%9E%C3%A2fi%C3%AE%2FHanef%C3%AE%20%C2%B7%20dakika%20d%C3%BCzeltmesi"
+ "s=vakit&sayfa=ay&sc=0&h0=30%20g%C3%BCnl%C3%BCk%20liste%20%C2%B7%20imsakiye"
 )
 i=1
 for Q in "${SH[@]}"; do

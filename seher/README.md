@@ -21,6 +21,7 @@ aynı dosya çalışır; reklam ve satın alma köprüleri native değilse sessi
 - **Kıble pusulası.** Kâbe'ye giden büyük dairenin başlangıç açısı ve Kâbe'ye uzaklık.
   Doğru yöne dönünce bir kez titrer.
 - **Zikirmatik.** 33, 99 veya sınırsız; ilerleme halkası ve hedefte titreşim.
+- **30 günlük liste.** Önümüzdeki otuz günün altı vakti tek ekranda — Ramazan imsakiyesinin karşılığı.
 - **Esmâü'l-Hüsnâ** — doksan dokuz ismin okunuşu ve Türkçe anlamı.
 
 Vakitler **cihazda** hesaplanır: Jülyen günü → güneşin deklinasyonu ve zaman denklemi

@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${1:-$ROOT/marketing/seher-tanitim.mp4}"
 CHROME="${CHROME:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}"
 FPS="${FPS:-12}"
-DUR="${DUR:-28}"
+DUR="${DUR:-32}"
 W=500; H=1080                      # telefon orani (430x932 ile ayni), headless alt siniri 500
 JOBS="${JOBS:-6}"
 
@@ -33,11 +33,24 @@ echo "viewport farki: ${DELTA}px  ·  ${FPS} kare/sn  ·  ${DUR} sn"
 
 DIR="$(mktemp -d /tmp/seherfilmXXXX)"
 N=$(( FPS * DUR ))
-SRV_PORT=8877
-( cd "$ROOT/www" && python3 -m http.server $SRV_PORT >/dev/null 2>&1 ) &
+# Port SABIT OLAMAZ. Sabit 8877 kullanilirken baska bir urunun film.sh
+# calismasindan kalan sunucu portu tutuyordu; bu betigin kendi sunucusu
+# sessizce baglanamadi ve Chrome ONEKI URUNUN sayfasini cekti. Sonuc:
+# "seher-tanitim.mp4" bastan sona Lull'u gosteriyordu ve hicbir asamada
+# hata vermedi. Bu yuzden: bos port + sunucunun BIZIM dosyamizi verdiginin
+# dogrulanmasi.
+SRV_PORT=$(python3 -c "import socket;s=socket.socket();s.bind(('127.0.0.1',0));print(s.getsockname()[1]);s.close()")
+( cd "$ROOT/www" && python3 -m http.server $SRV_PORT --bind 127.0.0.1 >/dev/null 2>&1 ) &
 SRV=$!
 trap 'kill $SRV 2>/dev/null || true' EXIT
-sleep 1
+IMZA=$(node -p "require('$ROOT/app.config.json').appName")
+HAZIR=0
+for i in 1 2 3 4 5 6 7 8 9 10; do
+  if curl -fsS "http://127.0.0.1:$SRV_PORT/index.html" 2>/dev/null | grep -q "$IMZA"; then HAZIR=1; break; fi
+  sleep 0.5
+done
+[ "$HAZIR" = 1 ] || { echo "sunucu $SRV_PORT portunda $IMZA sayfasini vermiyor - film uretilmedi"; exit 1; }
+echo "sunucu hazir: port $SRV_PORT, icerik $IMZA"
 
 frame() {
   local i=$1
@@ -60,7 +73,8 @@ for i in $(seq 0 $(( N - 1 ))); do
   PIDS+=($!)
   while [ "$(jobs -rp | wc -l)" -gt "$JOBS" ]; do sleep 0.2; done
 done
-for pid in "${PIDS[@]}"; do wait "$pid" || true; done
+# 2>/dev/null: is kendiliginden toplanmissa "not a child of this shell" uyarisi gelir
+for pid in "${PIDS[@]}"; do wait "$pid" 2>/dev/null || true; done
 
 GOT=$(ls "$DIR"/f-*.png 2>/dev/null | wc -l)
 echo "uretilen kare: $GOT / $N"
@@ -74,7 +88,7 @@ mkdir -p "$(dirname "$OUT")"
 
 # kucuk bir GIF onizleme de birak (mesajlasmada oynatmasi kolay).
 # Renk sayisi ve olcu bilerek dusuk: tam kalitede GIF 7 MB'i asiyordu.
-"$FF" -y -i "$OUT" -vf "fps=8,scale=300:-2:flags=lanczos,split[a][b];[a]palettegen=max_colors=96[p];[b][p]paletteuse=dither=bayer:bayer_scale=3" \
+"$FF" -y -i "$OUT" -vf "fps=8,scale=300:-2:flags=lanczos,split[a][b];[a]palettegen=max_colors=96[p];[b][p]paletteuse=dither=none" \
   "${OUT%.mp4}.gif" >/dev/null 2>&1 || true
 
 find "$DIR" -type f -delete; rmdir "$DIR" 2>/dev/null || true

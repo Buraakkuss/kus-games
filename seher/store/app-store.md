@@ -50,6 +50,9 @@ Bulunduğun yerden Kâbe'ye giden en kısa yolun açısı ve Kâbe'ye uzaklığ�
 ZİKİRMATİK
 33, 99 veya sınırsız hedef. Halka doldukça ilerler, hedefte titrer. Sayaç uygulamayı kapatsan da yerinde durur.
 
+30 GÜNLÜK LİSTE
+Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer, internetsiz açılır.
+
 ESMÂÜ'L-HÜSNÂ
 Doksan dokuz ismin okunuşu ve Türkçe anlamı.
 
@@ -71,7 +74,7 @@ Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan 
 ## Sürüm notları (What's New — 500 karakter sınırı)
 
 ```
-İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, kıble pusulası, zikirmatik ve Esmâü'l-Hüsnâ. Tamamı internetsiz çalışır.
+İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, 30 günlük liste, kıble pusulası, zikirmatik ve Esmâü'l-Hüsnâ. Tamamı internetsiz çalışır.
 ```
 (129 karakter)
 
@@ -79,8 +82,8 @@ Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan 
 
 | Cihaz | Dosya |
 |---|---|
-| 6.9" (1290×2796) | `assets/screenshots/ios69-1..5-1290x2796.png` |
-| 6.5" (1284×2778) | `assets/screenshots/ios65-1..5-1284x2778.png` |
+| 6.9" (1290×2796) | `assets/screenshots/ios69-1..6-1290x2796.png` |
+| 6.5" (1284×2778) | `assets/screenshots/ios65-1..6-1284x2778.png` |
 
 ## Uygulama bilgileri
 

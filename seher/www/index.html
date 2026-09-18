@@ -116,7 +116,7 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
 #nav button.on{color:var(--green)}
 
 /* ---------- sayfa / bildirim ---------- */
-.sheet{position:fixed;inset:0;background:rgba(5,16,14,.975);z-index:30;overflow-y:auto;
+.sheet{position:fixed;inset:0;background:#061512;z-index:30;overflow-y:auto;
   padding:calc(20px + var(--safe-t)) 20px calc(20px + var(--safe-b))}
 .sheet.hide{display:none}
 .sheet p{font-size:13.5px;line-height:1.75;color:var(--dim);margin-bottom:11px}
@@ -126,6 +126,16 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:40;pointer-events:none;max-width:86vw;text-align:center}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .cityrow{padding:13px 4px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;cursor:pointer}
+
+/* ---------- 30 gunluk vakit listesi ---------- */
+.ayrow{display:grid;grid-template-columns:76px repeat(6,1fr);gap:2px;align-items:center;
+  padding:9px 2px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.ayrow b{font-size:12.5px;font-weight:700;color:var(--dim)}
+.ayrow i{font-size:12.5px;font-style:normal;text-align:center;font-weight:600}
+.ayrow.ayhead{position:sticky;top:0;background:#071a17;border-bottom:1px solid var(--line)}
+.ayrow.ayhead b,.ayrow.ayhead i{font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.02em}
+.ayrow.bugun{background:rgba(62,201,167,.12);border-radius:10px}
+.ayrow.bugun b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -148,6 +158,7 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
     </div>
 
     <div class="list" id="vakitList"></div>
+    <button class="btn ghost" id="bAy" style="margin-top:12px">30 günlük vakit listesi</button>
     <div class="hint" id="methodHint"></div>
   </section>
 
@@ -250,6 +261,13 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   <h2 style="margin-top:0">Şehir seç</h2>
   <div id="cityList"></div>
   <button class="btn ghost" id="bCityClose" style="margin-top:14px">Kapat</button>
+</div>
+
+<div id="sheetAy" class="sheet hide">
+  <h2 style="margin-top:0">30 günlük vakit listesi</h2>
+  <div class="hint" id="ayHint" style="margin:0 0 12px"></div>
+  <div id="ayTablo"></div>
+  <button class="btn ghost" id="bAyClose" style="margin-top:14px">Kapat</button>
 </div>
 
 <div id="sheetInfo" class="sheet hide">
@@ -404,7 +422,7 @@ function hicri(date){
 
 /* =====================  KALICI DURUM  ===================== */
 var S = {
-  lat:null, lng:null, city:'', tz:null,
+  lat:null, lng:null, city:'', zone:null,
   method:'diyanet', asr:1,
   tune:{ imsak:0, gunes:0, ogle:0, ikindi:0, aksam:0, yatsi:0 },
   bildirim:{ imsak:true, gunes:false, ogle:true, ikindi:true, aksam:true, yatsi:true },
@@ -423,25 +441,27 @@ function save(){ try { localStorage.setItem('seher.v1', JSON.stringify(S)); } ca
 /* =====================  ŞEHİRLER  =====================
    GPS birincil yoldur. Bu liste yalnızca GPS'i kapalı tutmak isteyenler
    içindir; koordinatlar şehir merkezine göredir, birkaç km sapma vakti
-   bir dakikadan az etkiler. Kullanıcı ayrıca enlem/boylam elle girebilir. */
+   bir dakikadan az etkiler. Kullanıcı ayrıca enlem/boylam elle girebilir.
+   Dördüncü alan SABİT SAAT FARKI DEĞİL, IANA saat dilimi adıdır: yaz saati
+   uygulayan şehirlerde sabit fark yılın yarısında bir saat yanlış olur. */
 var SEHIRLER = [
-  ['İstanbul',41.0082,28.9784,3],['Ankara',39.9334,32.8597,3],['İzmir',38.4237,27.1428,3],
-  ['Bursa',40.1826,29.0669,3],['Antalya',36.8969,30.7133,3],['Adana',37.0000,35.3213,3],
-  ['Konya',37.8746,32.4932,3],['Gaziantep',37.0662,37.3833,3],['Şanlıurfa',37.1591,38.7969,3],
-  ['Kayseri',38.7312,35.4787,3],['Mersin',36.8000,34.6333,3],['Diyarbakır',37.9144,40.2306,3],
-  ['Samsun',41.2867,36.3300,3],['Denizli',37.7765,29.0864,3],['Eskişehir',39.7767,30.5206,3],
-  ['Erzurum',39.9000,41.2700,3],['Trabzon',41.0015,39.7178,3],['Malatya',38.3552,38.3095,3],
-  ['Van',38.4891,43.4089,3],['Sakarya',40.7569,30.3783,3],['Kocaeli',40.8533,29.8815,3],
-  ['Balıkesir',39.6484,27.8826,3],['Manisa',38.6191,27.4289,3],['Kahramanmaraş',37.5858,36.9371,3],
-  ['Aydın',37.8560,27.8416,3],['Hatay',36.2025,36.1606,3],['Muğla',37.2153,28.3636,3],
-  ['Tekirdağ',40.9781,27.5117,3],['Elazığ',38.6810,39.2264,3],['Sivas',39.7477,37.0179,3],
-  ['Mekke',21.4225,39.8262,3],['Medine',24.4686,39.6142,3],['Kudüs',31.7683,35.2137,3],
-  ['Kahire',30.0444,31.2357,2],['Bakû',40.4093,49.8671,4],['Taşkent',41.2995,69.2401,5],
-  ['Berlin',52.5200,13.4050,1],['Londra',51.5074,-0.1278,0],['Paris',48.8566,2.3522,1],
-  ['Amsterdam',52.3676,4.9041,1],['Viyana',48.2082,16.3738,1],['Stockholm',59.3293,18.0686,1],
-  ['New York',40.7128,-74.0060,-5],['Toronto',43.6532,-79.3832,-5],['Dubai',25.2048,55.2708,4],
-  ['Kuala Lumpur',3.1390,101.6869,8],['Cakarta',-6.2088,106.8456,7],['Karaçi',24.8607,67.0011,5],
-  ['Sarayevo',43.8563,18.4131,1],['Üsküp',41.9973,21.4280,1],['Priştine',42.6629,21.1655,1]
+  ['İstanbul',41.0082,28.9784,'Europe/Istanbul'],['Ankara',39.9334,32.8597,'Europe/Istanbul'],['İzmir',38.4237,27.1428,'Europe/Istanbul'],
+  ['Bursa',40.1826,29.0669,'Europe/Istanbul'],['Antalya',36.8969,30.7133,'Europe/Istanbul'],['Adana',37.0000,35.3213,'Europe/Istanbul'],
+  ['Konya',37.8746,32.4932,'Europe/Istanbul'],['Gaziantep',37.0662,37.3833,'Europe/Istanbul'],['Şanlıurfa',37.1591,38.7969,'Europe/Istanbul'],
+  ['Kayseri',38.7312,35.4787,'Europe/Istanbul'],['Mersin',36.8000,34.6333,'Europe/Istanbul'],['Diyarbakır',37.9144,40.2306,'Europe/Istanbul'],
+  ['Samsun',41.2867,36.3300,'Europe/Istanbul'],['Denizli',37.7765,29.0864,'Europe/Istanbul'],['Eskişehir',39.7767,30.5206,'Europe/Istanbul'],
+  ['Erzurum',39.9000,41.2700,'Europe/Istanbul'],['Trabzon',41.0015,39.7178,'Europe/Istanbul'],['Malatya',38.3552,38.3095,'Europe/Istanbul'],
+  ['Van',38.4891,43.4089,'Europe/Istanbul'],['Sakarya',40.7569,30.3783,'Europe/Istanbul'],['Kocaeli',40.8533,29.8815,'Europe/Istanbul'],
+  ['Balıkesir',39.6484,27.8826,'Europe/Istanbul'],['Manisa',38.6191,27.4289,'Europe/Istanbul'],['Kahramanmaraş',37.5858,36.9371,'Europe/Istanbul'],
+  ['Aydın',37.8560,27.8416,'Europe/Istanbul'],['Hatay',36.2025,36.1606,'Europe/Istanbul'],['Muğla',37.2153,28.3636,'Europe/Istanbul'],
+  ['Tekirdağ',40.9781,27.5117,'Europe/Istanbul'],['Elazığ',38.6810,39.2264,'Europe/Istanbul'],['Sivas',39.7477,37.0179,'Europe/Istanbul'],
+  ['Mekke',21.4225,39.8262,'Asia/Riyadh'],['Medine',24.4686,39.6142,'Asia/Riyadh'],['Kudüs',31.7683,35.2137,'Asia/Jerusalem'],
+  ['Kahire',30.0444,31.2357,'Africa/Cairo'],['Bakû',40.4093,49.8671,'Asia/Baku'],['Taşkent',41.2995,69.2401,'Asia/Tashkent'],
+  ['Berlin',52.52,13.405,'Europe/Berlin'],['Londra',51.5074,-0.1278,'Europe/London'],['Paris',48.8566,2.3522,'Europe/Paris'],
+  ['Amsterdam',52.3676,4.9041,'Europe/Amsterdam'],['Viyana',48.2082,16.3738,'Europe/Vienna'],['Stockholm',59.3293,18.0686,'Europe/Stockholm'],
+  ['New York',40.7128,-74.006,'America/New_York'],['Toronto',43.6532,-79.3832,'America/Toronto'],['Dubai',25.2048,55.2708,'Asia/Dubai'],
+  ['Kuala Lumpur',3.139,101.6869,'Asia/Kuala_Lumpur'],['Cakarta',-6.2088,106.8456,'Asia/Jakarta'],['Karaçi',24.8607,67.0011,'Asia/Karachi'],
+  ['Sarayevo',43.8563,18.4131,'Europe/Sarajevo'],['Üsküp',41.9973,21.428,'Europe/Skopje'],['Priştine',42.6629,21.1655,'Europe/Belgrade']
 ];
 
 /* =====================  ESMÂÜ'L-HÜSNÂ  =====================
@@ -515,15 +535,69 @@ function toast(msg){
   clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('on'); }, 2400);
 }
 function tzOffsetHours(){ return -new Date().getTimezoneOffset()/60; }
-/* ?t=2026-06-21T05:40 — mağaza kareleri ve testler için saati sabitler.
-   Üretimde her zaman null'dur; tüm arayüz saati bu tek kapıdan okur. */
-var SAHTE = (function(){
+/* Bir IANA saat diliminin VERİLEN ANDAKİ gerçek UTC farkı.
+   Sabit fark tutmak yaz saati uygulayan her şehirde yılın yarısında bir saat
+   hata demekti (Berlin kışın +1, yazın +2). Intl bunu tarihe göre çözer. */
+function zoneOffset(zone, date){
+  var dtf = new Intl.DateTimeFormat('en-US', { timeZone: zone, hour12:false,
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  var o = {};
+  dtf.formatToParts(date).forEach(function(x){ o[x.type] = x.value; });
+  var duvar = Date.UTC(+o.year, +o.month - 1, +o.day,
+                       (+o.hour) % 24, +o.minute, +o.second);
+  return Math.round((duvar - Math.floor(date.getTime()/1000)*1000) / 60000) / 60;
+}
+/* Seçili konumun o andaki UTC farkı. Şehir seçilmemişse (GPS veya elle
+   koordinat) cihazın kendi dilimi kullanılır — oradaysan doğrusu budur. */
+function ofset(date){
+  if (!S.zone) return -date.getTimezoneOffset()/60;
+  try { return zoneOffset(S.zone, date); }
+  catch(e){ return -date.getTimezoneOffset()/60; }
+}
+/* Seçili konumun "şimdi"si: o yerin takvim günü ve gün içindeki ondalık saati.
+   Vakitler de geri sayım da bu tek kaynaktan okunur; ikisi aynı çerçevede
+   olmazsa başka şehre bakan kullanıcının geri sayımı saatlerce şaşar. */
+function konumSimdi(){
+  var d = simdiki(), off = ofset(d);
+  var w = new Date(d.getTime() + off*3600000);
+  return { y:w.getUTCFullYear(), a:w.getUTCMonth(), g:w.getUTCDate(),
+           saat: w.getUTCHours() + w.getUTCMinutes()/60 + w.getUTCSeconds()/3600,
+           ofset: off, tarih: new Date(w.getUTCFullYear(), w.getUTCMonth(), w.getUTCDate()) };
+}
+/* Verilen takvim gününde seçili yerin UTC farkı. Gün gün hesaplanır, çünkü
+   yaz saati geçişi listenin ortasına düşerse sonraki günler bir saat kayar. */
+function gunOfseti(d, varsayilan){
+  if (!S.zone) return varsayilan;
+  try { return zoneOffset(S.zone, new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 12))); }
+  catch(e){ return varsayilan; }
+}
+/* Seçili yerin duvar saatindeki bir anı gerçek (mutlak) zamana çevirir.
+   Bildirimler bununla kurulur: başka şehir seçiliyken cihaz saatine göre
+   kurulan bildirim yanlış anda çalardı. */
+function mutlakAn(y, a, g, saat, off){
+  return new Date(Date.UTC(y, a, g) - off*3600000 + Math.round(saat*3600000));
+}
+/* Saati sabitlemenin iki yolu. Üretimde ikisi de kapalıdır; tüm arayüz
+   şimdiki zamanı yalnız simdiki() üzerinden okur.
+     ?t=2026-06-21T13:00  — SEÇİLİ YERİN duvar saati (mağaza kareleri, video)
+     SAHTE = <Date>       — doğrudan mutlak an (self-test)
+   ?t= bilerek duvar saatidir: kareler "İstanbul'da saat 13:00" gibi okunur,
+   testi çalıştıran makinenin saat dilimine göre kaymaz. */
+var SAHTE = null;
+var SAHTE_METIN = (function(){
   var v = new URLSearchParams(location.search).get('t');
-  if (!v) return null;
-  var d = new Date(v);
-  return isNaN(d.getTime()) ? null : d;
+  return /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(v || '') ? v : null;
 })();
-function simdiki(){ return SAHTE ? new Date(SAHTE.getTime()) : new Date(); }
+function simdiki(){
+  if (SAHTE) return new Date(SAHTE.getTime());
+  if (SAHTE_METIN){
+    var m = SAHTE_METIN.match(/^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)/);
+    var y = +m[1], a = +m[2] - 1, g = +m[3];
+    return mutlakAn(y, a, g, +m[4] + (+m[5])/60, ofset(new Date(Date.UTC(y, a, g, 12))));
+  }
+  return new Date();
+}
 
 /* =====================  VAKİT EKRANI  ===================== */
 var bugun = null;   /* {ham:{}, ayarli:{}} */
@@ -531,15 +605,15 @@ var bugun = null;   /* {ham:{}, ayarli:{}} */
 function vakitleriYenile(){
   if (S.lat === null){ $('vakitList').innerHTML =
     '<div class="vk"><div class="nm" style="color:var(--dim)">Önce konumunu seç</div></div>'; return; }
-  var tz = S.tz === null ? tzOffsetHours() : S.tz;
-  var ham = hesapla(simdiki(), S.lat, S.lng, tz, { method:S.method, asrShadow:S.asr });
+  var ks = konumSimdi();
+  var ham = hesapla(ks.tarih, S.lat, S.lng, ks.ofset, { method:S.method, asrShadow:S.asr });
   var ayarli = {};
   VAKIT_SIRA.forEach(function(k){
     ayarli[k] = ham[k] === null ? null : ham[k] + (S.tune[k]||0)/60;
   });
-  bugun = { ham:ham, ayarli:ayarli, tz:tz };
+  bugun = { ham:ham, ayarli:ayarli, ks:ks };
 
-  var simdi = simdiki(), su = simdi.getHours() + simdi.getMinutes()/60 + simdi.getSeconds()/3600;
+  var su = ks.saat;
   var aktif = null;
   for (var i = VAKIT_SIRA.length-1; i >= 0; i--){
     var v = ayarli[VAKIT_SIRA[i]];
@@ -563,7 +637,7 @@ function vakitleriYenile(){
     };
   });
 
-  var h = hicri(simdiki());
+  var h = hicri(ks.tarih);
   $('hicri').innerHTML = h.g + ' ' + h.ad + '<br>' + h.y + ' Hicrî';
   var M = METHODS[S.method];
   $('methodHint').textContent = M.ad + ' · ' + (S.asr===2?'Hanefî':'Şâfiî') + ' ikindi' +
@@ -574,14 +648,14 @@ function vakitleriYenile(){
 
 function siradakiVakit(){
   if (!bugun) return null;
-  var simdi = simdiki(), su = simdi.getHours() + simdi.getMinutes()/60 + simdi.getSeconds()/3600;
+  var su = konumSimdi().saat;
   for (var i = 0; i < VAKIT_SIRA.length; i++){
     var k = VAKIT_SIRA[i], v = bugun.ayarli[k];
     if (v !== null && v > su) return { k:k, saat:v, yarin:false };
   }
   /* Bugün vakit kalmadı: yarının imsakı */
-  var yarin = simdiki(); yarin.setDate(yarin.getDate()+1);
-  var t = hesapla(yarin, S.lat, S.lng, bugun.tz, { method:S.method, asrShadow:S.asr });
+  var yarin = new Date(bugun.ks.tarih.getTime()); yarin.setDate(yarin.getDate()+1);
+  var t = hesapla(yarin, S.lat, S.lng, bugun.ks.ofset, { method:S.method, asrShadow:S.asr });
   var im = t.imsak === null ? null : t.imsak + (S.tune.imsak||0)/60;
   return im === null ? null : { k:'imsak', saat:im+24, yarin:true };
 }
@@ -589,7 +663,7 @@ function siradakiVakit(){
 function geriSayim(){
   var n = siradakiVakit();
   if (!n){ $('nextName').textContent='—'; $('nextCd').textContent='--:--:--'; return; }
-  var simdi = simdiki(), su = simdi.getHours() + simdi.getMinutes()/60 + simdi.getSeconds()/3600;
+  var su = konumSimdi().saat;
   var kalan = (n.saat - su)*3600;
   $('nextName').textContent = VAKIT_ADI[n.k];
   $('nextCd').textContent = hhmmss(kalan);
@@ -604,6 +678,36 @@ function geriSayim(){
   var toplam = (n.saat - onceki)*3600, gecen = (su - onceki)*3600;
   $('nextBar').style.width = Math.max(0, Math.min(100, gecen/toplam*100)) + '%';
 }
+
+/* =====================  30 GÜNLÜK LİSTE  =====================
+   Ramazan imsakiyesinin karşılığı. Ana ekranla aynı hesabı kullanır:
+   ayrı bir yol açılsaydı iki ekran birbirinden sapardı.                */
+var AY_ADI = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',
+              'Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+function ayListesi(ac){
+  if (ac){
+    if (S.lat === null){ toast('Önce konumunu seç'); return; }
+    var ks = konumSimdi(), h = '';
+    h += '<div class="ayrow ayhead"><b>Tarih</b>' +
+         VAKIT_SIRA.map(function(k){ return '<i>' + VAKIT_ADI[k].slice(0,3) + '</i>'; }).join('') + '</div>';
+    for (var g = 0; g < 30; g++){
+      var d = new Date(ks.tarih.getTime()); d.setDate(d.getDate() + g);
+      var t = hesapla(d, S.lat, S.lng, gunOfseti(d, ks.ofset), { method:S.method, asrShadow:S.asr });
+      h += '<div class="ayrow' + (g === 0 ? ' bugun' : '') + '">' +
+           '<b>' + d.getDate() + ' ' + AY_ADI[d.getMonth()].slice(0,3) + '</b>' +
+           VAKIT_SIRA.map(function(k){
+             return '<i>' + hhmm(t[k] === null ? null : t[k] + (S.tune[k]||0)/60) + '</i>';
+           }).join('') + '</div>';
+    }
+    $('ayTablo').innerHTML = h;
+    $('ayHint').textContent = (S.city || S.lat.toFixed(2) + ', ' + S.lng.toFixed(2)) +
+      ' · ' + METHODS[S.method].ad + ' · ' + (S.asr === 2 ? 'Hanefî' : 'Şâfiî') +
+      ' · dakika düzeltmeleri dahil';
+  }
+  $('sheetAy').classList.toggle('hide', !ac);
+}
+$('bAy').onclick = function(){ ayListesi(true); };
+$('bAyClose').onclick = function(){ ayListesi(false); };
 
 /* =====================  KIBLE  ===================== */
 var pusulaAcik = false, cihazYonu = null;
@@ -760,7 +864,7 @@ function ayarlarKur(){
   sc.onchange = function(){
     if (sc.value === '') return;
     var c = SEHIRLER[+sc.value];
-    S.lat = c[1]; S.lng = c[2]; S.tz = c[3]; S.city = c[0]; save();
+    S.lat = c[1]; S.lng = c[2]; S.zone = c[3]; S.city = c[0]; save();
     vakitleriYenile(); kibleCiz(); bildirimKur(); toast(c[0] + ' seçildi');
   };
 
@@ -833,7 +937,7 @@ function ayarBildirimYenile(){
 $('bGps').onclick = function(){
   toast('Konum alınıyor...');
   function yerlesti(lat, lng){
-    S.lat = lat; S.lng = lng; S.tz = null; S.city = ''; save();
+    S.lat = lat; S.lng = lng; S.zone = null; S.city = ''; save();
     vakitleriYenile(); kibleCiz(); bildirimKur();
     toast('Konum bulundu');
   }
@@ -855,7 +959,7 @@ $('bManual').onclick = function(){
   if (isNaN(la) || isNaN(ln) || la < -90 || la > 90 || ln < -180 || ln > 180){
     toast('Geçerli bir enlem/boylam gir'); return;
   }
-  S.lat = la; S.lng = ln; S.tz = null; S.city = ''; save();
+  S.lat = la; S.lng = ln; S.zone = null; S.city = ''; save();
   vakitleriYenile(); kibleCiz(); bildirimKur(); toast('Konum ayarlandı');
 };
 $('bPlace').onclick = function(){ sehirSayfasi(true); };
@@ -868,7 +972,7 @@ function sehirSayfasi(ac){
     Array.prototype.forEach.call(document.querySelectorAll('#cityList .cityrow'), function(el){
       el.onclick = function(){
         var c = SEHIRLER[+el.getAttribute('data-i')];
-        S.lat=c[1]; S.lng=c[2]; S.tz=c[3]; S.city=c[0]; save();
+        S.lat=c[1]; S.lng=c[2]; S.zone=c[3]; S.city=c[0]; save();
         vakitleriYenile(); kibleCiz(); bildirimKur(); ayarlarKur();
         sehirSayfasi(false); toast(c[0]+' seçildi');
       };
@@ -889,15 +993,22 @@ function bildirimKur(){
       var ids = (p && p.notifications || []).map(function(n){ return { id:n.id }; });
       if (ids.length) return LN.cancel({ notifications:ids });
     }).then(function(){
-      var liste = [], id = 1, tz = S.tz === null ? tzOffsetHours() : S.tz;
+      var liste = [], id = 1, ks = konumSimdi();
       for (var g = 0; g < 7; g++){
-        var d = new Date(); d.setDate(d.getDate()+g);
-        var t = hesapla(d, S.lat, S.lng, tz, { method:S.method, asrShadow:S.asr });
+        var d = new Date(ks.tarih.getTime()); d.setDate(d.getDate()+g);
+        var gOfset = gunOfseti(d, ks.ofset);
+        var t = hesapla(d, S.lat, S.lng, gOfset, { method:S.method, asrShadow:S.asr });
         VAKIT_SIRA.forEach(function(k){
           if (!S.bildirim[k] || t[k] === null) return;
           var saat = t[k] + (S.tune[k]||0)/60;
-          var when = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-          when.setMinutes(Math.round(fix(saat,24)*60));
+          /* Seçili yerin duvar saati -> gerçek an. Cihaz başka bir dilimdeyse
+             doğrudan new Date(y,a,g,...) kurmak bildirimi yanlış anda çalardı. */
+          /* Yatsı gece yarısını geçebilir (yüksek enlem, Ümmü'l-Kurâ'nın
+             akşam+90dk kuralı). fix(saat,24) tek başına onu AYNI günün
+             gecesine, yani geçmişe koyuyordu ve bildirim sessizce düşüyordu. */
+          var gunAsimi = Math.floor(saat / 24);
+          var when = mutlakAn(d.getFullYear(), d.getMonth(), d.getDate() + gunAsimi,
+                              fix(saat, 24), gOfset);
           if (when.getTime() < Date.now() + 60000) return;
           liste.push({
             id: id++,
@@ -962,8 +1073,7 @@ var Ads = {
     if (now - this.lastInter < CFG.ads.minSecondsBetween) return;
     var n = siradakiVakit();
     if (n){
-      var simdi = simdiki(), su = simdi.getHours()+simdi.getMinutes()/60+simdi.getSeconds()/3600;
-      if ((n.saat - su)*60 < 10) return;         /* vakte 10 dakikadan az kaldıysa gösterme */
+      if ((n.saat - konumSimdi().saat)*60 < 10) return;   /* vakte 10 dakikadan az kaldıysa gösterme */
     }
     var self = this; this.showing = true;
     this.plugin.showInterstitial()
@@ -1053,16 +1163,29 @@ function baslat(){
   $('iVer').textContent = 'Sürüm ' + CFG.version + ' · ' + CFG.bundleId;
   esmaCiz(); zikirYenile(); ayarlarKur();
   if (S.lat === null){
-    /* İlk açılış: saat dilimine göre makul bir başlangıç, kullanıcı değiştirebilir */
-    var tz = tzOffsetHours();
-    var aday = SEHIRLER.filter(function(c){ return c[3] === tz; })[0] || SEHIRLER[0];
-    S.lat = aday[1]; S.lng = aday[2]; S.tz = aday[3]; S.city = aday[0];
+    /* İlk açılış: cihazın saat dilimiyle aynı dilimde bir şehir varsa onu seç,
+       yoksa İstanbul. Kullanıcı ilk ekrandan değiştirebilir. */
+    var cihazZone = '';
+    try { cihazZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+    var aday = SEHIRLER.filter(function(c){ return c[3] === cihazZone; })[0] || SEHIRLER[0];
+    S.lat = aday[1]; S.lng = aday[2]; S.zone = aday[3]; S.city = aday[0];
   }
   vakitleriYenile(); kibleCiz(); ekranAcik();
+  /* Gün dönüşü CİHAZIN değil, SEÇİLİ YERİN gece yarısında olur; cihaz saatine
+     bakmak başka dilime bakan kullanıcıda listeyi saatlerce bayat bırakırdı.
+     Sıradaki vakit değiştiğinde de liste tazelenir, yoksa "şu anki vakit"
+     vurgusu geride kalır. */
+  var sonGun = null, sonVakit = null;
   setInterval(function(){
     geriSayim();
-    var d = simdiki();
-    if (d.getHours() === 0 && d.getMinutes() === 0 && d.getSeconds() < 2) vakitleriYenile();
+    var ks = konumSimdi();
+    var gunAnahtar = ks.y + '-' + ks.a + '-' + ks.g;
+    var n = siradakiVakit(), vakitAnahtar = n ? n.k + (n.yarin ? '+' : '') : '';
+    if (sonGun === null){ sonGun = gunAnahtar; sonVakit = vakitAnahtar; return; }
+    if (gunAnahtar !== sonGun || vakitAnahtar !== sonVakit){
+      sonGun = gunAnahtar; sonVakit = vakitAnahtar;
+      vakitleriYenile();
+    }
   }, 1000);
   Ads.init(); IAP.init(); bildirimKur();
   try {
@@ -1113,6 +1236,31 @@ if (q.get('selftest') === '1'){
   var hc = hicri(new Date(2026,0,1));
   if (!(hc.y > 1440 && hc.y < 1460 && hc.a >= 1 && hc.a <= 12 && hc.g >= 1 && hc.g <= 30))
     hata.push('hicri tarih makul degil: '+hc.g+'/'+hc.a+'/'+hc.y);
+  /* saat dilimi: sabit fark tutulsaydı yaz saatinde bir saat hata olurdu.
+     Bu dört satır o hatanın geri gelmesini engeller. */
+  try {
+    var kis = new Date(Date.UTC(2026, 0, 15, 12)), yaz = new Date(Date.UTC(2026, 6, 15, 12));
+    [['Europe/Berlin', kis, 1], ['Europe/Berlin', yaz, 2],
+     ['Europe/London', kis, 0], ['Europe/London', yaz, 1],
+     ['America/New_York', kis, -5], ['America/New_York', yaz, -4],
+     ['Europe/Istanbul', kis, 3], ['Europe/Istanbul', yaz, 3],
+     ['Asia/Kolkata', kis, 5.5], ['Asia/Kolkata', yaz, 5.5]].forEach(function(x){
+      var g = zoneOffset(x[0], x[1]);
+      if (g !== x[2]) hata.push(x[0] + ' ofseti ' + g + ', beklenen ' + x[2]);
+    });
+    not.push('dilim=tamam');
+  } catch(e){ hata.push('zoneOffset calismadi: ' + e.message); }
+  /* her şehrin saat dilimi adı geçerli olmalı — yazım hatası sessizce
+     cihaz dilimine düşer ve vakitler saatlerce şaşar */
+  var dilimBozuk = SEHIRLER.filter(function(c){
+    try { zoneOffset(c[3], new Date()); return false; } catch(e){ return true; }
+  });
+  if (dilimBozuk.length) hata.push(dilimBozuk.length + ' sehrin saat dilimi adi gecersiz: ' + dilimBozuk[0][0]);
+  /* duvar saati -> mutlak an cevirisi: Berlin'de yaz saatinde 13:00,
+     UTC 11:00 olmalı */
+  var an = mutlakAn(2026, 6, 15, 13, 2);
+  if (an.getTime() !== Date.UTC(2026, 6, 15, 11)) hata.push('mutlakAn yanlis: ' + an.toISOString());
+
   /* veri tabloları eksiksiz mi */
   if (ESMA.length !== 99) hata.push('esma listesi ' + ESMA.length + ' isim, 99 olmali');
   var esmaBos = ESMA.filter(function(e){ return !e[0] || !e[1]; }).length;
@@ -1129,10 +1277,15 @@ if (q.get('selftest') === '1'){
     if (mt.yatsi <= mt.aksam) hata.push(mk + ' yonteminde yatsi aksamdan once');
   }
   /* dakika duzeltmesi gercekten uygulaniyor mu (arayuz yolu) */
-  S.lat = 41.0082; S.lng = 28.9784; S.tz = 3; S.city = 'İstanbul';
+  S.lat = 41.0082; S.lng = 28.9784; S.zone = 'Europe/Istanbul'; S.city = 'İstanbul';
   S.method = 'diyanet'; S.asr = 1;
   VAKIT_SIRA.forEach(function(k){ S.tune[k] = 0; });
-  SAHTE = new Date(2026, 5, 21, 13, 0, 0);
+  /* Sahte saat MUTLAK bir andır; "İstanbul'da 13:00" testi çalıştıran
+     makinenin saat diliminden bağımsız olsun diye mutlakAn ile kuruluyor. */
+  function sahteKur(y, a, g, saat){
+    SAHTE = mutlakAn(y, a, g, saat, ofset(new Date(Date.UTC(y, a, g, 12))));
+  }
+  sahteKur(2026, 5, 21, 13);
   baslat();
   var satir = document.querySelectorAll('#vakitList .vk');
   if (satir.length !== 6) hata.push('vakit listesinde ' + satir.length + ' satir var, 6 olmali');
@@ -1172,13 +1325,55 @@ if (q.get('selftest') === '1'){
   if (document.querySelectorAll('#esmaList .es').length !== 99) hata.push('esma ekrani 99 kart cizmedi');
   if ($('qDeg').textContent.indexOf('151') !== 0) hata.push('kible ekraninda aci yanlis: ' + $('qDeg').textContent);
   /* gece yarisindan sonra: siradaki vakit yarinin imsaki olmali */
-  SAHTE = new Date(2026, 5, 21, 23, 59, 0); vakitleriYenile();
+  sahteKur(2026, 5, 21, 23 + 59/60); vakitleriYenile();
   var gece = siradakiVakit();
   if (!gece || gece.k !== 'imsak' || !gece.yarin) hata.push('gece yarisinda yarinin imsaki bulunamadi');
+  /* 30 günlük liste ana ekranla AYNI hesabı kullanmalı; ayrı bir yol açılsaydı
+     iki ekran zamanla birbirinden saparadı. */
+  ayListesi(true);
+  var ayS = document.querySelectorAll('#ayTablo .ayrow');
+  if (ayS.length !== 31) hata.push('30 gunluk listede ' + ayS.length + ' satir var, 31 olmali (baslik + 30 gun)');
+  else {
+    var ilk = ayS[1].querySelectorAll('i');
+    var ekranOgle = document.querySelector('#vakitList .vk[data-k=ogle] .tm').textContent;
+    if (ilk[2].textContent !== ekranOgle)
+      hata.push('30 gunluk listenin ilk gunu ana ekranla uyusmuyor: ' + ilk[2].textContent + ' / ' + ekranOgle);
+    var bosHucre = 0;
+    Array.prototype.forEach.call(ayS, function(r, i){
+      if (i === 0) return;
+      Array.prototype.forEach.call(r.querySelectorAll('i'), function(c){
+        if (!/^\d\d:\d\d$/.test(c.textContent)) bosHucre++;
+      });
+    });
+    if (bosHucre) hata.push('30 gunluk listede ' + bosHucre + ' hucre saat bicimsiz');
+  }
+  ayListesi(false);
+  if (!$('sheetAy').classList.contains('hide')) hata.push('30 gunluk liste kapanmadi');
+
+  /* Başka bir şehre geçildiğinde vakitler O ŞEHRİN saatinde gösterilmeli ve
+     geri sayım yine de gerçek bir süre olmalı. Vakitler bir çerçeveden,
+     "şimdi" başka bir çerçeveden okunursa geri sayım saatlerce şaşar. */
+  sahteKur(2026, 5, 21, 13);
+  var trOgle = bugun.ayarli.ogle;
+  S.lat = 52.52; S.lng = 13.405; S.zone = 'Europe/Berlin'; S.city = 'Berlin';
+  vakitleriYenile();
+  var deOgle = bugun.ayarli.ogle;
+  /* Berlin yazın UTC+2, İstanbul UTC+3; Berlin daha batıda -> öğle daha geç okunur */
+  if (!(deOgle > 12.5 && deOgle < 13.5)) hata.push('Berlin oglesi ' + hhmm(deOgle) + ', 13:00 civari olmaliydi');
+  var bn = siradakiVakit();
+  if (!bn) hata.push('Berlin icin siradaki vakit bulunamadi');
+  else {
+    var kalanSn = (bn.saat - konumSimdi().saat)*3600;
+    if (kalanSn < 0 || kalanSn > 24*3600) hata.push('Berlin geri sayimi mantiksiz: ' + Math.round(kalanSn) + ' sn');
+  }
+  not.push('tr_ogle=' + hhmm(trOgle) + ' de_ogle=' + hhmm(deOgle));
+  S.lat = 41.0082; S.lng = 28.9784; S.zone = 'Europe/Istanbul'; S.city = 'İstanbul';
+  vakitleriYenile();
+
   /* reklam kapisi: vakte 5 dakika kala reklam gosterilmemeli */
-  SAHTE = new Date(2026, 5, 21, 13, 0, 0); vakitleriYenile();
+  sahteKur(2026, 5, 21, 13); vakitleriYenile();
   var ik = bugun.ayarli.ikindi;
-  SAHTE = new Date(2026, 5, 21, Math.floor(ik), Math.round((ik%1)*60) - 5, 0);
+  sahteKur(2026, 5, 21, ik - 5/60);
   Ads.native = true; Ads.interLoaded = true; Ads.plugin = { showInterstitial: function(){ hata.push('vakte 5 dk kala reklam gosterildi'); return Promise.resolve(); } };
   Ads.maybeInterstitial();
   Ads.native = false; Ads.plugin = null; Ads.interLoaded = false;
@@ -1200,21 +1395,24 @@ if (q.get('selftest') === '1'){
      tools/film.sh bu kareleri birlestirir.                                  */
   if (q.get('film') === '1'){
     document.documentElement.style.zoom = String(window.innerWidth / 390);
-    S.lat = 41.0082; S.lng = 28.9784; S.tz = 3; S.city = 'İstanbul';
+    S.lat = 41.0082; S.lng = 28.9784; S.zone = 'Europe/Istanbul'; S.city = 'İstanbul';
     S.method = 'diyanet'; S.asr = 1; S.zikirHedef = 33;
     var T = +(q.get('t') || 0);
     var SAHNE = [
       { t:0,  sn:7, tab:'tVakit', yazi:'Sıradaki vakte geri sayım' },
-      { t:7,  sn:6, tab:'tKible', yazi:'Kıbleyi anında bul' },
-      { t:13, sn:6, tab:'tZikir', yazi:'Zikirmatik · 33 ve 99' },
-      { t:19, sn:4, tab:'tEsma',  yazi:'Esmâü’l-Hüsnâ' },
-      { t:23, sn:5, tab:'tAyar',  yazi:'Kendi takvimine oturt' }
+      { t:7,  sn:5, tab:'tVakit', ay:true, yazi:'30 günlük liste · imsakiye' },
+      { t:12, sn:6, tab:'tKible', yazi:'Kıbleyi anında bul' },
+      { t:18, sn:5, tab:'tZikir', yazi:'Zikirmatik · 33 ve 99' },
+      { t:23, sn:4, tab:'tEsma',  yazi:'Esmâü’l-Hüsnâ' },
+      { t:27, sn:5, tab:'tAyar',  yazi:'Kendi takvimine oturt' }
     ];
     var sh = SAHNE[0];
     for (var si = 0; si < SAHNE.length; si++) if (T >= SAHNE[si].t) sh = SAHNE[si];
     var ilerleme = Math.max(0, Math.min(1, (T - sh.t) / sh.sn));
-    /* saat: öğleye altı dakika kala başlar, kare kare işler */
-    SAHTE = new Date(2026, 5, 21, 13, 0, Math.round(T));
+    /* Saat: öğleye altı dakika kala başlar, kare kare işler. Mutlak an olarak
+       kuruluyor; cihaz dilimine göre kurulsaydı video, kareleri üreten
+       makinenin saat dilimine göre başka bir vakti gösterirdi. */
+    SAHTE = mutlakAn(2026, 5, 21, 13 + T/3600, ofset(new Date(Date.UTC(2026, 5, 21, 12))));
     if (sh.tab === 'tKible') cihazYonu = 95 + ilerleme * (151.62 - 95);
     if (sh.tab === 'tZikir') S.zikir = Math.round(ilerleme * 33);
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(x){ x.classList.remove('on'); });
@@ -1228,8 +1426,13 @@ if (q.get('selftest') === '1'){
       'background:linear-gradient(0deg,rgba(7,26,23,.97),rgba(7,26,23,.88) 70%,transparent)';
     fb.textContent = sh.yazi;
     document.body.appendChild(fb);
-    var kaydir = { tEsma:[0,1100], tAyar:[60,700] }[sh.tab];
-    if (kaydir) $('app').scrollTop = kaydir[0] + ilerleme * (kaydir[1] - kaydir[0]);
+    if (sh.ay){
+      ayListesi(true);
+      $('sheetAy').scrollTop = ilerleme * 1200;
+    } else {
+      var kaydir = { tEsma:[0,1100], tAyar:[60,700] }[sh.tab];
+      if (kaydir) $('app').scrollTop = kaydir[0] + ilerleme * (kaydir[1] - kaydir[0]);
+    }
   }
 
   if (q.get('shot') === '1'){
@@ -1240,12 +1443,15 @@ if (q.get('selftest') === '1'){
     Array.prototype.forEach.call(document.querySelectorAll('#nav button'), function(x){
       x.classList.toggle('on', x.getAttribute('data-t') === hedef); });
     $(hedef).classList.add('on'); aktifTab = hedef;
-    S.lat = 41.0082; S.lng = 28.9784; S.tz = 3; S.city = 'İstanbul';
+    S.lat = 41.0082; S.lng = 28.9784; S.zone = 'Europe/Istanbul'; S.city = 'İstanbul';
     S.zikir = +(q.get('zikir') || 33);
     S.zikirHedef = 33;
     vakitleriYenile(); zikirYenile(); ayarlarKur();
     if (hedef === 'tKible'){ cihazYonu = +(q.get('yon') || 120); kibleCiz(); }
-    if (+q.get('sc')) setTimeout(function(){ $('app').scrollTop = +q.get('sc'); }, 0);
+    if (q.get('sayfa') === 'ay') ayListesi(true);
+    if (+q.get('sc')) setTimeout(function(){
+      ($('sheetAy').classList.contains('hide') ? $('app') : $('sheetAy')).scrollTop = +q.get('sc');
+    }, 0);
     /* Mağaza karesi başlığı. İki biçim var, çünkü 1080x1920 (Play'in izin
        verdiği en uzun oran) iri bir başlıkla altı vakti birden göstermiyor:
          ?h0=  tek satır, ince şerit  (liste tam sığar)

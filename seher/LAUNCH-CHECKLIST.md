@@ -128,7 +128,7 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
 ### App Store
 - [ ] App Store Connect → Yeni uygulama → bundle id `com.kusgrup.seher`
 - [ ] Metinler: `store/app-store.md`
-- [ ] Ekran görüntüleri: `assets/screenshots/ios69-*.png` (6.9") ve `ios65-*.png` (6.5")
+- [ ] Ekran görüntüleri: `assets/screenshots/ios69-*.png` (6.9") ve `ios65-*.png` (6.5") — altı kare
 - [ ] App Privacy: `store/app-privacy.md` — **konum: kaba, izleme: evet**
 - [ ] IDFA beyanı: **Yes → Serve advertisements within the app**
 - [ ] App Review notlarını yapıştır (`store/app-store.md` sonunda)

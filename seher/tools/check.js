@@ -49,15 +49,26 @@ console.log('\n2) Tarayicida self-test');
 if (!fs.existsSync(CHROME)) {
   wrn('Chrome bulunamadi (' + CHROME + '). CHROME=/yol/chrome node tools/check.js ile calistir.');
 } else {
-  try {
-    const out = cp.execSync(
-      `"${CHROME}" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 ` +
-      `--window-size=520,900 --dump-dom "file://${path.join(ROOT, 'www/index.html')}?selftest=1" 2>/dev/null`,
-      { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-    const t = (out.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
-    if (t.startsWith('SELFTEST OK')) ok(t.replace('SELFTEST OK ', ''));
-    else bad('self-test basarisiz: ' + t);
-  } catch (e) { bad('self-test calistirilamadi: ' + e.message); }
+  /* UC AYRI CIHAZ SAAT DILIMINDE calistiriliyor. Sebep: vakitler secili yerin
+     saat diliminde hesaplanir, "simdi" ise cihazdan okunur. Ikisi ayni cerceveden
+     okunmazsa yurt disindaki (veya baska sehre bakan) kullanicinin geri sayimi
+     saatlerce sasar ve bu tek dilimde test edilirken hic gorulmez. */
+  const sonuc = {};
+  for (const tz of ['UTC', 'America/New_York', 'Asia/Tokyo']) {
+    try {
+      const out = cp.execSync(
+        `"${CHROME}" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=30000 ` +
+        `--window-size=520,900 --dump-dom "file://${path.join(ROOT, 'www/index.html')}?selftest=1" 2>/dev/null`,
+        { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, TZ: tz } });
+      const t = (out.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+      if (t.startsWith('SELFTEST OK')) { sonuc[tz] = t; ok('TZ=' + tz + ' · ' + t.replace('SELFTEST OK ', '')); }
+      else bad('TZ=' + tz + ' self-test basarisiz: ' + t);
+    } catch (e) { bad('TZ=' + tz + ' self-test calistirilamadi: ' + e.message); }
+  }
+  const cikti = Object.values(sonuc);
+  if (cikti.length === 3 && !cikti.every(x => x === cikti[0]))
+    bad('self-test sonucu cihaz saat dilimine gore degisiyor - vakitler ve "simdi" ayni cerceveden okunmuyor');
+  else if (cikti.length === 3) ok('sonuc uc cihaz saat diliminde de ayni');
 }
 
 console.log('\n3) Magaza gorselleri');
@@ -66,7 +77,7 @@ console.log('\n3) Magaza gorselleri');
     'assets/icon-1024.png': [1024, 1024], 'assets/icon-512.png': [512, 512],
     'assets/feature-graphic-1024x500.png': [1024, 500], 'assets/splash-2732.png': [2732, 2732]
   };
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 6; i++) {
     need['assets/screenshots/android-' + i + '-1080x1920.png'] = [1080, 1920];
     need['assets/screenshots/ios69-' + i + '-1290x2796.png'] = [1290, 2796];
     need['assets/screenshots/ios65-' + i + '-1284x2778.png'] = [1284, 2778];
@@ -185,7 +196,9 @@ console.log('\n5) Surum ve kimlik tutarliligi');
   /* Klasor kopyalanarak acildigi icin baska urunden kalan metin en sik hata.
      Ad aramak yetmiyor: Lull'un destek sayfasi Latch'in SSS'iydi ve "latch"
      sozcugunu hic gecirmiyordu. Bu yuzden o urunlerin SOZ DAGARCIGI taraniyor. */
-  const KALINTI = /\b(hook|rope|swing|respawn|leaderboard|high score|skor tablosu|nefes al|breathe|inhale|exhale|orbit|planet|wall|duvar|cengel)\b/i;
+  /* "duvar saati" bu uründe mesru bir terim (saat dilimi katmani), Slot'un
+     duvarindan gelen kalinti degil - sozcugu o baglamda hariç tutuyoruz. */
+  const KALINTI = /\b(hook|rope|swing|respawn|leaderboard|high score|skor tablosu|nefes al|breathe|inhale|exhale|orbit|planet|wall|duvar(?!\s*saat)|cengel)\b/i;
   ['index.html','privacy.html','gizlilik.html','terms.html','support.html'].forEach(f => {
     const fp = path.join(DOCS, f);
     if (!fs.existsSync(fp)) return;   /* 4. bolum zaten HATA verdi */
@@ -197,10 +210,14 @@ console.log('\n5) Surum ve kimlik tutarliligi');
     const kal = s.match(KALINTI);
     if (kal) bad('docs/' + GAME + '/' + f + ' icinde baska urunun sozcugu var: "' + kal[0] + '"');
   });
-  /* LAUNCH-CHECKLIST.md hesap duzeyindeki isleri anlatir ve orada baska bir urunun
-     adini anmak dogrudur (Play'in 12x14 kapali test sarti hesap basina tek sefer).
-     Bu yuzden orada ad taranmaz, soz dagarcigi taranir. */
-  const ADSIZ = new Set(['LAUNCH-CHECKLIST.md']);
+  /* Bu iki dosyada baska bir urunun adini anmak DOGRUDUR:
+       LAUNCH-CHECKLIST.md hesap duzeyindeki isleri anlatir (Play'in 12x14 kapali
+         test sarti hesap basina tek seferdir, hangi uründe yapildigi onemlidir),
+       CLAUDE.md muhendislik gunlugudur; bir tuzagin hangi uründe nasil patladigini
+         yazmak o notun tek degerli kismidir (film.sh'in baska urunun sayfasini
+         cekmesi gibi).
+     Ikisinde de ad taranmaz, soz dagarcigi taranir - gercek bir kalinti yine yakalanir. */
+  const ADSIZ = new Set(['LAUNCH-CHECKLIST.md', 'CLAUDE.md']);
   ['CLAUDE.md','README.md','LAUNCH-CHECKLIST.md','store/google-play.md','store/app-store.md',
    'store/data-safety.md','store/app-privacy.md','store/content-rating.md',
    'native/android.md','native/ios.md'].forEach(f => {

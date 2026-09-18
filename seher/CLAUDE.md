@@ -50,6 +50,28 @@ Bunlar pazarlama tercihi değil, ürünün var olma sebebidir. Değiştirmeden �
 - Kıble = bulunduğun noktadan Kâbe'ye (21.4225, 39.8262) giden büyük dairenin
   **başlangıç** açısı. Mercator haritasındaki düz çizgi değildir; İstanbul için 151.6°.
 - Hicrî tarih aritmetik takvimdir, hilâl gözlemiyle bir gün oynayabilir; arayüzde belirtiliyor.
+- **30 günlük liste ayrı bir hesap yolu açmaz**; `hesapla()` ve `S.tune` ile aynı
+  kaynaktan üretilir. Ayrı yazılsaydı iki ekran zamanla birbirinden saparadı;
+  self-test ilk günün ana ekranla aynı olmasını denetliyor.
+
+### Saat dilimi — tek çerçeve kuralı
+
+Vakitler **seçili yerin** saat diliminde hesaplanır, "şimdi" ise **cihazdan** okunur.
+İkisi aynı çerçeveden okunmazsa başka şehre bakan (veya yurt dışındaki) kullanıcının
+geri sayımı saatlerce şaşar ve bu, tek bir saat diliminde test edilirken hiç görülmez.
+
+- Şehir listesi **sabit saat farkı değil, IANA dilim adı** tutar (`'Europe/Berlin'`).
+  Sabit fark yaz saati uygulayan her şehirde yılın yarısında bir saat hatalıydı.
+- `zoneOffset(zone, date)` o **tarihteki** gerçek farkı `Intl` ile bulur.
+- `konumSimdi()` tek kaynaktır: seçili yerin takvim günü + gün içindeki ondalık saati.
+  Vakit listesi, geri sayım, sıradaki vakit ve reklam kapısı hepsi bunu okur.
+  **Yeni bir yerde `new Date().getHours()` yazma** — çerçeveyi kırar.
+- `mutlakAn(y,a,g,saat,ofset)` duvar saatini gerçek ana çevirir. Bildirimler bununla
+  kurulur; doğrudan `new Date(y,a,g,...)` kurmak cihaz başka dilimdeyken yanlış anda çalar.
+- Bildirimlerde ofset **her gün ayrı** hesaplanır: yaz saati geçişi o yedi günün
+  ortasına düşerse geçişten sonraki bildirimler bir saat kayardı.
+- GPS veya elle koordinatta `S.zone` null'dur ve cihazın kendi dilimi kullanılır —
+  oradaysan doğrusu budur.
 
 ## Test kipleri
 
@@ -57,22 +79,44 @@ Bunlar pazarlama tercihi değil, ürünün var olma sebebidir. Değiştirmeden �
 |---|---|
 | `www/index.html` | normal uygulama |
 | `www/index.html?selftest=1` | hesabı bilinen değerlerle sınar, **arayüzü de kurup DOM'u denetler**, sonucu `document.title` içine yazar |
-| `www/index.html?shot=1&s=...` | mağaza karesi kompozisyonu (parametreler `tools/gen.sh` içinde) |
-| `www/index.html?t=2026-06-21T13:00` | saati sabitler (tüm arayüz `simdiki()` üzerinden okur) |
+| `www/index.html?shot=1&s=...` | mağaza karesi kompozisyonu (parametreler `tools/gen.sh` içinde); `&sayfa=ay` 30 günlük listeyi açar |
+| `www/index.html?t=2026-06-21T13:00` | saati sabitler — **seçili yerin duvar saati** olarak (tüm arayüz `simdiki()` üzerinden okur) |
+| `www/index.html?film=1&t=<saniye>` | tanıtım videosunun tek karesi (`tools/film.sh` birleştirir) |
 
 **Self-test kuralı:** `SELFTEST OK` dışında her şey hatadır. Test yalnız matematiği
 değil arayüzü de sınar: altı satır çiziliyor mu, sıralı mı, dakika düzeltmesi ekrana
 yansıyor mu, gece yarısından sonra yarının imsakı bulunuyor mu, vakte 5 dakika kala
-reklam kapısı tutuyor mu. Yeni bir özellik eklerken karşılığını buraya da yaz.
+reklam kapısı tutuyor mu, 30 günlük liste ana ekranla aynı saatleri mi veriyor.
+Yeni bir özellik eklerken karşılığını buraya da yaz.
+
+`check.js` self-test'i **üç ayrı cihaz saat diliminde** çalıştırır (UTC, New York,
+Tokyo) ve üç çıktının **birebir aynı** olmasını şart koşar. Saat dilimi hatalarının
+tek dilimde test edilirken görünmemesi bu ürünün en sinsi hata sınıfıdır.
 
 ## Tuzaklar
 
 - **`?selftest=1` beklenen değeri sabitlemez, değişmezi sınar.** "13:00'te sıradaki
   vakit ikindi" diye yazıldı ve testi yanlış yere kırdı (doğrusu öğleydi, 13:06).
   Sabit isim yerine "ilk büyük vakit" değişmezi denetleniyor.
+- **Saat dilimi sabit sayı olarak tutulmaz.** Şehir listesi ilk yazıldığında
+  `['Berlin',52.52,13.405,1]` gibi sabit fark tutuyordu; Berlin yazın UTC+2 olduğu
+  için Nisan-Ekim arası bütün vakitler bir saat yanlış çıkıyordu. Artık IANA dilim
+  adı tutuluyor ve fark tarihe göre hesaplanıyor.
+- **`?t=` cihazın saati değil, seçili yerin duvar saatidir.** `new Date("...")`
+  ile ayrıştırılırsa kareleri üreten makinenin dilimine göre kayar; mağaza kareleri
+  bir kez böyle başka bir vakti gösterdi. `simdiki()` bunu `mutlakAn` ile çözüyor.
 - **Esmâü'l-Hüsnâ 99 isimdir**; "Allah" lafza-i celâli listeye eklenince 100 oldu.
   `check.js` sayıyı denetliyor. Arapça hat v1'de bilerek yok: yanlış bir harf dinî
   içerikte kabul edilemez, doğrulanmış bir kaynakla eklenecek.
+- **`tools/film.sh` sabit port kullanmaz — ve bu bir kez çok kötü sonuç verdi.**
+  Betik kareleri kendi başlattığı `python3 -m http.server` üzerinden çekiyor.
+  Port 8877'de sabitken, başka bir ürünün film.sh çalışmasından kalan sunucu
+  portu tutuyordu; bu betiğin kendi sunucusu sessizce bağlanamıyor, Chrome
+  **öteki ürünün sayfasını** çekiyordu. Sonuç: `seher-tanitim.mp4` baştan sona
+  **Lull'u** gösteriyordu ve hiçbir aşamada hata vermedi — video üretildi,
+  çıkış kodu 0'dı. Artık boş port seçiliyor ve sunucunun gerçekten **bu
+  ürünün** sayfasını verdiği `appName` ile doğrulanıyor; doğrulanmazsa betik
+  durur. Üretilen videoyu yine de bir kare açıp gözle kontrol et.
 - **Headless Chrome pencereyi 500 CSS pikselden dar açmaz.** Mağaza kareleri bir kez
   500 piksellik yerleşimin solundan kırpılmış çıktı. `?zw=390` sayfayı `zoom` ile
   telefon genişliğine oturtuyor; `tools/gen.sh` bunu kendisi ekliyor.

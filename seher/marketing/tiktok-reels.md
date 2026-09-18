@@ -91,8 +91,10 @@ Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 - **Ekran metni:** `yazın Londra'da yatsı 23:00'ü geçiyor`
 
 ### 13 · Ramazan (dönemsel — Ramazan'dan üç hafta önce başlat)
-- **Görüntü:** İmsak ve akşam satırlarına yakın çekim, geri sayım akşama.
-- **Ekran metni:** `iftara ne kadar kaldı — saniyesiyle`
+- **Görüntü:** İmsak ve akşam satırlarına yakın çekim, geri sayım akşama. Sonra
+  "30 günlük vakit listesi"ne bas, ayın tamamı ekranda kaysın.
+- **Ekran metni:** `iftara ne kadar kaldı — ve ayın tamamı tek ekranda`
+- **Açıklama:** `imsakiye yazdırmaya gerek yok, internetsiz açılıyor`
 
 ### 14 · Yaşlı bir kullanıcı için
 - **Görüntü:** Büyük puntolu geri sayım kartına yakın çekim.
