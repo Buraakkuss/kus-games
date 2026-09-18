@@ -51,6 +51,41 @@ else
   echo "Reklam KAPALI: GADApplicationIdentifier, ATT istemi ve SKAdNetwork listesi eklenmedi"
 fi
 
+# UYGULAMA IKONU VE ACILIS EKRANI
+# Bu adim uzun sure EKSIKTI: native/ios.md bunu "Xcode'da elle yap" diye
+# tarif ediyordu, betik ise otomatiklestirmemisti. Mac'siz yayinladigimiz icin
+# o elle adim hic gerceklesmedi ve TestFlight'a Capacitor'in bos yer tutucu
+# ikonuyla bir yapi gitti. Ikon magazada urunun yuzu; elle adim birakilamaz.
+ICONSET="$ROOT/ios/App/App/Assets.xcassets/AppIcon.appiconset"
+if [ -d "$ICONSET" ] && [ -f "$ROOT/assets/icon-1024.png" ]; then
+  rm -f "$ICONSET"/*.png
+  cp "$ROOT/assets/icon-1024.png" "$ICONSET/AppIcon-1024.png"
+  cat > "$ICONSET/Contents.json" <<'JEOF'
+{
+  "images" : [
+    {
+      "filename" : "AppIcon-1024.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    }
+  ],
+  "info" : { "author" : "xcode", "version" : 1 }
+}
+JEOF
+  echo "uygulama ikonu yerlestirildi (1024x1024, tek boyut)"
+else
+  echo "UYARI: AppIcon.appiconset veya assets/icon-1024.png yok - ikon yerlestirilemedi"
+fi
+
+SPLASHSET="$ROOT/ios/App/App/Assets.xcassets/Splash.imageset"
+if [ -d "$SPLASHSET" ] && [ -f "$ROOT/assets/splash-2732.png" ]; then
+  for f in "$SPLASHSET"/*.png; do
+    [ -f "$f" ] && cp "$ROOT/assets/splash-2732.png" "$f"
+  done
+  echo "acilis ekrani yerlestirildi"
+fi
+
 # sadece iPhone, dikey, surum
 if [ -f "$PBX" ]; then
   # IPHONEOS_DEPLOYMENT_TARGET: Capacitor 14.0 ile geliyor. Apple 2027 baharindan
