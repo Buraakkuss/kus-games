@@ -91,18 +91,27 @@ jobs:
           printf '%s\n' "$KEY_P8" > ~/private_keys/AuthKey_$KEY_ID.p8
           chmod 600 ~/private_keys/AuthKey_$KEY_ID.p8
 
-      - name: Arsivle
+      - name: Arsivle (imzasiz)
         working-directory: ${{ inputs.app }}/ios/App
+        # ARSIV BILEREK IMZASIZ. Xcode'un otomatik imzasinda arsivleme adimi
+        # GELISTIRME kimligiyle imzalanir; magaza imzasi bir sonraki adimda,
+        # disa aktarmada atilir. Arsivi imzalatmaya calisirsak Xcode gelistirme
+        # profili uretmek ister, o da EN AZ BIR KAYITLI CIHAZ sarti koyar:
+        #   "Your team has no devices from which to generate a provisioning profile"
+        # Magaza (dagitim) profili cihaz istemez. Bu yuzden imzayi tamamen
+        # disa aktarma adimina birakiyoruz; cihaz kaydi hic gerekmiyor.
+        #
+        # pipefail SART: "xcodebuild ... | tail" boru hattinin cikis kodu tail'e
+        # aittir, yani arsivleme cokse bile adim YESIL gorunur ve hata ancak bir
+        # sonraki adimda "arsiv bulunamadi" diye ortaya cikar. Bu bir kez yasandi.
         run: |
+          set -o pipefail
           xcodebuild -workspace App.xcworkspace -scheme App \
             -configuration Release -destination 'generic/platform=iOS' \
             -archivePath "$PWD/build/App.xcarchive" archive \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_$KEY_ID.p8 \
-            -authenticationKeyID "$KEY_ID" \
-            -authenticationKeyIssuerID "$ISSUER_ID" \
             DEVELOPMENT_TEAM="$TEAM_ID" \
-            CODE_SIGN_STYLE=Automatic | tail -40
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO | tail -60
+          ls -la build/App.xcarchive/Products/Applications
 
       - name: IPA uret
         working-directory: ${{ inputs.app }}/ios/App

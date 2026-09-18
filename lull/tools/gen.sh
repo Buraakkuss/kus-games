@@ -75,7 +75,11 @@ declare -a SH=(
 i=1
 for Q in "${SH[@]}"; do
   shot "$OUT/screenshots/android-$i-1080x1920.png" 1080 1920 "$G&$Q"
-  shot "$OUT/screenshots/ios67-$i-1290x2796.png"   1290 2796 "$G&$Q"
+  # App Store Connect hesaba/surume gore bazen 6.9 inc (1290x2796) bazen
+  # 6.5 inc (1284x2778) slotu gosteriyor; 1290'lik kare 6.5 slotuna YUKLENMEZ.
+  # Hangisi cikarsa ciksin hazir olmak icin ikisi de uretiliyor.
+  shot "$OUT/screenshots/ios69-$i-1290x2796.png"   1290 2796 "$G&$Q"
+  shot "$OUT/screenshots/ios65-$i-1284x2778.png"   1284 2778 "$G&$Q"
   i=$((i+1))
 done
 rm -f "$TMPSHOT"

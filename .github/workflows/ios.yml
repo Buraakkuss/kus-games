@@ -63,6 +63,12 @@ jobs:
         run: |
           /usr/libexec/PlistBuddy -c "Print :ITSAppUsesNonExemptEncryption" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Print :UISupportedInterfaceOrientations" ios/App/App/Info.plist
+          # Ikon bir kez EKSIK gitti: ios-prepare.sh onu hic yerlestirmiyordu ve
+          # TestFlight'a Capacitor'in bos yer tutucu ikonuyla bir yapi cikti.
+          # Ikon magazada urunun yuzu; bir daha sessizce gecmesin.
+          test -f ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png \
+            || { echo "::error::uygulama ikonu yerlestirilmemis"; exit 1; }
+          echo "uygulama ikonu yerinde"
           ADS_ON=$(node -p "String(require('./app.config.json').admob.enabled !== false ? 1 : 0)")
           if [ "$ADS_ON" = "1" ]; then
             /usr/libexec/PlistBuddy -c "Print :GADApplicationIdentifier" ios/App/App/Info.plist
@@ -77,7 +83,10 @@ jobs:
 
       - name: Derle (simulator, imzasiz)
         working-directory: ${{ matrix.dir }}/ios/App
+        # pipefail olmadan "xcodebuild | tail" derleme coktugunde bile YESIL
+        # doner (cikis kodu tail'e aittir). Sessiz yesil, kirmizidan kotudur.
         run: |
+          set -o pipefail
           xcodebuild -workspace App.xcworkspace -scheme App \
             -configuration Release -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
