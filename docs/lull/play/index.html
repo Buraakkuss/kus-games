@@ -216,7 +216,23 @@ var Snd = (function () {
   };
 })();
 
-function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
+/* navigator.vibrate iOS'ta YOKTUR (Safari ve WKWebView desteklemez), sessizce
+   hicbir sey yapar. Tarayicida fark edilmez, gercek iPhone'da titresim hic
+   gelmez -- bu bir kez yasandi. Native tarafta Capacitor Haptics kullaniyoruz;
+   tarayicida navigator.vibrate'e dusuyoruz. Dizi (desen) yalnizca Android'de
+   anlamli; iOS'ta tek bir vurus veriliyor. */
+function buzz(ms) {
+  try {
+    var H = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Haptics;
+    if (H) {
+      var sure = Array.isArray(ms) ? Math.max.apply(null, ms) : ms;
+      var p = H.impact({ style: sure >= 20 ? 'MEDIUM' : 'LIGHT' });
+      if (p && p.catch) p.catch(function () {});
+      return;
+    }
+    if (navigator.vibrate) navigator.vibrate(ms);
+  } catch (e) {}
+}
 
 /* ---------- nefes matematigi -------------------------------------------
    İki egri var ve ikisi de onemli:
