@@ -45,6 +45,15 @@ Harfler, harekeler ve okuma alıştırmalarıyla 14 ders; ardından 12 tecvid de
 TERİM SÖZLÜĞÜ
 Kur'an okurken ve dinlerken karşılaşılan 144 terim, arama kutusuyla. Ücretsiz.
 
+NAMAZ TAKİBİ VE KAZA
+Bugün kıldığın vakti işaretle; işaretlemediğin vakit gün dönünce kazaya eklenir. Toplu kaza girişi, tek dokunuşla düşürme ve kaza orucu sayacı.
+
+ZEKÂT HESAPLAMA
+Nakit, altın, gümüş, ticari mal ve alacaklarından borcunu düş; altın (85 g) ya da gümüş (595 g) nisabına göre kırkta birini hesapla. Gram fiyatını sen girersin, internet gerekmez.
+
+DİNİ GÜNLER
+Yıl boyunca kandiller, bayramlar, arefeler ve mübarek günler; her birine kaç gün kaldığıyla.
+
 30 GÜNLÜK LİSTE
 Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer; yazdırmaya gerek yok, internetsiz açılır.
 
@@ -63,7 +72,7 @@ GİZLİLİK
 Hesap yok, kayıt yok, giriş yok. Konumun vakitleri hesaplamak için telefonunda kullanılır ve bizim tarafımızdan hiçbir yere gönderilmez. Konum iznini hiç vermeden de kullanabilirsin: şehir listesinden seç ya da koordinatı elle yaz.
 
 REKLAMLAR VE SEHER PRO
-Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan az kalmışken reklam gösterilmez; kıble pusulası ve zikirmatik açıkken de gösterilmez.
+Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan az kalmışken reklam gösterilmez; kıble pusulası ve zikirmatik açıkken de gösterilmez. Reklam içeriği genel izleyici (G) seviyesiyle sınırlandırılmıştır; kumar, bahis, flört ve cinsel içerikli kategoriler engellidir.
 
 Seher Pro (aylık veya yıllık abonelik) kilitli tebrik kartlarının tamamını ve elifbanın bütün derslerini açar, reklamları kaldırır. Yalnızca reklamları kaldırmak isteyenler için tek seferlik bir satın alma da vardır. Abonelik otomatik yenilenir; istediğin an Google Play hesabından iptal edebilirsin.
 

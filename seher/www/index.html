@@ -170,6 +170,9 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   background:rgba(255,255,255,.06);color:var(--ink);font-size:15px;font-family:inherit;font-weight:600}
 
 /* ---------- pro ---------- */
+.sayac{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.07);color:var(--ink);font-size:20px;font-weight:800;cursor:pointer;
+  font-family:inherit;line-height:1}
 .prorozet{display:inline-block;background:linear-gradient(180deg,#f0c75f,#d19a22);color:#2a1d00;
   font-size:10px;font-weight:900;letter-spacing:.06em;padding:3px 8px;border-radius:99px;margin-left:8px;vertical-align:middle}
 .profiyat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:10px;cursor:pointer}
@@ -240,6 +243,8 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
     <div class="rowb" style="margin-top:12px">
       <button class="btn ghost" id="bZikReset">Sıfırla</button>
     </div>
+    <h2 style="margin-top:22px">Namaz tesbihatı</h2>
+    <div class="card" id="tesbihBox"></div>
     <div class="hint">Her dokunuşta sayar, hedefe ulaşınca kısa bir titreşim verir. Sayaç uygulamayı kapatsan da durur.</div>
   </section>
 
@@ -282,8 +287,19 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
     </div>
   </section>
 
-  <!-- ==================== AYARLAR ==================== -->
+  <!-- ==================== DAHA (araçlar + ayarlar) ==================== -->
   <section class="tab" id="tAyar">
+    <h2>Araçlar</h2>
+    <button class="kgrup" id="bKaza"><div class="ki">&#10003;</div>
+      <div class="kn"><b>Namaz takibi ve kaza</b><small id="kazaOzet">kıldıklarını işaretle, kazanı takip et</small></div>
+      <div class="kok">&#8250;</div></button>
+    <button class="kgrup" id="bZekat"><div class="ki">&#9878;</div>
+      <div class="kn"><b>Zekât hesaplama</b><small>nisap, altın/gümüş ölçüsü ve kırkta bir</small></div>
+      <div class="kok">&#8250;</div></button>
+    <button class="kgrup" id="bDiniGun"><div class="ki">&#9789;</div>
+      <div class="kn"><b>Dini günler</b><small id="diniOzet">yıl boyunca kandiller, bayramlar, arefeler</small></div>
+      <div class="kok">&#8250;</div></button>
+
     <h2>Konum</h2>
     <div class="card">
       <button class="btn" id="bGps">Konumumu bul</button>
@@ -322,6 +338,16 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
 
     <h2>Bildirimler</h2>
     <div class="card" id="notifBox"></div>
+    <div class="card">
+      <label>Vaktin kaç dakika öncesinde de haber verilsin?</label>
+      <div class="seg" id="segOnce">
+        <button class="sg on" data-m="0">kapalı</button>
+        <button class="sg" data-m="10">10 dk</button>
+        <button class="sg" data-m="15">15 dk</button>
+        <button class="sg" data-m="30">30 dk</button>
+      </div>
+      <div class="hint">Açık vakitler için vaktin girmesinden önce ikinci bir bildirim gelir.</div>
+    </div>
 
     <h2>Uygulama</h2>
     <div class="card">
@@ -344,7 +370,7 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   <button data-t="tKart"><i>&#9993;</i>Kartlar</button>
   <button data-t="tOgren"><i>&#9998;</i>Öğren</button>
   <button data-t="tZikir"><i>&#9679;</i>Zikir</button>
-  <button data-t="tAyar"><i>&#9881;</i>Ayarlar</button>
+  <button data-t="tAyar"><i>&#9776;</i>Daha</button>
 </nav>
 
 <div id="sheetCity" class="sheet hide">
@@ -382,6 +408,39 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   <h2 style="margin-top:0" id="dersBaslik"></h2>
   <div class="ilerlecubuk"><i id="dersCubuk"></i></div>
   <div id="dersGovde" style="margin-top:18px"></div>
+</div>
+
+<div id="sheetKaza" class="sheet hide">
+  <button class="btn ghost" id="bKazaGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <h2 style="margin-top:0">Namaz takibi ve kaza</h2>
+  <div class="hint" style="margin:0 0 14px">Bugün kıldığın vakti işaretle. İşaretlemediğin vakit, gün
+    dönünce kazaya eklenir. Sayıları elle de düzeltebilirsin.</div>
+  <div class="card" id="bugunKutu"></div>
+  <h2>Kaza namazların</h2>
+  <div class="card" id="kazaKutu"></div>
+  <h2>Kaza orucun</h2>
+  <div class="card" id="orucKutu"></div>
+  <button class="btn ghost" id="bKazaSifirla" style="margin-top:12px">Bütün sayaçları sıfırla</button>
+  <div class="hint">Bu sayılar yalnızca senin cihazında tutulur; hiçbir yere gönderilmez.</div>
+</div>
+
+<div id="sheetZekat" class="sheet hide">
+  <button class="btn ghost" id="bZekatGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <h2 style="margin-top:0">Zekât hesaplama</h2>
+  <div class="hint" style="margin:0 0 14px">Değerleri kendi para biriminle gir. Fiyatlar internetten
+    çekilmez; güncel gram fiyatını sen yazarsın.</div>
+  <div class="card" id="zekatKutu"></div>
+  <div class="card" id="zekatSonuc" style="margin-top:12px"></div>
+  <div class="hint">Bu bir hesap makinesidir, fetva değildir. Nisap ölçüsü ve borçların düşülmesi
+    konusunda görüşler farklılaşır; bağlı olduğun kurumun ölçüsünü esas al.</div>
+</div>
+
+<div id="sheetDini" class="sheet hide">
+  <button class="btn ghost" id="bDiniGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <h2 style="margin-top:0">Dini günler</h2>
+  <div class="hint" style="margin:0 0 14px">Hicrî takvimden hesaplanır. Resmî ilanla bir gün
+    oynayabilir; kesin tarih için bağlı olduğun kurumun takvimine bak.</div>
+  <div id="diniListe"></div>
 </div>
 
 <div id="sheetPro" class="sheet hide">
@@ -556,7 +615,8 @@ var S = {
   tune:{ imsak:0, gunes:0, ogle:0, ikindi:0, aksam:0, yatsi:0 },
   bildirim:{ imsak:true, gunes:false, ogle:true, ikindi:true, aksam:true, yatsi:true },
   vibe:true, wake:false, noAds:false, pro:false, zikir:0, zikirHedef:33,
-  ogren:{ biten:[], bitenT:[], ders:null }
+  ogren:{ biten:[], bitenT:[], ders:null },
+  takip:null, zekat:null, oncebildir:0
 };
 try {
   var raw = localStorage.getItem('seher.v1');
@@ -2154,6 +2214,248 @@ function ogrenBolum(o){
 }
 $('sozAra').oninput = function(){ sozlukCiz(this.value); };
 
+
+/* =====================  NAMAZ TAKİBİ VE KAZA  =====================
+   Pazar liderinde en çok kullanılan bölümlerden biri ve bizde yoktu.
+   Mantık basit tutuldu: bugünün vakitlerini işaretlersin, gün dönünce
+   işaretlenmeyenler kazaya eklenir. Otomatik ekleme YALNIZCA geçmiş
+   günler için yapılır; bugünün henüz girmemiş vakti kazaya yazılmaz.   */
+function kazaVarsayilan(){
+  if (!S.takip) S.takip = { gun:'', kildim:{}, kaza:{}, oruc:0 };
+  VAKIT_SIRA.forEach(function(k){
+    if (k === 'gunes') return;
+    if (S.takip.kaza[k] === undefined) S.takip.kaza[k] = 0;
+  });
+  return S.takip;
+}
+var NAMAZ_VAKIT = ['imsak','ogle','ikindi','aksam','yatsi'];   /* güneş namaz vakti değildir */
+var NAMAZ_ADI  = { imsak:'Sabah', ogle:'Öğle', ikindi:'İkindi', aksam:'Akşam', yatsi:'Yatsı' };
+
+function gunAnahtari(){
+  var ks = konumSimdi();
+  return ks.y + '-' + (ks.a+1) + '-' + ks.g;
+}
+/* Gün değiştiyse, dünün işaretlenmemiş vakitleri kazaya eklenir. */
+function takipGunDonusu(){
+  var t = kazaVarsayilan(), bug = gunAnahtari();
+  if (t.gun === bug) return;
+  if (t.gun){
+    NAMAZ_VAKIT.forEach(function(k){ if (!t.kildim[k]) t.kaza[k] = (t.kaza[k]||0) + 1; });
+  }
+  t.gun = bug; t.kildim = {};
+  save();
+}
+function kazaCiz(){
+  var t = kazaVarsayilan();
+  if (!$('bugunKutu')) return;
+  takipGunDonusu();
+  var su = konumSimdi().saat, h = '';
+  NAMAZ_VAKIT.forEach(function(k){
+    var girdi = bugun && bugun.ayarli[k] !== null && su >= bugun.ayarli[k];
+    h += '<div class="sw"><span>' + NAMAZ_ADI[k] +
+         (girdi ? '' : ' <small style="color:var(--dim)">· vakti girmedi</small>') + '</span>' +
+         '<button class="tg' + (t.kildim[k] ? ' on' : '') + '" data-kild="' + k + '"' +
+         (girdi ? '' : ' disabled style="opacity:.4"') + '><i></i></button></div>';
+  });
+  $('bugunKutu').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#bugunKutu .tg'), function(b){
+    b.onclick = function(){
+      if (b.hasAttribute('disabled')) { toast('Bu vakit henüz girmedi'); return; }
+      var k = b.getAttribute('data-kild');
+      t.kildim[k] = !t.kildim[k];
+      /* Kıldım demek, geçmişten bir kaza düşürmez; yalnız bugünü işaretler. */
+      save(); b.classList.toggle('on', !!t.kildim[k]); buzz(10); kazaOzetYaz();
+    };
+  });
+
+  var kh = '';
+  NAMAZ_VAKIT.forEach(function(k){
+    kh += '<div class="sw"><span>' + NAMAZ_ADI[k] + '</span>' +
+          '<span style="display:flex;align-items:center;gap:10px">' +
+          '<button class="sayac" data-eksi="' + k + '">&minus;</button>' +
+          '<b style="min-width:52px;text-align:center;font-variant-numeric:tabular-nums" id="kz_' + k + '">' + (t.kaza[k]||0) + '</b>' +
+          '<button class="sayac" data-arti="' + k + '">+</button></span></div>';
+  });
+  kh += '<div class="rowb" style="margin-top:12px">' +
+        '<button class="btn ghost" id="bTopluKaza">Toplu ekle</button>' +
+        '<button class="btn ghost" id="bBirKildim">Birer kaza kıldım</button></div>';
+  $('kazaKutu').innerHTML = kh;
+  Array.prototype.forEach.call(document.querySelectorAll('#kazaKutu .sayac'), function(b){
+    b.onclick = function(){
+      var a = b.getAttribute('data-arti'), e = b.getAttribute('data-eksi');
+      var k = a || e;
+      t.kaza[k] = Math.max(0, (t.kaza[k]||0) + (a ? 1 : -1));
+      $('kz_' + k).textContent = t.kaza[k]; save(); buzz(8); kazaOzetYaz();
+    };
+  });
+  $('bTopluKaza').onclick = function(){
+    var g = prompt('Kaç günlük kaza eklensin?', '30');
+    var n = parseInt(g, 10);
+    if (isNaN(n) || n <= 0) return;
+    NAMAZ_VAKIT.forEach(function(k){ t.kaza[k] = (t.kaza[k]||0) + n; });
+    save(); kazaCiz(); toast(n + ' günlük kaza eklendi');
+  };
+  $('bBirKildim').onclick = function(){
+    var azaldi = 0;
+    NAMAZ_VAKIT.forEach(function(k){ if (t.kaza[k] > 0){ t.kaza[k]--; azaldi++; } });
+    save(); kazaCiz(); buzz(14);
+    toast(azaldi ? 'Her vakitten bir kaza düşüldü' : 'Kaza namazın kalmamış');
+  };
+
+  $('orucKutu').innerHTML =
+    '<div class="sw"><span>Kaza orucu</span><span style="display:flex;align-items:center;gap:10px">' +
+    '<button class="sayac" id="orucEksi">&minus;</button>' +
+    '<b style="min-width:52px;text-align:center;font-variant-numeric:tabular-nums" id="orucSay">' + (t.oruc||0) + '</b>' +
+    '<button class="sayac" id="orucArti">+</button></span></div>';
+  $('orucArti').onclick = function(){ t.oruc = (t.oruc||0)+1; $('orucSay').textContent = t.oruc; save(); buzz(8); };
+  $('orucEksi').onclick = function(){ t.oruc = Math.max(0,(t.oruc||0)-1); $('orucSay').textContent = t.oruc; save(); buzz(8); };
+  kazaOzetYaz();
+}
+function kazaToplam(){
+  var t = kazaVarsayilan(), n = 0;
+  NAMAZ_VAKIT.forEach(function(k){ n += t.kaza[k]||0; });
+  return n;
+}
+function kazaOzetYaz(){
+  if (!$('kazaOzet')) return;
+  var t = kazaVarsayilan(), n = kazaToplam();
+  var bugunSayi = NAMAZ_VAKIT.filter(function(k){ return t.kildim[k]; }).length;
+  $('kazaOzet').textContent = n ? (n + ' kaza namazı · bugün ' + bugunSayi + '/5')
+                                : ('bugün ' + bugunSayi + '/5 · kaza yok');
+}
+$('bKaza').onclick = function(){ kazaCiz(); $('sheetKaza').classList.remove('hide'); $('sheetKaza').scrollTop = 0; };
+$('bKazaGeri').onclick = function(){ $('sheetKaza').classList.add('hide'); };
+$('bKazaSifirla').onclick = function(){
+  var t = kazaVarsayilan();
+  NAMAZ_VAKIT.forEach(function(k){ t.kaza[k] = 0; });
+  t.oruc = 0; t.kildim = {};
+  save(); kazaCiz(); toast('Sayaçlar sıfırlandı');
+};
+
+/* =====================  ZEKÂT  =====================
+   Oranlar ve nisap ölçüleri klasik fıkıh ölçüleridir; fiyatı kullanıcı
+   girer, internetten fiyat çekilmez (uygulamanın tamamı çevrimdışı).    */
+var ZEKAT_ALAN = [
+  { id:'nakit',  ad:'Nakit ve banka',        ipucu:'' },
+  { id:'altin',  ad:'Altın (gram)',          ipucu:'gram olarak yaz' },
+  { id:'gumus',  ad:'Gümüş (gram)',          ipucu:'gram olarak yaz' },
+  { id:'ticari', ad:'Ticari mal değeri',     ipucu:'' },
+  { id:'alacak', ad:'Tahsil edilecek alacak',ipucu:'' },
+  { id:'borc',   ad:'Borçların',             ipucu:'toplamdan düşülür' }
+];
+function zekatCiz(){
+  if (!S.zekat) S.zekat = { nakit:0, altin:0, gumus:0, ticari:0, alacak:0, borc:0, gramAltin:0, gramGumus:0, olcu:'altin' };
+  var z = S.zekat, h = '';
+  h += '<label>Gram altın fiyatı</label><input type="number" id="zk_gramAltin" value="' + (z.gramAltin||'') + '" placeholder="örn. 4200">';
+  h += '<label>Gram gümüş fiyatı</label><input type="number" id="zk_gramGumus" value="' + (z.gramGumus||'') + '" placeholder="örn. 45">';
+  h += '<label>Nisap ölçüsü</label><div class="seg" id="zkOlcu">' +
+       '<button class="sg' + (z.olcu === 'altin' ? ' on' : '') + '" data-o="altin">Altın (85 g)</button>' +
+       '<button class="sg' + (z.olcu === 'gumus' ? ' on' : '') + '" data-o="gumus">Gümüş (595 g)</button></div>';
+  ZEKAT_ALAN.forEach(function(a){
+    h += '<label>' + a.ad + (a.ipucu ? ' <span style="color:var(--dim)">· ' + a.ipucu + '</span>' : '') + '</label>' +
+         '<input type="number" id="zk_' + a.id + '" value="' + (z[a.id]||'') + '" placeholder="0">';
+  });
+  $('zekatKutu').innerHTML = h;
+  function oku(){
+    ['gramAltin','gramGumus'].concat(ZEKAT_ALAN.map(function(a){ return a.id; })).forEach(function(k){
+      var v = parseFloat($('zk_' + k).value); z[k] = isNaN(v) ? 0 : v;
+    });
+    save(); zekatHesapla();
+  }
+  Array.prototype.forEach.call($('zekatKutu').querySelectorAll('input'), function(i){ i.oninput = oku; });
+  Array.prototype.forEach.call(document.querySelectorAll('#zkOlcu .sg'), function(b){
+    b.onclick = function(){
+      z.olcu = b.getAttribute('data-o'); save();
+      Array.prototype.forEach.call(document.querySelectorAll('#zkOlcu .sg'), function(x){
+        x.classList.toggle('on', x === b); });
+      zekatHesapla();
+    };
+  });
+  zekatHesapla();
+}
+function zekatHesapla(){
+  var z = S.zekat;
+  var varlik = (z.nakit||0) + (z.ticari||0) + (z.alacak||0) +
+               (z.altin||0)*(z.gramAltin||0) + (z.gumus||0)*(z.gramGumus||0);
+  var net = varlik - (z.borc||0);
+  var nisap = (z.olcu === 'gumus') ? 595*(z.gramGumus||0) : 85*(z.gramAltin||0);
+  var zekat = net >= nisap && nisap > 0 ? net/40 : 0;
+  function pr(n){ return Math.round(n).toLocaleString('tr-TR'); }
+  var h = '<div class="sw"><span>Zekâta tâbi net varlık</span><b>' + pr(net) + '</b></div>' +
+          '<div class="sw"><span>Nisap (' + (z.olcu === 'gumus' ? '595 g gümüş' : '85 g altın') + ')</span><b>' +
+          (nisap > 0 ? pr(nisap) : '—') + '</b></div>';
+  if (nisap <= 0)
+    h += '<div class="hint" style="margin-top:10px">Nisabı hesaplayabilmek için gram fiyatını gir.</div>';
+  else if (net < nisap)
+    h += '<div class="hint" style="margin-top:10px">Net varlığın nisabın altında; bu ölçüye göre zekât gerekmiyor.</div>';
+  else
+    h += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">' +
+         '<div style="font-size:13px;color:var(--dim);font-weight:700">Vermen gereken zekât (kırkta bir)</div>' +
+         '<div style="font-size:32px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums">' +
+         pr(zekat) + '</div></div>';
+  $('zekatSonuc').innerHTML = h;
+}
+$('bZekat').onclick = function(){ zekatCiz(); $('sheetZekat').classList.remove('hide'); $('sheetZekat').scrollTop = 0; };
+$('bZekatGeri').onclick = function(){ $('sheetZekat').classList.add('hide'); };
+
+/* =====================  DİNİ GÜNLER  =====================
+   Tarihler kart gruplarıyla AYNI kaynaktan geliyor; ayrı yazılsaydı iki
+   ekran birbirinden saparadı.                                            */
+var GUN_ADI = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+function diniGunler(){
+  var liste = [];
+  KART.forEach(function(g){
+    if (g.id === 'cuma') return;
+    var d = null;
+    try { d = g.tarih(); } catch(e){}
+    if (d) liste.push({ ad:g.ad, ikon:g.ikon, t:d, kalan:gunFarki(d) });
+  });
+  liste.sort(function(a,b){ return a.kalan - b.kalan; });
+  return liste;
+}
+function diniCiz(){
+  var h = '';
+  diniGunler().forEach(function(x){
+    h += '<button class="kgrup" style="cursor:default"><div class="ki">' + x.ikon + '</div>' +
+         '<div class="kn"><b>' + x.ad + '</b><small>' +
+         x.t.getDate() + ' ' + AY_ADI[x.t.getMonth()] + ' ' + x.t.getFullYear() +
+         ' · ' + GUN_ADI[x.t.getDay()] + '</small></div>' +
+         '<div style="text-align:right;font-size:12.5px;font-weight:800;color:var(--gold)">' +
+         (x.kalan === 0 ? 'bugün' : (x.kalan === 1 ? 'yarın' : x.kalan + ' gün')) + '</div></button>';
+  });
+  $('diniListe').innerHTML = h;
+  var ilk = diniGunler()[0];
+  if ($('diniOzet') && ilk)
+    $('diniOzet').textContent = 'sıradaki: ' + ilk.ad + ' · ' +
+      (ilk.kalan === 0 ? 'bugün' : (ilk.kalan === 1 ? 'yarın' : ilk.kalan + ' gün sonra'));
+}
+$('bDiniGun').onclick = function(){ diniCiz(); $('sheetDini').classList.remove('hide'); $('sheetDini').scrollTop = 0; };
+$('bDiniGeri').onclick = function(){ $('sheetDini').classList.add('hide'); };
+
+/* =====================  TESBİHAT  ===================== */
+var TESBIHAT = [
+  { ad:'Sübhânallâh', hedef:33 },
+  { ad:'Elhamdülillâh', hedef:33 },
+  { ad:'Allâhü ekber', hedef:34 }
+];
+function tesbihCiz(){
+  if (!$('tesbihBox')) return;
+  var h = '<div class="hint" style="margin:0 0 10px">Namaz sonrası tesbihat için hazır sayaçlar. ' +
+          'Dokunduğunda zikirmatik o hedefle sıfırdan başlar.</div>';
+  TESBIHAT.forEach(function(t, i){
+    h += '<div class="sw"><span>' + t.ad + ' · ' + t.hedef + '</span>' +
+         '<button class="btn ghost" style="width:auto;padding:9px 16px" data-tb="' + i + '">Başlat</button></div>';
+  });
+  $('tesbihBox').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#tesbihBox [data-tb]'), function(b){
+    b.onclick = function(){
+      var t = TESBIHAT[+b.getAttribute('data-tb')];
+      S.zikirHedef = t.hedef; S.zikir = 0; save(); zikirYenile(); buzz(12);
+      toast(t.ad + ' · ' + t.hedef + ' hedefiyle başladı');
+    };
+  });
+}
+
 /* =====================  AYARLAR  ===================== */
 function ayarlarKur(){
   var sm = $('selMethod'); sm.innerHTML = '';
@@ -2213,6 +2515,17 @@ function ayarlarKur(){
     save(); ayarlarKur(); vakitleriYenile(); bildirimKur();
     toast('Düzeltmeler sıfırlandı');
   };
+
+  Array.prototype.forEach.call(document.querySelectorAll('#segOnce .sg'), function(b){
+    b.classList.toggle('on', +b.getAttribute('data-m') === (S.oncebildir||0));
+    b.onclick = function(){
+      S.oncebildir = +b.getAttribute('data-m'); save();
+      Array.prototype.forEach.call(document.querySelectorAll('#segOnce .sg'), function(x){
+        x.classList.toggle('on', x === b); });
+      bildirimKur();
+      toast(S.oncebildir ? (S.oncebildir + ' dakika önce de haber verilecek') : 'Önceden haber verme kapalı');
+    };
+  });
 
   ayarBildirimYenile();
 
@@ -2323,6 +2636,18 @@ function bildirimKur(){
             body: (S.city || 'Konumun') + ' için ' + hhmm(saat),
             schedule: { at: when }
           });
+          /* Vaktin N dakika öncesi için ikinci bildirim. Aynı listeye
+             ekleniyor; ayrı bir planlama yolu açmak iki yerde bakım demekti. */
+          if (S.oncebildir){
+            var once = new Date(when.getTime() - S.oncebildir*60000);
+            if (once.getTime() > Date.now() + 60000)
+              liste.push({
+                id: id++,
+                title: VAKIT_ADI[k] + ' vaktine ' + S.oncebildir + ' dakika',
+                body: hhmm(saat) + ' · ' + (S.city || 'Konumun'),
+                schedule: { at: once }
+              });
+          }
         });
       }
       if (liste.length) return LN.schedule({ notifications: liste.slice(0,60) });
@@ -2577,8 +2902,9 @@ function baslat(){
   }
   /* Kart tarihleri konumun saat dilimine gore hesaplaniyor; konum varsayilani
      atandiktan SONRA cizilmeli. */
-  kartGrupCiz();
+  kartGrupCiz(); tesbihCiz();
   vakitleriYenile(); kibleCiz(); ekranAcik();
+  takipGunDonusu(); kazaOzetYaz(); diniCiz();
   /* Gün dönüşü CİHAZIN değil, SEÇİLİ YERİN gece yarısında olur; cihaz saatine
      bakmak başka dilime bakan kullanıcıda listeyi saatlerce bayat bırakırdı.
      Sıradaki vakit değiştiğinde de liste tazelenir, yoksa "şu anki vakit"
@@ -2792,6 +3118,59 @@ if (q.get('selftest') === '1'){
     var tekrar = {};
     q.secenek.forEach(function(x){ if (tekrar[x]) hata.push('soru seceneklerinde tekrar var'); tekrar[x] = 1; });
   }
+  /* ---- namaz takibi ve kaza ----
+     En kritik yer gun donusu: gunde bir kez, YALNIZ gecmis gun icin ve
+     iki kez calistirilinca iki kez eklemeden. */
+  S.takip = null; kazaVarsayilan();
+  var tk = S.takip;
+  tk.gun = ''; takipGunDonusu();
+  if (NAMAZ_VAKIT.some(function(k){ return tk.kaza[k] !== 0; }))
+    hata.push('ilk acilista kaza eklenmis olmamali');
+  tk.gun = '2020-1-1'; tk.kildim = { ogle:true, ikindi:true };
+  takipGunDonusu();
+  if (tk.kaza.imsak !== 1 || tk.kaza.ogle !== 0 || tk.kaza.yatsi !== 1)
+    hata.push('gun donusunde kaza yanlis eklendi: ' + JSON.stringify(tk.kaza));
+  if (Object.keys(tk.kildim).length) hata.push('gun donusunde bugunun isaretleri silinmedi');
+  var oncekiToplam = kazaToplam();
+  takipGunDonusu(); takipGunDonusu();
+  if (kazaToplam() !== oncekiToplam) hata.push('ayni gun icinde kaza tekrar eklendi');
+  if (NAMAZ_VAKIT.indexOf('gunes') >= 0) hata.push('gunes namaz vakti olarak sayiliyor');
+  if (NAMAZ_VAKIT.length !== 5) hata.push('namaz vakti sayisi 5 olmali');
+  not.push('kaza=' + kazaToplam());
+  S.takip = null; kazaVarsayilan();
+
+  /* ---- zekat ---- */
+  S.zekat = { nakit:500000, altin:0, gumus:0, ticari:0, alacak:0, borc:0,
+              gramAltin:4000, gramGumus:50, olcu:'altin' };
+  zekatCiz();
+  var zs = $('zekatSonuc').textContent;
+  if (zs.indexOf('12.500') < 0) hata.push('zekat hesabi yanlis (85g altin nisabi, 500000 net -> 12500): ' + zs);
+  S.zekat.nakit = 100000; zekatHesapla();
+  if ($('zekatSonuc').textContent.indexOf('nisabın altında') < 0)
+    hata.push('nisap altinda zekat cikmamali');
+  S.zekat.gramAltin = 0; zekatHesapla();
+  if ($('zekatSonuc').textContent.indexOf('gram fiyatını gir') < 0)
+    hata.push('fiyat girilmeden nisap hesaplanmis gibi davraniyor');
+  S.zekat = null;
+
+  /* ---- dini gunler ---- */
+  diniCiz();
+  var dg = document.querySelectorAll('#diniListe .kgrup').length;
+  if (dg !== KART.length - 1) hata.push('dini gunler listesinde ' + dg + ' satir var, ' + (KART.length-1) + ' olmali');
+  var dgListe = diniGunler();
+  for (var dgi = 1; dgi < dgListe.length; dgi++)
+    if (dgListe[dgi].kalan < dgListe[dgi-1].kalan){ hata.push('dini gunler yakindan uzaga sirali degil'); break; }
+  not.push('dinigun=' + dg);
+
+  /* ---- tesbihat ---- */
+  tesbihCiz();
+  if (document.querySelectorAll('#tesbihBox [data-tb]').length !== 3)
+    hata.push('tesbihat on ayarlari cizilmedi');
+  var eskiHedef = S.zikirHedef;
+  document.querySelector('#tesbihBox [data-tb="2"]').click();
+  if (S.zikirHedef !== 34 || S.zikir !== 0) hata.push('tesbihat on ayari zikirmatige uygulanmadi');
+  S.zikirHedef = eskiHedef; S.zikir = 0; zikirYenile();
+
   /* ---- tecvid ---- */
   if (TECVID.length < 10) hata.push('tecvid ders sayisi ' + TECVID.length + ', en az 10 olmali');
   var tHata = 0;
@@ -2978,6 +3357,13 @@ if (q.get('selftest') === '1'){
     if (q.get('sayfa') === 'onizle'){ S.pro = true; kartOnizleAc(+(q.get('g') || 0), +(q.get('k') || 0)); }
     if (q.get('sayfa') === 'pro') proAc();
     if (q.get('sayfa') === 'sehir') sehirSayfasi(true);
+    if (q.get('sayfa') === 'kaza'){ kazaCiz(); $('sheetKaza').classList.remove('hide'); }
+    if (q.get('sayfa') === 'zekat'){
+      S.zekat = { nakit:640000, altin:120, gumus:0, ticari:0, alacak:0, borc:40000,
+                  gramAltin:4200, gramGumus:48, olcu:'altin' };
+      zekatCiz(); $('sheetZekat').classList.remove('hide');
+    }
+    if (q.get('sayfa') === 'dini'){ diniCiz(); $('sheetDini').classList.remove('hide'); }
     if (q.get('sayfa') === 'hakkinda') $('sheetInfo').classList.remove('hide');
     var altB = q.get('o') || (q.get('s') === 'esma' ? 'esma' : '');
     if (altB){

@@ -70,6 +70,16 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
 - [ ] AdMob → Uygulama ekle (**Android**) → App ID'yi kopyala
 - [ ] AdMob → Uygulama ekle (**iOS**) → App ID'yi kopyala
 - [ ] Her iki uygulama için **Interstitial** ve **Rewarded** reklam birimi (4 kimlik)
+- [ ] **AdMob → Engelleme denetimleri → Hassas kategoriler**: şunları engelle —
+      *Kumar ve bahis, Flört, Cinsel sağlık, Alkol, Zayıflama, Din, Siyaset,
+      Referanslı kazanç/kredi*. Bu adım **pazarlığa kapalı**: rakibin bir
+      numaralı şikâyeti, namaz uygulamasında kumar ve cinsel içerikli reklam
+      çıkması. Bir kez bile çıkarsa itibar geri gelmez.
+- [ ] AdMob → Engelleme denetimleri → **Reklam içeriği derecelendirmesi: G**
+      (kodda da ayrıca ayarlanıyor — `tools/android-prepare.sh` MainActivity'ye
+      `MAX_AD_CONTENT_RATING_G` yazıyor)
+- [ ] Yayından sonra **ilk hafta günde bir kez** uygulamayı açıp gelen reklamlara
+      bak. Uygunsuz bir reklam görürsen AdMob'da o reklamvereni engelle.
 - [ ] `app.config.json` → `admob.real` alanlarını doldur, `useTest: false` yap
 - [ ] `bash tools/set-identity.sh`
 - [ ] Play Console → Ürünler → Uygulama içi ürünler → `remove_ads` (tek seferlik, ~2,99 $)
@@ -94,6 +104,10 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
       uygulamayı bir daha güncelleyemezsin.
 
 ### Gerçek cihazda sınanacaklar (bunlar emülatörde görünmez)
+
+- [ ] **Reklam içeriği**: test reklamlarıyla değil, gerçek kimliklerle birkaç
+      reklam gör. Kumar/bahis/cinsel içerik çıkıyorsa AdMob engellemeleri
+      uygulanmamış demektir — yayına çıkma.
 
 - [ ] **Uçak modunda aç:** vakitler, kıble ve zikirmatik çalışmalı. Mağaza metnindeki
       "internetsiz çalışır" vaadi budur.
@@ -120,6 +134,12 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
 - [ ] **Kaydet**: dosyalara yazmalı ve "kaydedildi" bildirimi gelmeli.
 - [ ] Küçük ekranda (SE) ve büyük ekranda (Pro Max) yerleşim taşmıyor mu?
 - [ ] Gece yarısını geç: liste yeni güne dönmeli, geri sayım yarının imsakını göstermeli.
+- [ ] **Kaza takibi**: bir vakti işaretle, gece yarısını geç, işaretlenmeyenlerin
+      kazaya eklendiğini gör. Uygulamayı gün içinde birkaç kez aç-kapa — kaza
+      **bir kez** artmalı.
+- [ ] **Vakit öncesi hatırlatma**: 10 dk'yı seç, yaklaşan bir vakitte iki bildirim
+      geldiğini gör.
+- [ ] **Zekât**: gram fiyatını gir, nisap ve sonucun mantıklı olduğunu doğrula.
 
 ---
 

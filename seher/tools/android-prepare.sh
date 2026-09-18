@@ -46,6 +46,54 @@ fs.writeFileSync(f,s);
 console.log('  Manifest guncellendi');
 NODEEOF
 
+# 2b) Reklam icerik filtresi (MainActivity)
+# Pazar liderinin bir numarali sikayeti: dini bir uygulamada kumar, bahis ve
+# cinsel icerikli reklam cikmasi. Bunu kodda da kapatiyoruz: AdMob'a en fazla
+# "G" (genel izleyici) seviyesinde reklam istendigini soyluyoruz. Konsoldaki
+# hassas kategori engelleri bunun ustune gelir (LAUNCH-CHECKLIST'e yazili).
+MAIN="$(find "$AND/app/src/main/java" -name MainActivity.java | head -1)"
+if [ -n "$MAIN" ]; then
+node - "$MAIN" <<'NODEEOF'
+const fs=require('fs'), f=process.argv[2];
+let s=fs.readFileSync(f,'utf8');
+if (s.includes('MAX_AD_CONTENT_RATING_G')) { console.log('  MainActivity zaten filtreli'); process.exit(0); }
+s=s.replace(/import com\.getcapacitor\.BridgeActivity;/,
+  'import android.os.Bundle;
+' +
+  'import com.getcapacitor.BridgeActivity;
+' +
+  'import com.google.android.gms.ads.MobileAds;
+' +
+  'import com.google.android.gms.ads.RequestConfiguration;');
+s=s.replace(/public class MainActivity extends BridgeActivity \{\s*\}/,
+  'public class MainActivity extends BridgeActivity {
+' +
+  '    @Override
+' +
+  '    public void onCreate(Bundle savedInstanceState) {
+' +
+  '        super.onCreate(savedInstanceState);
+' +
+  '        // Dini bir uygulamada kumar/bahis/cinsel icerikli reklam kabul edilemez.
+' +
+  '        MobileAds.setRequestConfiguration(
+' +
+  '                new RequestConfiguration.Builder()
+' +
+  '                        .setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_G)
+' +
+  '                        .build());
+' +
+  '    }
+' +
+  '}');
+fs.writeFileSync(f,s);
+console.log('  MainActivity: reklam icerik filtresi (G) eklendi');
+NODEEOF
+else
+  echo "  UYARI: MainActivity.java bulunamadi, reklam filtresi eklenemedi"
+fi
+
 # 3) strings.xml
 cat > "$AND/app/src/main/res/values/strings.xml" <<XEOF
 <?xml version='1.0' encoding='utf-8'?>

@@ -48,6 +48,12 @@ console.log('\n1) Uygulama betigi');
   if (!/var DERS = \[/.test(html)) bad('DERS (elifba dersleri) tablosu yok');
   if (!/var TECVID = \[/.test(html)) bad('TECVID tablosu yok');
   if (!/var SOZLUK = \[/.test(html)) bad('SOZLUK tablosu yok');
+  if (!/function takipGunDonusu/.test(html)) bad('kaza takibi (takipGunDonusu) yok');
+  if (!/function zekatHesapla/.test(html)) bad('zekat hesabi yok');
+  if (!/function diniGunler/.test(html)) bad('dini gunler listesi yok');
+  /* Gunes namaz vakti degildir; kaza sayaci bes vakit uzerinden isler. */
+  if (!/NAMAZ_VAKIT = \['imsak','ogle','ikindi','aksam','yatsi'\]/.test(html))
+    bad('NAMAZ_VAKIT bes vakit olmali (gunes dahil edilmemeli)');
   /* Bu urunun en buyuk hukuki riski: baskasinin telifli metnini tasimak.
      Uygulamada mushaf metni, meal ve tefsir YOKTUR; bu satir o sinirin
      yazili oldugunu denetler, boylece biri "hizlica ekleyeyim" derse
@@ -252,6 +258,18 @@ console.log('\n5) Surum ve kimlik tutarliligi');
     const kal = s.match(KALINTI);
     if (kal) bad(f + ' icinde baska urunun sozcugu var: "' + kal[0] + '"');
   });
+}
+
+/* Dini bir uygulamada kumar/cinsel icerikli reklam cikmasi, pazar liderinin
+   bir numarali sikayeti. Filtre derleme betiginden dusmesin. */
+{
+  const ap = fs.readFileSync(path.join(ROOT, 'tools/android-prepare.sh'), 'utf8');
+  if (!/MAX_AD_CONTENT_RATING_G/.test(ap))
+    bad('tools/android-prepare.sh icinde reklam icerik filtresi (G) yok');
+  else ok('reklam icerik filtresi derleme betiginde');
+  const lc = fs.readFileSync(path.join(ROOT, 'LAUNCH-CHECKLIST.md'), 'utf8');
+  if (!/Hassas kategoriler/.test(lc))
+    bad('LAUNCH-CHECKLIST icinde AdMob hassas kategori engelleme adimi yok');
 }
 
 console.log('\n6) Yayin oncesi ayarlar');

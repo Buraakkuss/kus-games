@@ -30,6 +30,13 @@ aynı dosya çalışır; reklam ve satın alma köprüleri native değilse sessi
 - **Tecvid.** 12 ders: mahreç, kalın/ince harfler, med çeşitleri, izhâr, idgam,
   iklâb, ihfâ, sâkin mîm, gunne, kalkale, vakf işaretleri.
 - **Kur'an terimleri sözlüğü.** 144 terim, arama kutusuyla. Ücretsiz.
+- **Namaz takibi ve kaza.** Bugün kıldığını işaretle; gün dönünce işaretlenmeyen
+  vakit kazaya eklenir. Toplu giriş, tek dokunuşla düşürme, kaza orucu sayacı.
+- **Zekât hesaplama.** Altın/gümüş nisabı, kırkta bir. Fiyatı sen girersin;
+  internetten fiyat çekilmez.
+- **Dini günler.** Yıl boyunca kandiller, bayramlar ve arefeler, geri sayımıyla.
+- **Vakit öncesi hatırlatma.** 10/15/30 dakika önce ikinci bildirim.
+- **Tesbihat ön ayarları.** 33 · 33 · 34 sayaçları.
 - **Esmâü'l-Hüsnâ** — doksan dokuz ismin okunuşu ve Türkçe anlamı.
 
 Vakitler **cihazda** hesaplanır: Jülyen günü → güneşin deklinasyonu ve zaman denklemi

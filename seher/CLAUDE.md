@@ -44,7 +44,7 @@ Bunlar pazarlama tercihi değil, ürünün var olma sebebidir. Değiştirmeden �
 | Kartlar | 14 grup, 158 hazır tebrik kartı, paylaş/kaydet |
 | Öğren | Elifba (14 ders) · Tecvid (12 ders) · Sözlük (144 terim) · Esmâü'l-Hüsnâ |
 | Zikir | zikirmatik |
-| Ayarlar | konum, hesaplama, bildirim, Seher Pro |
+| Daha | **Araçlar** (namaz takibi ve kaza, zekât, dini günler) + konum, hesaplama, bildirim, Seher Pro |
 
 ## Tebrik kartları
 
@@ -68,6 +68,30 @@ kullanır (`MUFREDAT` tablosu); ayrı yazılsaydı biri düzeltilip diğeri unut
 Her müfredatın kendi ilerlemesi (`S.ogren.biten` / `S.ogren.bitenT`) ve kendi
 ücretsiz ders sayısı var. Sözlük 144 terimdir, arama kutusu vardır ve **ücretsizdir** —
 elde tutma ve mağaza aramasında bulunurluk için bilerek kilitlenmedi.
+
+## Namaz takibi ve kaza
+
+- Gün dönüşü `takipGunDonusu()` ile olur: **yalnız geçmiş gün için**, günde bir
+  kez ve iki kez çağrılınca iki kez eklemeden. Self-test bunu üç yönden sınıyor;
+  burada bir hata kullanıcının kaza sayısını sessizce şişirir ve güveni bitirir.
+- `NAMAZ_VAKIT` beş vakittir — **güneş namaz vakti değildir**, kazaya girmez.
+  `check.js` bunu denetliyor.
+- "Kıldım" işareti geçmişten kaza düşmez; yalnız bugünü işaretler. Kaza sayısı
+  ayrı ve elle de düzeltilebilir.
+
+## Reklam içeriği — pazarın en büyük açığı
+
+Pazar liderinin bir numaralı şikâyeti, dini bir uygulamada **kumar, bahis ve
+cinsel içerikli reklam** çıkması; Pro satın alanların bile reklam görmesi ikinci.
+Bizde üç katman var:
+
+1. `tools/android-prepare.sh`, MainActivity'ye `MAX_AD_CONTENT_RATING_G` yazıyor.
+2. AdMob konsolunda hassas kategoriler engelleniyor (`LAUNCH-CHECKLIST.md`).
+3. `Ads.enabled()` Pro/reklamsız kullanıcıda **false** döner; reklam bileşeni hiç
+   başlatılmaz.
+
+`check.js` 1. ve 2. maddenin yerinde durduğunu denetliyor. Bu üçü ürünün satış
+argümanıdır; birini gevşetmek rakibin düştüğü yere düşmektir.
 
 ## İçerik kaynağı — değişmez sınır
 
