@@ -37,6 +37,7 @@ jobs:
       KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
       KEY_P8: ${{ secrets.APPSTORE_PRIVATE_KEY }}
       TEAM_ID: ${{ secrets.APPSTORE_TEAM_ID }}
+      BUNDLE_ID: com.kusgrup.${{ inputs.app }}
     steps:
       - uses: actions/checkout@v4
 
@@ -85,6 +86,45 @@ jobs:
           echo "build numarasi: ${{ github.run_number }}"
           grep -m1 "MARKETING_VERSION" "$PBX"
 
+      - name: App hedefini dagitim imzasina cevir
+        working-directory: ${{ inputs.app }}/ios/App
+        # Capacitor sablonu App hedefini GELISTIRME imzasiyla uretiyor; oyle
+        # birakilirsa Xcode arsivlerken gelistirme profili aramaya kalkiyor ve
+        # "your team has no devices" diyor. Magaza yuklemesi dagitim imzasi
+        # ister, dagitim profili cihaz istemez.
+        #
+        # Ayari KOMUT SATIRINDAN vermek yanlis: o zaman Pods hedeflerine de
+        # gecer ve "conflicting provisioning settings" hatasi cikar. Bu yuzden
+        # yalnizca App.xcodeproj icinde, bizim paket kimligimizi tasiyan
+        # yapilandirma bloklarina yaziliyor.
+        run: |
+          python3 - "App.xcodeproj/project.pbxproj" "$BUNDLE_ID" <<'PY'
+          import re, sys
+          yol, paket = sys.argv[1], sys.argv[2]
+          m = open(yol, encoding='utf-8').read()
+          bloklar = list(re.finditer(r'buildSettings = \{(.*?)\n\t*\};', m, re.S))
+          yeni, kaydirma, sayac = m, 0, 0
+          for b in bloklar:
+              icerik = b.group(1)
+              if 'PRODUCT_BUNDLE_IDENTIFIER = ' + paket not in icerik:
+                  continue
+              sayac += 1
+              if 'CODE_SIGN_IDENTITY' in icerik:
+                  d = re.sub(r'CODE_SIGN_IDENTITY = [^;]+;',
+                             'CODE_SIGN_IDENTITY = "Apple Distribution";', icerik)
+              else:
+                  d = icerik + '\n\t\t\t\tCODE_SIGN_IDENTITY = "Apple Distribution";'
+              bas, son = b.start(1) + kaydirma, b.end(1) + kaydirma
+              yeni = yeni[:bas] + d + yeni[son:]
+              kaydirma += len(d) - len(icerik)
+          if sayac == 0:
+              print('::error::App hedefi bulunamadi - paket kimligi ' + paket + ' hicbir yapilandirmada yok')
+              sys.exit(1)
+          open(yol, 'w', encoding='utf-8').write(yeni)
+          print('imza kimligi yazildi, yapilandirma sayisi:', sayac)
+          PY
+          grep -n "CODE_SIGN_IDENTITY\|CODE_SIGN_STYLE" App.xcodeproj/project.pbxproj
+
       - name: API anahtarini yerlestir
         run: |
           mkdir -p ~/private_keys
@@ -97,10 +137,9 @@ jobs:
         # aittir, yani arsivleme cokse bile adim YESIL gorunur ve hata ancak bir
         # sonraki adimda "arsiv bulunamadi" diye ortaya cikar. Bu bir kez yasandi.
         #
-        # CODE_SIGN_IDENTITY="Apple Distribution": bunu yazmazsak Xcode otomatik
-        # imzada GELISTIRME profili uretmeye calisiyor, o da kayitli cihaz
-        # istiyor ("your team has no devices"). Magazaya yukleme icin dagitim
-        # imzasi gerekir ve dagitim profili cihaz istemez.
+        # Imza kimligi burada DEGIL, bir onceki adimda yalnizca App hedefine
+        # yaziliyor. Komut satirindan verilirse Pods kutuphanelerine de gecer ve
+        # "conflicting provisioning settings" hatasi cikar.
         run: |
           set -o pipefail
           xcodebuild -workspace App.xcworkspace -scheme App \
@@ -111,8 +150,7 @@ jobs:
             -authenticationKeyID "$KEY_ID" \
             -authenticationKeyIssuerID "$ISSUER_ID" \
             DEVELOPMENT_TEAM="$TEAM_ID" \
-            CODE_SIGN_STYLE=Automatic \
-            CODE_SIGN_IDENTITY="Apple Distribution" | tail -60
+            CODE_SIGN_STYLE=Automatic | tail -60
 
       - name: IPA uret
         working-directory: ${{ inputs.app }}/ios/App
