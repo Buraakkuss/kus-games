@@ -18,6 +18,9 @@ Günde 1-2 story yeterli. Her birinde bir etkileşim aracı olsun.
 | 8 | Reklamsız sürüm düğmesi | "bir kere, abonelik değil" | Link çıkartması |
 | 9 | Kullanıcı yorumu ekran görüntüsü | "bugün gelen" | Tekrar paylaşım |
 | 10 | Sade metin | "vakte 10 dakika kala reklam açmıyoruz" | — |
+| 11 | Kart ızgarası | "hangisini gönderirdin?" | Anket |
+| 12 | Paylaşılan kartın WhatsApp ekran görüntüsü | "iki dokunuş" | Link çıkartması |
+| 13 | Elifba ders listesi | "hangi harfte kaldın?" | Soru kutusu |
 
 ## Ramazan serisi (dönemsel)
 

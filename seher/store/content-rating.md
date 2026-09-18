@@ -20,7 +20,7 @@ App Store'da karşılığı **4+** yaş sınırıdır.
 | Kullanıcılar arası iletişim / sohbet? | Hayır |
 | Kullanıcı konumunu başkalarıyla paylaşıyor mu? | Hayır |
 | Kullanıcı tarafından oluşturulan içerik? | Hayır |
-| Dijital satın alma içeriyor mu? | **Evet** — tek seferlik "Reklamsız sürüm" |
+| Dijital satın alma içeriyor mu? | **Evet** — tek seferlik "Reklamsız sürüm" ve "Seher Pro" aboneliği |
 | Reklam gösteriyor mu? | **Evet** |
 | Kişisel bilgi topluyor/paylaşıyor mu? | **Evet** — yalnız reklam kimliği ve kaba konum (bkz. `data-safety.md`) |
 
@@ -28,6 +28,13 @@ App Store'da karşılığı **4+** yaş sınırıdır.
 
 - Play (IARC): **3+ / Herkes**
 - App Store: **4+**
+
+## Kullanıcı tarafından paylaşılan içerik notu
+
+Uygulamadaki tebrik kartları **hazır ve sabittir**; kullanıcı metin yazamaz, görsel
+yükleyemez. Paylaşım, işletim sisteminin kendi paylaşım penceresiyle yapılır.
+Bu yüzden "kullanıcı tarafından oluşturulan içerik" sorusu **hayır**'dır ve
+moderasyon yükümlülüğü doğmaz.
 
 ## Dinî içerik notu
 

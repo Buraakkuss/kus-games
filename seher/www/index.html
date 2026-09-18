@@ -127,6 +127,54 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .cityrow{padding:13px 4px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;cursor:pointer}
 
+/* ---------- kartlar ---------- */
+.kgrup{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:14px 16px;margin-bottom:10px;cursor:pointer;width:100%;text-align:left;color:var(--ink);font-family:inherit}
+.kgrup .ki{width:34px;height:34px;flex:none;border-radius:11px;display:grid;place-items:center;font-size:17px;
+  background:linear-gradient(160deg,rgba(227,178,60,.22),rgba(62,201,167,.12));color:var(--gold)}
+.kgrup .kn{flex:1}
+.kgrup .kn b{display:block;font-size:15.5px;font-weight:800}
+.kgrup .kn small{display:block;font-size:12px;color:var(--dim);font-weight:600;margin-top:2px}
+.kgrup .kok{font-size:18px;color:var(--dim)}
+.kizgara{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kkart{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);cursor:pointer;background:#08201c}
+.kkart canvas{width:100%;display:block;aspect-ratio:4/5}
+.kkart .kpro{position:absolute;top:7px;right:7px;background:linear-gradient(180deg,#f0c75f,#d19a22);
+  color:#2a1d00;font-size:9.5px;font-weight:900;letter-spacing:.06em;padding:3px 7px;border-radius:99px}
+.konizle{width:100%;max-width:420px;margin:0 auto;display:block;border-radius:18px;border:1px solid var(--line)}
+
+/* ---------- ogren ---------- */
+.ders{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:13px 15px;margin-bottom:9px;cursor:pointer;width:100%;text-align:left;color:var(--ink);font-family:inherit}
+.ders.kilit{opacity:.55}
+.ders .dn{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+  font-size:13px;font-weight:800;background:rgba(255,255,255,.08);color:var(--dim)}
+.ders.bitti .dn{background:var(--green);color:#04221c}
+.ders .dm{flex:1}
+.ders .dm b{display:block;font-size:14.5px;font-weight:700}
+.ders .dm small{display:block;font-size:11.5px;color:var(--dim);margin-top:2px;font-weight:600}
+.harf{font-size:64px;line-height:1.35;text-align:center;font-weight:400;
+  font-family:"Geeza Pro","Noto Naskh Arabic","Traditional Arabic",serif}
+.harfkck{font-size:30px;font-family:"Geeza Pro","Noto Naskh Arabic","Traditional Arabic",serif}
+.sik{width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06);
+  color:var(--ink);font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:9px}
+.sik.dogru{background:rgba(62,201,167,.25);border-color:var(--green)}
+.sik.yanlis{background:rgba(255,138,92,.22);border-color:var(--warn)}
+.ilerlecubuk{height:7px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin-top:10px}
+.ilerlecubuk i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--gold));width:0}
+
+/* ---------- pro ---------- */
+.prorozet{display:inline-block;background:linear-gradient(180deg,#f0c75f,#d19a22);color:#2a1d00;
+  font-size:10px;font-weight:900;letter-spacing:.06em;padding:3px 8px;border-radius:99px;margin-left:8px;vertical-align:middle}
+.profiyat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:10px;cursor:pointer}
+.profiyat.secili{border-color:var(--gold);background:rgba(227,178,60,.10)}
+.profiyat b{display:block;font-size:16px;font-weight:800}
+.profiyat small{display:block;font-size:12.5px;color:var(--dim);font-weight:600;margin-top:3px}
+.proliste{margin:14px 0}
+.proliste div{font-size:14px;color:var(--ink);padding:7px 0;display:flex;gap:9px;align-items:flex-start}
+.proliste div span{color:var(--green);font-weight:900;flex:none}
+.prosart{font-size:11px;line-height:1.6;color:#6f8880;margin-top:14px}
+
 /* ---------- 30 gunluk vakit listesi ---------- */
 .ayrow{display:grid;grid-template-columns:76px repeat(6,1fr);gap:2px;align-items:center;
   padding:9px 2px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
@@ -189,11 +237,30 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
     <div class="hint">Her dokunuşta sayar, hedefe ulaşınca kısa bir titreşim verir. Sayaç uygulamayı kapatsan da durur.</div>
   </section>
 
-  <!-- ==================== ESMÂÜ'L-HÜSNÂ ==================== -->
-  <section class="tab" id="tEsma">
-    <h2>Esmâü'l-Hüsnâ</h2>
-    <div class="hint" style="margin:0 0 12px">Doksan dokuz ismin okunuşu ve Türkçe anlamı.</div>
-    <div class="esma" id="esmaList"></div>
+  <!-- ==================== KARTLAR ==================== -->
+  <section class="tab" id="tKart">
+    <h2>Kartlar</h2>
+    <div class="hint" style="margin:0 0 12px">Kandil, bayram ve cuma için hazır tebrik kartları. Seç, paylaş.</div>
+    <div id="kartGrup"></div>
+  </section>
+
+  <!-- ==================== ÖĞREN ==================== -->
+  <section class="tab" id="tOgren">
+    <h2>Öğren</h2>
+    <div class="seg" id="ogrenSeg" style="margin-bottom:14px">
+      <button class="sg on" data-o="elifba">Kur'an elifbası</button>
+      <button class="sg" data-o="esma">Esmâü'l-Hüsnâ</button>
+    </div>
+
+    <div id="oElifba">
+      <div class="card" id="oIlerleme"></div>
+      <div id="dersListe"></div>
+    </div>
+
+    <div id="oEsma" style="display:none">
+      <div class="hint" style="margin:0 0 12px">Doksan dokuz ismin okunuşu ve Türkçe anlamı.</div>
+      <div class="esma" id="esmaList"></div>
+    </div>
   </section>
 
   <!-- ==================== AYARLAR ==================== -->
@@ -242,7 +309,10 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
       <div class="sw"><span>Titreşim</span><button class="tg on" id="tgVibe"><i></i></button></div>
       <div class="sw"><span>Ekran açık kalsın</span><button class="tg" id="tgWake"><i></i></button></div>
     </div>
-    <button class="btn gold" id="bNoAds">Reklamsız sürüm</button>
+    <h2>Seher Pro</h2>
+    <div class="card" id="proKutu"></div>
+    <button class="btn gold" id="bProAyar">Seher Pro</button>
+    <button class="btn ghost" id="bNoAds">Yalnızca reklamları kaldır</button>
     <button class="btn ghost" id="bRestore">Satın almayı geri yükle</button>
     <button class="btn ghost" id="bInfo">Hakkında ve gizlilik</button>
   </section>
@@ -252,8 +322,9 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
 <nav id="nav">
   <button class="on" data-t="tVakit"><i>&#9788;</i>Vakitler</button>
   <button data-t="tKible"><i>&#10021;</i>Kıble</button>
+  <button data-t="tKart"><i>&#9993;</i>Kartlar</button>
+  <button data-t="tOgren"><i>&#9998;</i>Öğren</button>
   <button data-t="tZikir"><i>&#9679;</i>Zikir</button>
-  <button data-t="tEsma"><i>&#10070;</i>Esmâ</button>
   <button data-t="tAyar"><i>&#9881;</i>Ayarlar</button>
 </nav>
 
@@ -268,6 +339,45 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   <div class="hint" id="ayHint" style="margin:0 0 12px"></div>
   <div id="ayTablo"></div>
   <button class="btn ghost" id="bAyClose" style="margin-top:14px">Kapat</button>
+</div>
+
+<div id="sheetKart" class="sheet hide">
+  <button class="btn ghost" id="bKartGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <h2 style="margin-top:0" id="kartBaslik"></h2>
+  <div class="hint" id="kartAltBaslik" style="margin:0 0 14px"></div>
+  <div class="kizgara" id="kartIzgara"></div>
+</div>
+
+<div id="sheetOnizle" class="sheet hide">
+  <button class="btn ghost" id="bOnizleGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <canvas class="konizle" id="onizleCv"></canvas>
+  <div class="rowb" style="margin-top:16px;max-width:420px;margin-left:auto;margin-right:auto">
+    <button class="btn" id="bPaylas">Paylaş</button>
+    <button class="btn ghost" id="bKaydet">Kaydet</button>
+  </div>
+  <div class="hint" id="onizleNot" style="max-width:420px;margin-left:auto;margin-right:auto"></div>
+</div>
+
+<div id="sheetDers" class="sheet hide">
+  <button class="btn ghost" id="bDersGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <h2 style="margin-top:0" id="dersBaslik"></h2>
+  <div class="ilerlecubuk"><i id="dersCubuk"></i></div>
+  <div id="dersGovde" style="margin-top:18px"></div>
+</div>
+
+<div id="sheetPro" class="sheet hide">
+  <button class="btn ghost" id="bProGeri" style="margin-bottom:14px">&#8592; Geri</button>
+  <h2 style="margin-top:0">Seher Pro</h2>
+  <div class="proliste">
+    <div><span>&#10003;</span><span>Kilitli tebrik kartlarının tamamı</span></div>
+    <div><span>&#10003;</span><span>Kur'an elifbasının bütün dersleri</span></div>
+    <div><span>&#10003;</span><span>Reklam yok</span></div>
+    <div><span>&#10003;</span><span>Yeni eklenen kartlar ve dersler</span></div>
+  </div>
+  <div id="proFiyatlar"></div>
+  <button class="btn gold" id="bProAl">Pro'ya geç</button>
+  <button class="btn ghost" id="bProGeriYukle" style="margin-top:9px">Satın almayı geri yükle</button>
+  <div class="prosart" id="proSart"></div>
 </div>
 
 <div id="sheetInfo" class="sheet hide">
@@ -300,7 +410,7 @@ var CFG = {
   privacyUrl: 'https://kusgrupgames.github.io/seher/privacy.html',
   termsUrl:   'https://kusgrupgames.github.io/seher/terms.html',
   supportUrl: 'https://kusgrupgames.github.io/seher/support.html',
-  iap: { removeAds: 'remove_ads' },
+  iap: { removeAds: 'remove_ads', proAy: 'seher_pro_aylik', proYil: 'seher_pro_yillik' },
   ads: {
     useTest: true,
     minSecondsBetween: 180,
@@ -426,7 +536,8 @@ var S = {
   method:'diyanet', asr:1,
   tune:{ imsak:0, gunes:0, ogle:0, ikindi:0, aksam:0, yatsi:0 },
   bildirim:{ imsak:true, gunes:false, ogle:true, ikindi:true, aksam:true, yatsi:true },
-  vibe:true, wake:false, noAds:false, zikir:0, zikirHedef:33
+  vibe:true, wake:false, noAds:false, pro:false, zikir:0, zikirHedef:33,
+  ogren:{ biten:[], ders:null }
 };
 try {
   var raw = localStorage.getItem('seher.v1');
@@ -709,6 +820,612 @@ function ayListesi(ac){
 $('bAy').onclick = function(){ ayListesi(true); };
 $('bAyClose').onclick = function(){ ayListesi(false); };
 
+/* =====================  TEBRİK KARTLARI  =====================
+   Kartlar HAZIR GÖRSEL DEĞİL, çizilir: her kart bir metin + bir tema +
+   bir palet birleşimidir. Sebep pratik — yüzlerce PNG uygulamayı
+   onlarca megabayt şişirirdi, burada kart paylaşılırken 1080x1350
+   olarak tam çözünürlükte üretiliyor ve uygulama birkaç kilobayt büyüyor.
+   Metinlerde bilerek âyet/hadis alıntısı YOK: doğrulanmamış bir alıntıyı
+   yüz binlerce kişiye dağıtmak bu üründe kabul edilemez.                */
+
+/* Hicrî ay/gün -> bir sonraki miladi tarih. Aritmetik takvim kullanıldığı
+   için resmî ilanla bir gün oynayabilir; arayüzde bu yazılı. */
+function sonrakiHicri(ay, gun, baslangic){
+  var d = new Date((baslangic || konumSimdi().tarih).getTime());
+  for (var i = 0; i < 400; i++){
+    var h = hicri(d);
+    if (h.a === ay && h.g === gun) return d;
+    d.setDate(d.getDate() + 1);
+  }
+  return null;
+}
+/* Recep ayının ilk perşembesi (Regaib gecesi o akşam başlar) */
+function regaibGunu(){
+  var d = sonrakiHicri(7, 1);
+  if (!d) return null;
+  for (var i = 0; i < 10; i++){
+    if (d.getDay() === 4) return d;
+    d.setDate(d.getDate() + 1);
+  }
+  return null;
+}
+function sonrakiCuma(){
+  var d = new Date(konumSimdi().tarih.getTime());
+  for (var i = 0; i < 8; i++){ if (d.getDay() === 5) return d; d.setDate(d.getDate()+1); }
+  return null;
+}
+/* Arefe = bayramın bir önceki günü */
+function arefeGunu(ay, gun){
+  var b = sonrakiHicri(ay, gun);
+  if (!b) return null;
+  var a = new Date(b.getTime()); a.setDate(a.getDate() - 1);
+  return a;
+}
+
+var KART = [
+{ id:'cuma', ad:'Cuma', ikon:'☾', bedava:7, tarih:function(){ return sonrakiCuma(); },
+  m:[
+  "Cumanız mübarek olsun. Bu güzel günde dualarınız kabul, gönlünüz ferah olsun.",
+  "Hayırlı cumalar. Yeni bir haftanın bereketi ve huzuru üzerinize olsun.",
+  "Cuma günü kalplerin yumuşadığı gündür. Cumanız mübarek olsun.",
+  "Bugün dualarımızda birbirimizi unutmayalım. Hayırlı cumalar.",
+  "Gönlünüzden geçen her güzel dileğin gerçekleşmesi dileğiyle. Cumanız mübarek.",
+  "Cuma sabahının huzuru bütün haftanıza yayılsın. Hayırlı cumalar.",
+  "Sevdiklerinizle birlikte, sağlık ve huzur içinde nice cumalara.",
+  "Bu cuma; derdi olanın derdine derman, duası olanın duasına karşılık olsun.",
+  "Hayırlı cumalar. Kapınızdan bereket, gönlünüzden huzur eksik olmasın.",
+  "Cumanız mübarek olsun. Bugün bir gönül alalım, bir dua edelim.",
+  "Haftanın en güzel günü hayırlara vesile olsun. Hayırlı cumalar.",
+  "Cumanız mübarek olsun; sofranız bereketli, yolunuz açık olsun."
+]},
+{ id:'ucaylar', ad:'Üç Ayların Başlangıcı', ikon:'✦', bedava:6, tarih:function(){ return sonrakiHicri(7,1); },
+  m:[
+  "Üç aylar başlıyor. Bu bereketli dönem sizin ve sevdiklerinizin üzerine hayırlar getirsin.",
+  "Üç ayların bereketi evinize, işinize ve gönlünüze dolsun.",
+  "Rahmet ayları başladı. Bu dönem hepimiz için bir yenilenme vesilesi olsun.",
+  "Üç aylarınız mübarek olsun. Gönüller ferah, dualar kabul olsun.",
+  "Bu güzel günlerin başlangıcında, sevdiklerinizle sağlıkla kalın.",
+  "Üç aylar hayırlı olsun. Kırgınlıkların gittiği, gönüllerin barıştığı bir dönem dilerim.",
+  "Bereketin ve huzurun kapımızı çaldığı günler. Üç aylarınız mübarek olsun.",
+  "Üç ayların ilk gününde tuttuğunuz niyet, sonuna kadar sizinle olsun.",
+  "Bu dönem; sabrın, paylaşmanın ve şükrün dönemi olsun. Üç aylarınız mübarek.",
+  "Üç aylarınızı tebrik eder, sağlık ve huzur dolu günler dilerim."
+]},
+{ id:'regaib', ad:'Regaib Kandili', ikon:'✧', bedava:6, tarih:function(){ return regaibGunu(); },
+  m:[
+  "Regaib Kandiliniz mübarek olsun. Bu gecede edilen dualar geri çevrilmesin.",
+  "Üç ayların ilk kandili hayırlara vesile olsun. Kandiliniz mübarek.",
+  "Regaib gecesinin bereketi, sevdiklerinizle birlikte üzerinize olsun.",
+  "Bu mübarek gecede gönlünüzden geçen ne varsa gerçek olsun.",
+  "Kandiliniz mübarek olsun. Dualarınız kabul, yolunuz açık olsun.",
+  "Regaib Kandili'nin nuru evinize ve gönlünüze düşsün.",
+  "Bu gece; hastalara şifa, dertlilere derman olsun. Kandiliniz mübarek.",
+  "Regaib Kandilinizi tebrik eder, huzur dolu bir gece dilerim.",
+  "Gecenin sessizliğinde edilen dualar en güzelidir. Kandiliniz mübarek olsun.",
+  "Regaib gecesi hepimize hayırlı bir başlangıç olsun.",
+  "Kandiliniz mübarek olsun; kalpler ferah, gönüller huzurlu olsun.",
+  "Bu mübarek gecede dualarımızda birbirimize yer ayıralım."
+]},
+{ id:'mirac', ad:'Miraç Kandili', ikon:'☪', bedava:6, tarih:function(){ return sonrakiHicri(7,27); },
+  m:[
+  "Miraç Kandiliniz mübarek olsun. Bu gecede dualarınız kabul olsun.",
+  "Bu mübarek gecede edilen dualar geri çevrilmesin. Kandiliniz kutlu olsun.",
+  "Miraç Kandili'nin nuru evinize, gönlünüze ve yolunuza düşsün.",
+  "Kandiliniz mübarek olsun. Bu gece bütün gönüller ferahlasın.",
+  "Miraç gecesinin bereketi, sevdiklerinizle birlikte üzerinize olsun.",
+  "Dualarımızda birbirimize yer ayıralım. Miraç Kandiliniz mübarek olsun.",
+  "Bu gecenin huzuru, yılın bütün günlerine yayılsın. Kandiliniz kutlu olsun.",
+  "Miraç Kandilinizi tebrik eder, sağlık ve huzur dolu günler dilerim.",
+  "Gecenin sessizliğinde edilen dualar en güzelidir. Kandiliniz mübarek.",
+  "Kalplerin yükseldiği bu gecede gönlünüz hafiflesin. Kandiliniz mübarek olsun.",
+  "Miraç Kandili'nde dilekleriniz kabul, gönlünüz huzur dolu olsun.",
+  "Bu mübarek gece; hastalara şifa, dertlilere derman olsun."
+]},
+{ id:'berat', ad:'Berat Kandili', ikon:'✶', bedava:6, tarih:function(){ return sonrakiHicri(8,15); },
+  m:[
+  "Berat Kandiliniz mübarek olsun. Bu gece gönüller affa, kalpler huzura ersin.",
+  "Berat gecesinde dualarınız kabul, defterinize yalnız güzellikler yazılsın.",
+  "Kandiliniz mübarek olsun. Bu gece bütün kırgınlıklar geride kalsın.",
+  "Berat Kandili'nin bereketi evinize ve gönlünüze dolsun.",
+  "Bu mübarek gecede bir gönül alalım, bir dua edelim. Kandiliniz mübarek.",
+  "Berat gecesi; affın, bağışlamanın ve yeniden başlamanın gecesi olsun.",
+  "Kandiliniz mübarek olsun. Sevdiklerinizle sağlıkla, huzurla kalın.",
+  "Berat Kandilinizi tebrik eder, gönlünüzce bir gece dilerim.",
+  "Bu gece dualarımızda birbirimizi unutmayalım. Kandiliniz mübarek.",
+  "Berat gecesinin nuru yolunuzu aydınlatsın.",
+  "Kandiliniz mübarek olsun; dertler hafiflesin, gönüller ferahlasın.",
+  "Berat Kandili hepimiz için temiz bir sayfa olsun."
+]},
+{ id:'ramazanbas', ad:'Ramazan Başlangıcı', ikon:'◐', bedava:6, tarih:function(){ return sonrakiHicri(9,1); },
+  m:[
+  "Ramazan-ı Şerif'iniz mübarek olsun. Bu ay evinize bereket, gönlünüze huzur getirsin.",
+  "Hoş geldin Ramazan. Oruçlarınız kabul, sofranız bereketli olsun.",
+  "On bir ayın sultanı geldi. Ramazanınız mübarek olsun.",
+  "Ramazanınız mübarek olsun; sabrın ve paylaşmanın ayı hepimize iyi gelsin.",
+  "Bu Ramazan; dargınların barıştığı, gönüllerin ferahladığı bir ay olsun.",
+  "Ramazanınızı tebrik eder, sağlıkla tamamlamanızı dilerim.",
+  "Sofranız bereketli, orucunuz kabul, gönlünüz huzurlu olsun.",
+  "Hoş geldin Ya Şehr-i Ramazan. Bu ay hepimize hayırlar getirsin.",
+  "Ramazanınız mübarek olsun. Komşunuzu, uzaktaki dostunuzu unutmayalım.",
+  "Bu mübarek ayda tutulan her oruç, edilen her dua kabul olsun.",
+  "Ramazan bereketi eksik olmasın. İyi ki varsınız.",
+  "Ramazanınız mübarek olsun; yılın en güzel ayını sevdiklerinizle geçirin."
+]},
+{ id:'kadir', ad:'Kadir Gecesi', ikon:'✹', bedava:6, tarih:function(){ return sonrakiHicri(9,27); },
+  m:[
+  "Kadir Geceniz mübarek olsun. Bu gece dualarınız kabul olsun.",
+  "Yılın en kıymetli gecesinde gönlünüzden geçen ne varsa gerçek olsun.",
+  "Kadir Gecesi'nin nuru evinize, yolunuza ve gönlünüze düşsün.",
+  "Bu mübarek gecede dualarımızda birbirimize yer ayıralım.",
+  "Kadir Geceniz mübarek olsun; hastalara şifa, dertlilere derman olsun.",
+  "Bin aydan hayırlı bu gecede huzur sizinle olsun.",
+  "Kadir Gecenizi tebrik eder, gönlünüzce bir gece dilerim.",
+  "Bu gece edilen dualar geri çevrilmesin. Kadir Geceniz mübarek.",
+  "Gecenin sessizliğinde açılan eller boş dönmesin.",
+  "Kadir Geceniz mübarek olsun. Kalpler ferah, gönüller huzurlu olsun.",
+  "Bu kıymetli gece hepimiz için bir yenilenme olsun.",
+  "Kadir Gecesi'nin bereketi ömrünüze yayılsın."
+]},
+{ id:'rbarefe', ad:'Ramazan Bayramı Arefe', ikon:'◔', bedava:5, tarih:function(){ return arefeGunu(10,1); },
+  m:[
+  "Arefeniz mübarek olsun. Yarın bayram; bugünden gönüller barışsın.",
+  "Arefe günü hayırlı olsun. Bayrama sağlıkla ve huzurla girelim.",
+  "Bugün arefe. Uzaktaki dostu arayalım, bir gönül alalım.",
+  "Arefeniz mübarek olsun. Bayram bereketi şimdiden evinize dolsun.",
+  "Ramazan'ı uğurlarken dualarınız kabul olsun. Arefeniz hayırlı olsun.",
+  "Arefe gününüz mübarek olsun; yarın hep birlikte bayram edelim.",
+  "Bugün gönül alma günü. Arefeniz hayırlı olsun.",
+  "Arefeniz mübarek olsun. Bayramınız şimdiden kutlu olsun.",
+  "Ramazan'ın son günü hayırlara vesile olsun. Arefeniz mübarek.",
+  "Arefeniz mübarek olsun; sevdiklerinizle bir arada olun."
+]},
+{ id:'ramazanbayram', ad:'Ramazan Bayramı', ikon:'❁', bedava:7, tarih:function(){ return sonrakiHicri(10,1); },
+  m:[
+  "Bayramınız mübarek olsun. Sevdiklerinizle birlikte nice bayramlara.",
+  "Ramazan Bayramınız kutlu olsun. Evinizden neşe, gönlünüzden huzur eksik olmasın.",
+  "Bayramınız mübarek olsun; küskünlükler bitsin, gönüller barışsın.",
+  "Bugün bayram. Uzaktakileri arayalım, yakındakilere sarılalım.",
+  "Bayramınız mübarek olsun. Sofranız bereketli, yüzünüz gülsün.",
+  "Nice sağlıklı, huzurlu ve bir arada bayramlara.",
+  "Ramazan Bayramınızı tebrik eder, mutluluklar dilerim.",
+  "Bayramınız mübarek olsun; bu güzel günde herkesin yüzü gülsün.",
+  "Bayram, birbirimizi hatırlama günüdür. Bayramınız kutlu olsun.",
+  "Bayramınız mübarek olsun. Çocuklar sevinsin, büyükler huzur bulsun.",
+  "Tatlı yiyip tatlı konuştuğumuz nice bayramlara. Bayramınız kutlu olsun.",
+  "Bayramınız mübarek olsun; sevdiklerinizle nice yıllara."
+]},
+{ id:'kbarefe', ad:'Kurban Bayramı Arefe', ikon:'◕', bedava:5, tarih:function(){ return arefeGunu(12,10); },
+  m:[
+  "Arefeniz mübarek olsun. Yarın bayram; gönüller şimdiden barışsın.",
+  "Arefe gününüz hayırlı olsun. Bayrama sağlıkla ve huzurla girelim.",
+  "Bugün arefe. Bir gönül alalım, bir dua edelim.",
+  "Arefeniz mübarek olsun. Bayram bereketi evinize dolsun.",
+  "Arefe gününüz hayırlı olsun; bayramınız şimdiden kutlu olsun.",
+  "Bugün gönül alma günü. Arefeniz mübarek olsun.",
+  "Arefeniz mübarek olsun. Yarın hep birlikte bayram edelim.",
+  "Arefe gününüz hayırlara vesile olsun.",
+  "Arefeniz mübarek olsun; sevdiklerinizle bir arada olun.",
+  "Bayrama bir gün kaldı. Arefeniz hayırlı olsun."
+]},
+{ id:'kurbanbayram', ad:'Kurban Bayramı', ikon:'✤', bedava:7, tarih:function(){ return sonrakiHicri(12,10); },
+  m:[
+  "Kurban Bayramınız mübarek olsun. Sevdiklerinizle birlikte nice bayramlara.",
+  "Bayramınız kutlu olsun; kurbanınız kabul, duanız makbul olsun.",
+  "Kurban Bayramınız mübarek olsun. Paylaştıkça bereketlenen bir bayram dilerim.",
+  "Bayramınız mübarek olsun; komşuyu, yetimi, uzaktaki dostu unutmayalım.",
+  "Nice sağlıklı, huzurlu ve bir arada bayramlara.",
+  "Kurban Bayramınızı tebrik eder, mutluluklar dilerim.",
+  "Bayramınız mübarek olsun. Sofranız bereketli, gönlünüz ferah olsun.",
+  "Bugün paylaşma günü. Bayramınız kutlu olsun.",
+  "Bayramınız mübarek olsun; küskünlükler bitsin, gönüller barışsın.",
+  "Kurbanınız kabul olsun. Bayramınız hayırlara vesile olsun.",
+  "Bayramınız mübarek olsun. Çocuklar sevinsin, büyükler huzur bulsun.",
+  "Sevdiklerinizle nice bayramlara. Bayramınız kutlu olsun."
+]},
+{ id:'hicriyil', ad:'Hicri Yılbaşı', ikon:'❂', bedava:6, tarih:function(){ return sonrakiHicri(1,1); },
+  m:[
+  "Hicri yeni yılınız mübarek olsun. Yeni yıl sağlık ve huzur getirsin.",
+  "Yeni hicri yıl hayırlara vesile olsun.",
+  "Hicri yılbaşınız kutlu olsun; geride kalan dertler geride kalsın.",
+  "Yeni yılda gönlünüzden geçen ne varsa gerçek olsun.",
+  "Hicri yeni yılınız mübarek olsun. Sevdiklerinizle sağlıkla kalın.",
+  "Bir yıl daha geride kaldı. Yenisi hepimize hayırlı olsun.",
+  "Hicri yılbaşınızı tebrik eder, huzur dolu bir yıl dilerim.",
+  "Yeni yıl; barışın, bereketin ve sağlığın yılı olsun.",
+  "Hicri yeni yılınız mübarek olsun. Temiz bir sayfa hepimize nasip olsun.",
+  "Yeni hicri yılınız kutlu olsun; kapınızdan bereket eksik olmasın."
+]},
+{ id:'asure', ad:'Aşure Günü', ikon:'❋', bedava:5, tarih:function(){ return sonrakiHicri(1,10); },
+  m:[
+  "Aşure gününüz mübarek olsun. Paylaştıkça çoğalan bir bereket dilerim.",
+  "Aşureniz bol, gönlünüz ferah olsun.",
+  "Aşure günü; komşuyu, dostu, uzaktakini hatırlama günüdür. Mübarek olsun.",
+  "Aşure gününüz hayırlara vesile olsun.",
+  "Paylaşmanın en güzel günü. Aşure gününüz mübarek olsun.",
+  "Aşureniz kabul, sofranız bereketli olsun.",
+  "Aşure gününüzü tebrik eder, huzurlu günler dilerim.",
+  "Bugün bir kase de komşuya. Aşure gününüz mübarek olsun.",
+  "Aşure gününüz mübarek olsun; birlik ve beraberliğimiz daim olsun.",
+  "Aşure bereketi evinizden eksik olmasın."
+]},
+{ id:'mevlid', ad:'Mevlid Kandili', ikon:'✵', bedava:6, tarih:function(){ return sonrakiHicri(3,12); },
+  m:[
+  "Mevlid Kandiliniz mübarek olsun. Bu gece gönüller huzur bulsun.",
+  "Kandiliniz mübarek olsun; dualarınız kabul, yolunuz açık olsun.",
+  "Mevlid Kandili'nin nuru evinize ve gönlünüze düşsün.",
+  "Bu mübarek gecede dualarımızda birbirimize yer ayıralım.",
+  "Mevlid Kandiliniz mübarek olsun. Sevdiklerinizle sağlıkla kalın.",
+  "Kandiliniz kutlu olsun; hastalara şifa, dertlilere derman olsun.",
+  "Mevlid Kandilinizi tebrik eder, huzurlu bir gece dilerim.",
+  "Bu gece edilen dualar geri çevrilmesin. Kandiliniz mübarek.",
+  "Mevlid gecesinin bereketi üzerinize olsun.",
+  "Kandiliniz mübarek olsun. Gönüller ferah, kalpler huzurlu olsun.",
+  "Bu mübarek gece hepimize hayırlar getirsin.",
+  "Mevlid Kandiliniz mübarek olsun; sevgi ve merhamet eksik olmasın."
+]}
+];
+
+/* ---------- paletler ve temalar ----------
+   Kart görüntüsü (palet, tema) çiftinden gelir ve ÇİFT DETERMİNİSTİKTİR:
+   aynı kart her açılışta, önizlemede ve paylaşımda birebir aynı çıkar. */
+var PALET = [
+  { bg:['#0d3b32','#04140f'], v:'#f0c75f', i:'#f3fbf7', s:'#8fd9c3' },
+  { bg:['#122a4d','#050b18'], v:'#e8c979', i:'#f2f6ff', s:'#8fb6e8' },
+  { bg:['#3a1430','#120512'], v:'#f2c14e', i:'#fbf1f6', s:'#e0a0c4' },
+  { bg:['#123f46','#03151a'], v:'#ffd28a', i:'#eefaf9', s:'#7fd4d9' },
+  { bg:['#402213','#150803'], v:'#f5cf8b', i:'#fdf3e8', s:'#e0a86a' },
+  { bg:['#1d1147','#070318'], v:'#ecc65d', i:'#f4f0ff', s:'#a893e8' },
+  { bg:['#0b3a22','#02120a'], v:'#ffd97a', i:'#effaf2', s:'#7fd79c' },
+  { bg:['#2b1220','#0d040a'], v:'#e9b978', i:'#fbf0f3', s:'#d68fa6' }
+];
+var TEMA = ['yildizAgi','cami','fener','mihrap','isik','gece','arabesk','sade'];
+
+function kartTema(gi, ki){ return TEMA[(gi + ki*2) % TEMA.length]; }
+function kartPalet(gi, ki){ return PALET[(gi*3 + ki) % PALET.length]; }
+function kartPro(gi, ki){ return ki >= KART[gi].bedava; }
+
+/* sekiz kollu yıldız (rub el hizb) */
+function csYildiz(c, x, y, r, rot){
+  c.beginPath();
+  for (var i = 0; i < 16; i++){
+    var a = rot + i*Math.PI/8, rr = (i % 2 === 0) ? r : r*0.52;
+    var X = x + Math.cos(a)*rr, Y = y + Math.sin(a)*rr;
+    i ? c.lineTo(X,Y) : c.moveTo(X,Y);
+  }
+  c.closePath();
+}
+function csHilal(c, x, y, r){
+  c.beginPath(); c.arc(x, y, r, 0, Math.PI*2);
+  c.moveTo(x + r*0.25 + r*0.80, y);
+  c.arc(x + r*0.25, y, r*0.80, 0, Math.PI*2, true);
+  c.closePath();
+}
+function csKemer(c, x, taban, gen, yuk){
+  c.beginPath();
+  c.moveTo(x-gen, taban);
+  c.lineTo(x-gen, taban-yuk*0.52);
+  c.quadraticCurveTo(x-gen*0.92, taban-yuk*0.9, x, taban-yuk);
+  c.quadraticCurveTo(x+gen*0.92, taban-yuk*0.9, x+gen, taban-yuk*0.52);
+  c.lineTo(x+gen, taban);
+}
+
+function kartSusle(c, W, H, p, tema, tohum){
+  var U = W/1080;
+  c.save();
+  if (tema === 'yildizAgi'){
+    var adim = W*0.135;
+    c.strokeStyle = p.v; c.globalAlpha = 0.13; c.lineWidth = 2*U;
+    for (var y = -adim; y < H+adim; y += adim)
+      for (var x = -adim; x < W+adim; x += adim){
+        csYildiz(c, x + ((Math.round(y/adim) % 2) ? adim/2 : 0), y, adim*0.42, 0); c.stroke();
+      }
+  } else if (tema === 'cami'){
+    /* Ilk denemede minareler duz dikdortgen + ucgen ucla cizilmisti ve
+       kartta ok gibi gorunuyordu. Serefe, kulah ve yan yarim kubbeler
+       siluetin cami olarak okunmasini sagliyor. */
+    c.globalAlpha = 0.20; c.fillStyle = p.v;
+    var tb = H*0.93, o = W*0.5, R = W*0.15;
+    c.fillRect(0, tb, W, H - tb);
+    c.fillRect(o - R*1.9, tb - W*0.085, R*3.8, W*0.085);          /* gövde */
+    [-1, 1].forEach(function(t){                                   /* yan yarım kubbeler */
+      c.beginPath(); c.arc(o + t*R*1.32, tb - W*0.085, R*0.58, Math.PI, 0); c.fill();
+    });
+    c.fillRect(o - R, tb - W*0.14, R*2, W*0.06);                   /* kasnak */
+    c.beginPath(); c.arc(o, tb - W*0.14, R, Math.PI, 0); c.fill(); /* ana kubbe */
+    c.fillRect(o - W*0.006, tb - W*0.14 - R - W*0.05, W*0.012, W*0.05);
+    [-1, 1].forEach(function(t){                                   /* minareler */
+      var mx = o + t*W*0.255, gov = W*0.017, yuk = W*0.34;
+      c.fillRect(mx - gov/2, tb - yuk, gov, yuk);
+      c.fillRect(mx - gov*1.5, tb - yuk*0.62, gov*3, W*0.016);     /* şerefe */
+      c.beginPath();                                                /* külah */
+      c.moveTo(mx - gov*1.1, tb - yuk);
+      c.lineTo(mx, tb - yuk - W*0.048);
+      c.lineTo(mx + gov*1.1, tb - yuk); c.closePath(); c.fill();
+    });
+  } else if (tema === 'fener'){
+    c.globalAlpha = 0.30; c.strokeStyle = p.v; c.fillStyle = p.v; c.lineWidth = 2.5*U;
+    for (var i = 0; i < 5; i++){
+      var fx = W*(0.12 + i*0.19), fy = H*(0.10 + (i%2)*0.055), fw = W*0.052, fh = W*0.085;
+      c.beginPath(); c.moveTo(fx, 0); c.lineTo(fx, fy); c.stroke();
+      c.beginPath();
+      c.moveTo(fx-fw*0.5, fy+fh*0.18); c.lineTo(fx+fw*0.5, fy+fh*0.18);
+      c.lineTo(fx+fw*0.34, fy+fh); c.lineTo(fx-fw*0.34, fy+fh); c.closePath(); c.stroke();
+      c.globalAlpha = 0.16; c.fill(); c.globalAlpha = 0.30;
+      c.beginPath(); c.moveTo(fx-fw*0.22, fy); c.lineTo(fx+fw*0.22, fy);
+      c.lineTo(fx+fw*0.5, fy+fh*0.18); c.lineTo(fx-fw*0.5, fy+fh*0.18); c.closePath(); c.stroke();
+    }
+  } else if (tema === 'mihrap'){
+    c.globalAlpha = 0.28; c.strokeStyle = p.v; c.lineWidth = 3*U; c.lineJoin = 'round';
+    csKemer(c, W*0.5, H*0.895, W*0.36, H*0.70); c.stroke();
+    c.globalAlpha = 0.16;
+    csKemer(c, W*0.5, H*0.875, W*0.32, H*0.64); c.stroke();
+  } else if (tema === 'isik'){
+    c.globalAlpha = 0.11; c.fillStyle = p.v;
+    for (var k = 0; k < 18; k++){
+      c.save(); c.translate(W*0.5, H*0.30); c.rotate(k*Math.PI/9 + 0.12);
+      c.beginPath(); c.moveTo(0,0); c.lineTo(-W*0.035, -H*0.9); c.lineTo(W*0.035, -H*0.9);
+      c.closePath(); c.fill(); c.restore();
+    }
+    c.globalAlpha = 0.5;
+    csHilal(c, W*0.5, H*0.185, W*0.085); c.fill('evenodd');
+  } else if (tema === 'gece'){
+    var r = tohum;
+    function rnd(){ r = (r*1103515245 + 12345) & 0x7fffffff; return r/0x7fffffff; }
+    c.fillStyle = p.i;
+    for (var t = 0; t < 90; t++){
+      var sx = rnd()*W, sy = rnd()*H*0.62, sr = (0.4 + rnd()*1.7)*U*1.6;
+      c.globalAlpha = 0.18 + rnd()*0.5;
+      c.beginPath(); c.arc(sx, sy, sr, 0, Math.PI*2); c.fill();
+    }
+    c.globalAlpha = 0.85; c.fillStyle = p.v;
+    csHilal(c, W*0.78, H*0.145, W*0.075); c.fill('evenodd');
+  } else if (tema === 'arabesk'){
+    c.globalAlpha = 0.24; c.strokeStyle = p.v; c.lineWidth = 3*U;
+    [[0,0,1,1],[W,0,-1,1],[0,H,1,-1],[W,H,-1,-1]].forEach(function(k){
+      c.save(); c.translate(k[0], k[1]); c.scale(k[2], k[3]);
+      c.beginPath();
+      c.moveTo(W*0.045, H*0.135);
+      c.quadraticCurveTo(W*0.045, W*0.055, W*0.16, W*0.055);
+      c.quadraticCurveTo(W*0.26, W*0.055, W*0.26, W*0.125);
+      c.stroke();
+      c.beginPath();
+      c.moveTo(W*0.075, H*0.105);
+      c.quadraticCurveTo(W*0.075, W*0.085, W*0.15, W*0.085);
+      c.stroke();
+      c.restore();
+    });
+  } else {
+    c.globalAlpha = 0.5; c.strokeStyle = p.v; c.lineWidth = 2*U;
+    c.strokeRect(W*0.065, H*0.055, W*0.87, H*0.89);
+    c.globalAlpha = 0.18;
+    c.strokeRect(W*0.085, H*0.072, W*0.83, H*0.856);
+  }
+  c.restore();
+}
+
+/* metni kutuya sığdırarak satırlara böler */
+function csSar(c, metin, genislik){
+  var kelime = metin.split(' '), satir = [], su = '';
+  for (var i = 0; i < kelime.length; i++){
+    var dene = su ? su + ' ' + kelime[i] : kelime[i];
+    if (c.measureText(dene).width > genislik && su){ satir.push(su); su = kelime[i]; }
+    else su = dene;
+  }
+  if (su) satir.push(su);
+  return satir;
+}
+
+function kartMarka(c, W, H, p){
+  var U = W/1080, y = H - 52*U;
+  c.save();
+  c.globalAlpha = 0.85;
+  c.fillStyle = p.v;
+  csHilal(c, W*0.5 - 52*U, y - 5*U, 15*U);
+  c.fill('evenodd');
+  c.globalAlpha = 0.75;
+  c.fillStyle = p.i;
+  c.font = '800 ' + Math.round(23*U) + 'px ui-rounded, system-ui, sans-serif';
+  c.textAlign = 'left'; c.textBaseline = 'middle';
+  c.fillText('Seher', W*0.5 - 28*U, y - 4*U);
+  c.globalAlpha = 0.42;
+  c.font = '700 ' + Math.round(15*U) + 'px ui-rounded, system-ui, sans-serif';
+  c.fillText('namaz vakti uygulaması', W*0.5 - 28*U, y + 20*U);
+  c.restore();
+}
+
+function kartCiz(cv, W, H, gi, ki){
+  var g = KART[gi], p = kartPalet(gi, ki), tema = kartTema(gi, ki), U = W/1080;
+  cv.width = W; cv.height = H;
+  var c = cv.getContext('2d');
+  var zg = c.createLinearGradient(0, 0, W*0.35, H);
+  zg.addColorStop(0, p.bg[0]); zg.addColorStop(1, p.bg[1]);
+  c.fillStyle = zg; c.fillRect(0, 0, W, H);
+  var pg = c.createRadialGradient(W*0.5, H*0.30, 0, W*0.5, H*0.45, H*0.8);
+  pg.addColorStop(0, 'rgba(255,255,255,.10)'); pg.addColorStop(1, 'rgba(255,255,255,0)');
+  c.fillStyle = pg; c.fillRect(0, 0, W, H);
+  kartSusle(c, W, H, p, tema, gi*97 + ki*31 + 7);
+
+  c.textAlign = 'center';
+  c.fillStyle = p.v;
+  c.font = '800 ' + Math.round(34*U) + 'px ui-rounded, system-ui, sans-serif';
+  c.textBaseline = 'alphabetic';
+  var basl = g.ad.toLocaleUpperCase('tr');
+  c.save(); c.globalAlpha = 0.92;
+  /* harf arası: canvas letterSpacing her yerde yok, elle açıyoruz */
+  var bl = basl.split(''), bw = 0, bs = 4*U;
+  bl.forEach(function(ch){ bw += c.measureText(ch).width + bs; });
+  var bx = W*0.5 - bw/2;
+  c.textAlign = 'left';
+  bl.forEach(function(ch){ c.fillText(ch, bx, H*0.285); bx += c.measureText(ch).width + bs; });
+  c.restore();
+  c.textAlign = 'center';
+  c.globalAlpha = 0.55; c.fillStyle = p.v;
+  c.fillRect(W*0.5 - 44*U, H*0.312, 88*U, 2.5*U);
+  c.globalAlpha = 1;
+
+  c.fillStyle = p.i;
+  var fs = 46*U;
+  var satir;
+  do {
+    c.font = '700 ' + Math.round(fs) + 'px ui-rounded, system-ui, sans-serif';
+    satir = csSar(c, g.m[ki], W*0.76);
+    if (satir.length <= 6) break;
+    fs -= 2*U;
+  } while (fs > 26*U);
+  var sy = H*0.505 - (satir.length - 1)*fs*0.72;
+  satir.forEach(function(t){ c.fillText(t, W*0.5, sy); sy += fs*1.44; });
+  /* metnin altina uc noktali ince bir bitis: alt yari bos kaliyordu */
+  c.save(); c.globalAlpha = 0.45; c.fillStyle = p.v;
+  [-1, 0, 1].forEach(function(t){
+    c.beginPath(); c.arc(W*0.5 + t*22*U, sy - fs*0.35, (t === 0 ? 5 : 3.2)*U, 0, Math.PI*2); c.fill();
+  });
+  c.restore();
+
+  kartMarka(c, W, H, p);
+  return cv;
+}
+
+/* ---------- kart arayüzü ---------- */
+var kartAcik = -1, onizleG = -1, onizleK = -1;
+
+function gunFarki(d){
+  if (!d) return null;
+  var b = konumSimdi().tarih;
+  return Math.round((d.getTime() - b.getTime()) / 86400000);
+}
+function kalanMetin(d){
+  var f = gunFarki(d);
+  if (f === null) return '';
+  if (f === 0) return 'bugün';
+  if (f === 1) return 'yarın';
+  return f + ' gün sonra';
+}
+
+function kartGrupCiz(){
+  if (!$('kartGrup')) return;
+  var h = '';
+  KART.forEach(function(g, i){
+    var kilitli = 0;
+    for (var k = 0; k < g.m.length; k++) if (kartPro(i, k) && !proMu()) kilitli++;
+    var ne = '';
+    try { ne = kalanMetin(g.tarih()); } catch(e){}
+    h += '<button class="kgrup" data-g="' + i + '">' +
+         '<div class="ki">' + g.ikon + '</div>' +
+         '<div class="kn"><b>' + g.ad + '</b><small>' + g.m.length + ' kart' +
+         (ne ? ' · ' + ne : '') + (kilitli ? ' · ' + kilitli + ' kilitli' : '') + '</small></div>' +
+         '<div class="kok">&#8250;</div></button>';
+  });
+  $('kartGrup').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#kartGrup .kgrup'), function(el){
+    el.onclick = function(){ kartIzgaraAc(+el.getAttribute('data-g')); };
+  });
+}
+
+function kartIzgaraAc(gi){
+  kartAcik = gi;
+  var g = KART[gi];
+  $('kartBaslik').textContent = g.ad;
+  var ne = '';
+  try { ne = kalanMetin(g.tarih()); } catch(e){}
+  $('kartAltBaslik').textContent = g.m.length + ' hazır kart' + (ne ? ' · ' + ne : '') +
+    '. Kartın üzerine dokun, önizle ve paylaş.';
+  var h = '';
+  for (var k = 0; k < g.m.length; k++)
+    h += '<div class="kkart" data-k="' + k + '"><canvas></canvas>' +
+         (kartPro(gi, k) && !proMu() ? '<div class="kpro">PRO</div>' : '') + '</div>';
+  $('kartIzgara').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#kartIzgara .kkart'), function(el){
+    var k = +el.getAttribute('data-k');
+    kartCiz(el.querySelector('canvas'), 324, 405, gi, k);
+    el.onclick = function(){ kartOnizleAc(gi, k); };
+  });
+  $('sheetKart').classList.remove('hide');
+  $('sheetKart').scrollTop = 0;
+}
+
+function kartOnizleAc(gi, ki){
+  if (kartPro(gi, ki) && !proMu()){
+    proAc('Bu kart Seher Pro ile açılıyor');
+    return;
+  }
+  onizleG = gi; onizleK = ki;
+  kartCiz($('onizleCv'), 1080, 1350, gi, ki);
+  $('onizleNot').textContent = 'Paylaş: WhatsApp, Instagram, Facebook ve telefonundaki ' +
+    'diğer uygulamalar açılır. Kaydet: kartı telefonunun dosyalarına indirir.';
+  $('sheetOnizle').classList.remove('hide');
+  $('sheetOnizle').scrollTop = 0;
+}
+
+/* Kart 1080x1350 olarak yeniden çizilir; ekrandaki önizleme küçük olabilir,
+   paylaşılan dosya her zaman tam çözünürlüktedir. */
+function kartPngB64(gi, ki){
+  var cv = document.createElement('canvas');
+  kartCiz(cv, 1080, 1350, gi, ki);
+  return cv.toDataURL('image/png').split(',')[1];
+}
+function kartDosyaAdi(gi, ki){
+  return 'seher-' + KART[gi].id + '-' + (ki+1) + '.png';
+}
+function b64Blob(b64){
+  var bin = atob(b64), n = bin.length, u = new Uint8Array(n);
+  for (var i = 0; i < n; i++) u[i] = bin.charCodeAt(i);
+  return new Blob([u], { type:'image/png' });
+}
+
+function kartPaylas(){
+  if (onizleG < 0) return;
+  var b64 = kartPngB64(onizleG, onizleK), ad = kartDosyaAdi(onizleG, onizleK);
+  var metin = KART[onizleG].m[onizleK];
+  var P = window.Capacitor && Capacitor.Plugins;
+  if (P && P.Filesystem && P.Share){
+    P.Filesystem.writeFile({ path:ad, data:b64, directory:'CACHE' })
+      .then(function(r){
+        return P.Share.share({ title:KART[onizleG].ad, text:metin,
+                               files:[r.uri], dialogTitle:'Kartı paylaş' });
+      })
+      .catch(function(){ toast('Paylaşım açılamadı'); });
+    return;
+  }
+  var blob = b64Blob(b64);
+  try {
+    var dosya = new File([blob], ad, { type:'image/png' });
+    if (navigator.canShare && navigator.canShare({ files:[dosya] })){
+      navigator.share({ files:[dosya], text:metin, title:KART[onizleG].ad })
+        .catch(function(){});
+      return;
+    }
+  } catch(e){}
+  kartIndir(blob, ad);
+}
+function kartKaydet(){
+  if (onizleG < 0) return;
+  var b64 = kartPngB64(onizleG, onizleK), ad = kartDosyaAdi(onizleG, onizleK);
+  var P = window.Capacitor && Capacitor.Plugins;
+  if (P && P.Filesystem){
+    /* DOCUMENTS: kullanıcının dosyalarında görünür. Galeriye yazmak ayrı bir
+       izin ve eklenti isterdi; paylaş menüsünden "Fotoğraflara kaydet" zaten var. */
+    P.Filesystem.writeFile({ path:ad, data:b64, directory:'DOCUMENTS' })
+      .then(function(){ toast('Kart dosyalarına kaydedildi'); })
+      .catch(function(){ toast('Kaydedilemedi'); });
+    return;
+  }
+  kartIndir(b64Blob(b64), ad);
+}
+function kartIndir(blob, ad){
+  try {
+    var u = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = u; a.download = ad; document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(u); }, 4000);
+    toast('Kart indirildi');
+  } catch(e){ toast('Kaydedilemedi'); }
+}
+
+$('bKartGeri').onclick    = function(){ $('sheetKart').classList.add('hide'); };
+$('bOnizleGeri').onclick  = function(){ $('sheetOnizle').classList.add('hide'); };
+$('bPaylas').onclick      = kartPaylas;
+$('bKaydet').onclick      = kartKaydet;
+
 /* =====================  KIBLE  ===================== */
 var pusulaAcik = false, cihazYonu = null;
 function kibleCiz(){
@@ -846,6 +1563,285 @@ function esmaCiz(){
   ESMA.forEach(function(e,i){ h += '<div class="es"><u>'+(i+1)+'</u><b>'+e[0]+'</b><i>'+e[1]+'</i></div>'; });
   $('esmaList').innerHTML = h;
 }
+
+
+/* =====================  KUR'AN ELİFBASI  =====================
+   Kapsam bilerek sınırlı: harfler, harekeler ve OKUMA ALIŞTIRMALARI.
+   Alıştırma heceleri üretilmiş hecelerdir, Kur'an-ı Kerim metni DEĞİLDİR.
+   Mushaf metni bu sürümde yok; doğrulanmış bir kaynak olmadan âyet
+   dizmek bu üründe kabul edilemez (bir harekenin bile yanlış olması
+   kabul edilemez). Ders motoru metni veriden okuyor, kaynak geldiğinde
+   yeni dersler eklenir.                                               */
+var DERS = [
+{ ad:'Harfler 1', alt:'elif · be · te · se · cim · ha · hı', tip:'harf', o:[
+  { a:'ا', n:'elif', k:'Sesi yoktur, harekeyle ses alır.' },
+  { a:'ب', n:'be',   k:'Altında tek nokta.' },
+  { a:'ت', n:'te',   k:'Üstünde iki nokta.' },
+  { a:'ث', n:'se',   k:'Üstünde üç nokta. Dil ucu dişler arasında.' },
+  { a:'ج', n:'cim',  k:'İçinde tek nokta.' },
+  { a:'ح', n:'ha',   k:'Noktasız. Boğazdan, yumuşak.' },
+  { a:'خ', n:'hı',   k:'Üstünde tek nokta. Boğazdan, sert.' }
+]},
+{ ad:'Harfler 2', alt:'dal · zel · ra · ze · sin · şın', tip:'harf', o:[
+  { a:'د', n:'dal', k:'Noktasız.' },
+  { a:'ذ', n:'zel', k:'Üstünde tek nokta.' },
+  { a:'ر', n:'ra',  k:'Noktasız, aşağı kıvrık.' },
+  { a:'ز', n:'ze',  k:'Üstünde tek nokta.' },
+  { a:'س', n:'sin', k:'Üç dişli, noktasız.' },
+  { a:'ش', n:'şın', k:'Üç dişli, üstünde üç nokta.' }
+]},
+{ ad:'Harfler 3', alt:'sad · dad · tı · zı · ayn · gayn', tip:'harf', o:[
+  { a:'ص', n:'sad',  k:'Kalın okunur.' },
+  { a:'ض', n:'dad',  k:'Üstünde tek nokta, kalın.' },
+  { a:'ط', n:'tı',   k:'Noktasız, kalın.' },
+  { a:'ظ', n:'zı',   k:'Üstünde tek nokta, kalın.' },
+  { a:'ع', n:'ayn',  k:'Boğazdan çıkar.' },
+  { a:'غ', n:'gayn', k:'Üstünde tek nokta, boğazdan.' }
+]},
+{ ad:'Harfler 4', alt:'fe · kaf · kef · lam · mim · nun', tip:'harf', o:[
+  { a:'ف', n:'fe',  k:'Üstünde tek nokta.' },
+  { a:'ق', n:'kaf', k:'Üstünde iki nokta, kalın.' },
+  { a:'ك', n:'kef', k:'İnce okunur.' },
+  { a:'ل', n:'lam', k:'Uzun dikey çizgi.' },
+  { a:'م', n:'mim', k:'Yuvarlak başlı.' },
+  { a:'ن', n:'nun', k:'Üstünde tek nokta.' }
+]},
+{ ad:'Harfler 5', alt:'vav · he · ye · lamelif · hemze', tip:'harf', o:[
+  { a:'و', n:'vav',     k:'Yuvarlak başlı, kuyruklu.' },
+  { a:'ه', n:'he',      k:'Yumuşak, nefesli.' },
+  { a:'ي', n:'ye',      k:'Altında iki nokta.' },
+  { a:'لا', n:'lamelif', k:'Lam ile elifin birleşimi.' },
+  { a:'ء', n:'hemze',   k:'Kesik ses verir.' }
+]},
+{ ad:'Üstün', alt:'harekelerin ilki: e / a sesi', tip:'hareke', o:[
+  { a:'بَ', n:'be', k:'Üstün, harfe e/a sesi verir.' },
+  { a:'تَ', n:'te', k:'' },
+  { a:'جَ', n:'ce', k:'' },
+  { a:'دَ', n:'de', k:'' },
+  { a:'سَ', n:'se', k:'' },
+  { a:'قَ', n:'ka', k:'Kalın harfte a sesi olur.' }
+]},
+{ ad:'Esre', alt:'i sesi', tip:'hareke', o:[
+  { a:'بِ', n:'bi', k:'Esre, harfe i sesi verir.' },
+  { a:'تِ', n:'ti', k:'' },
+  { a:'جِ', n:'ci', k:'' },
+  { a:'دِ', n:'di', k:'' },
+  { a:'سِ', n:'si', k:'' },
+  { a:'قِ', n:'kı', k:'Kalın harfte ı sesi olur.' }
+]},
+{ ad:'Ötre', alt:'u / ü sesi', tip:'hareke', o:[
+  { a:'بُ', n:'bü', k:'Ötre, harfe u/ü sesi verir.' },
+  { a:'تُ', n:'tü', k:'' },
+  { a:'جُ', n:'cü', k:'' },
+  { a:'دُ', n:'dü', k:'' },
+  { a:'سُ', n:'sü', k:'' },
+  { a:'قُ', n:'ku', k:'Kalın harfte u sesi olur.' }
+]},
+{ ad:'Harekeli okuma', alt:'üç harekeyi karıştırarak', tip:'hareke', o:[
+  { a:'بَ بِ بُ', n:'be bi bü', k:'Sırayla üstün, esre, ötre.' },
+  { a:'تَ تِ تُ', n:'te ti tü', k:'' },
+  { a:'سَ سِ سُ', n:'se si sü', k:'' },
+  { a:'مَ مِ مُ', n:'me mi mü', k:'' },
+  { a:'نَ نِ نُ', n:'ne ni nü', k:'' },
+  { a:'لَ لِ لُ', n:'le li lü', k:'' }
+]},
+{ ad:'Cezm', alt:'harekesiz, kapatan harf', tip:'hareke', o:[
+  { a:'بْ', n:'b', k:'Cezm: harf sessiz okunur, önündeki harekeyle birleşir.' },
+  { a:'اَبْ', n:'eb', k:'' },
+  { a:'اِسْ', n:'is', k:'' },
+  { a:'اُمْ', n:'üm', k:'' },
+  { a:'قَلْ', n:'kal', k:'' },
+  { a:'مَنْ', n:'men', k:'' }
+]},
+{ ad:'Şedde', alt:'harfi iki kez okutur', tip:'hareke', o:[
+  { a:'بَّ', n:'bbe', k:'Şedde: harf iki kere okunur, ilki cezimli.' },
+  { a:'رَبَّ', n:'rabbe', k:'' },
+  { a:'اَمَّ', n:'emme', k:'' },
+  { a:'حَقَّ', n:'hakka', k:'' },
+  { a:'اِنَّ', n:'inne', k:'' },
+  { a:'كُلَّ', n:'külle', k:'' }
+]},
+{ ad:'Tenvin', alt:'çift hareke: n sesi', tip:'hareke', o:[
+  { a:'بً', n:'ben', k:'İki üstün: sonunda n sesi.' },
+  { a:'بٍ', n:'bin', k:'İki esre.' },
+  { a:'بٌ', n:'bün', k:'İki ötre.' },
+  { a:'كِتَابًا', n:'kitâben', k:'' },
+  { a:'رَجُلٌ', n:'racülün', k:'' },
+  { a:'بَيْتٍ', n:'beytin', k:'' }
+]},
+{ ad:'Med harfleri', alt:'sesi uzatanlar: elif · vav · ye', tip:'hareke', o:[
+  { a:'بَا', n:'bâ', k:'Üstünden sonra elif: uzun a.' },
+  { a:'بُو', n:'bû', k:'Ötreden sonra vav: uzun u.' },
+  { a:'بِي', n:'bî', k:'Esreden sonra ye: uzun i.' },
+  { a:'قَالَ', n:'kâle', k:'' },
+  { a:'يَقُولُ', n:'yekûlü', k:'' },
+  { a:'قِيلَ', n:'kîle', k:'' }
+]},
+{ ad:'Bitişik okuma', alt:'harflerin kelime içindeki şekilleri', tip:'hareke', o:[
+  { a:'بـ ـبـ ـب', n:'başta · ortada · sonda', k:'Çoğu harf bulunduğu yere göre şekil değiştirir.' },
+  { a:'كَتَبَ', n:'ketebe', k:'' },
+  { a:'عَلِمَ', n:'alime', k:'' },
+  { a:'سَمِعَ', n:'semia', k:'' },
+  { a:'نَصَرَ', n:'nasara', k:'' },
+  { a:'حَمِدَ', n:'hamide', k:'' }
+]}
+];
+var DERS_BEDAVA = 3;
+
+var dersAktif = -1, dersAdim = 0, dersSoru = null, dersDogru = 0;
+
+function dersBitti(i){ return (S.ogren.biten || []).indexOf(i) >= 0; }
+function dersKilitli(i){ return i >= DERS_BEDAVA && !proMu(); }
+
+function dersListeCiz(){
+  if (!$('dersListe')) return;
+  var biten = (S.ogren.biten || []).length;
+  $('oIlerleme').innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center">' +
+    '<b style="font-size:15px">Elifba ilerlemen</b>' +
+    '<span style="font-size:13px;color:var(--dim);font-weight:700">' + biten + ' / ' + DERS.length + '</span></div>' +
+    '<div class="ilerlecubuk"><i style="width:' + Math.round(biten/DERS.length*100) + '%"></i></div>' +
+    (proMu() ? '' : '<div class="hint" style="margin-top:10px">İlk ' + DERS_BEDAVA +
+      ' ders ücretsiz. Devamı Seher Pro ile açılır.</div>');
+  var h = '';
+  DERS.forEach(function(d, i){
+    var kilit = dersKilitli(i), ok = dersBitti(i);
+    h += '<button class="ders' + (ok ? ' bitti' : '') + (kilit ? ' kilit' : '') + '" data-d="' + i + '">' +
+         '<div class="dn">' + (ok ? '&#10003;' : (kilit ? '&#128274;' : (i+1))) + '</div>' +
+         '<div class="dm"><b>' + d.ad + (kilit ? '<span class="prorozet">PRO</span>' : '') +
+         '</b><small>' + d.alt + '</small></div></button>';
+  });
+  h += '<div class="hint" style="margin-top:14px">Bu bölüm harfleri, harekeleri ve ' +
+       'okuma alıştırmalarını kapsar. Alıştırmalardaki heceler öğretim amacıyla ' +
+       'oluşturulmuştur, Kur\'an-ı Kerim metni değildir. Mushaf metniyle okuma ' +
+       'dersleri, doğrulanmış bir kaynakla birlikte sonraki sürümde eklenecek.</div>';
+  $('dersListe').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#dersListe .ders'), function(el){
+    el.onclick = function(){
+      var i = +el.getAttribute('data-d');
+      if (dersKilitli(i)){ proAc('Bu ders Seher Pro ile açılıyor'); return; }
+      dersAc(i);
+    };
+  });
+}
+
+function seslendir(metin){
+  try {
+    if (!window.speechSynthesis) return false;
+    var u = new SpeechSynthesisUtterance(metin);
+    u.lang = 'tr-TR'; u.rate = 0.85;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+    return true;
+  } catch(e){ return false; }
+}
+
+function dersAc(i){
+  dersAktif = i; dersAdim = 0; dersDogru = 0; dersSoru = null;
+  $('dersBaslik').textContent = DERS[i].ad;
+  $('sheetDers').classList.remove('hide');
+  $('sheetDers').scrollTop = 0;
+  dersCiz();
+}
+function dersKapat(){ $('sheetDers').classList.add('hide'); dersListeCiz(); }
+
+function dersCiz(){
+  var d = DERS[dersAktif], n = d.o.length, toplamAdim = n + 4;
+  $('dersCubuk').style.width = Math.round(dersAdim / toplamAdim * 100) + '%';
+  var g = $('dersGovde');
+
+  if (dersAdim < n){
+    var o = d.o[dersAdim];
+    g.innerHTML =
+      '<div class="card" style="text-align:center;padding:26px 16px">' +
+      '<div class="harf">' + o.a + '</div>' +
+      '<div style="font-size:26px;font-weight:800;margin-top:10px">' + o.n + '</div>' +
+      (o.k ? '<div class="hint" style="margin-top:8px">' + o.k + '</div>' : '') +
+      '</div>' +
+      '<div class="rowb" style="margin-top:12px">' +
+      '<button class="btn ghost" id="dSes">&#9834; Dinle</button>' +
+      '<button class="btn" id="dIleri">' + (dersAdim === n-1 ? 'Alıştırmaya geç' : 'Sonraki') + '</button>' +
+      '</div>' +
+      '<div class="hint" style="text-align:center;margin-top:10px">' + (dersAdim+1) + ' / ' + n + '</div>';
+    $('dSes').onclick = function(){ if (!seslendir(o.n)) toast('Bu cihazda seslendirme yok'); };
+    $('dIleri').onclick = function(){ dersAdim++; buzz(8); dersCiz(); };
+    return;
+  }
+
+  if (dersAdim < toplamAdim){
+    if (!dersSoru) dersSoru = dersSoruUret(d);
+    var q = dersSoru;
+    var h = '<div class="card" style="text-align:center;padding:26px 16px">' +
+            '<div class="hint" style="margin:0 0 10px">Bunun okunuşu hangisi?</div>' +
+            '<div class="harf">' + q.dogru.a + '</div></div>';
+    q.secenek.forEach(function(sec, si){
+      h += '<button class="sik" data-s="' + si + '">' + sec + '</button>';
+    });
+    g.innerHTML = h;
+    Array.prototype.forEach.call(document.querySelectorAll('#dersGovde .sik'), function(el){
+      el.onclick = function(){
+        if (el.classList.contains('dogru') || el.classList.contains('yanlis')) return;
+        var dogruMu = el.textContent === q.dogru.n;
+        el.classList.add(dogruMu ? 'dogru' : 'yanlis');
+        if (dogruMu) dersDogru++;
+        else Array.prototype.forEach.call(document.querySelectorAll('#dersGovde .sik'), function(x){
+          if (x.textContent === q.dogru.n) x.classList.add('dogru');
+        });
+        buzz(dogruMu ? 12 : [12,60,12]);
+        setTimeout(function(){ dersAdim++; dersSoru = null; dersCiz(); }, 700);
+      };
+    });
+    return;
+  }
+
+  /* bitti */
+  var yeni = (S.ogren.biten || []).slice();
+  if (yeni.indexOf(dersAktif) < 0){ yeni.push(dersAktif); S.ogren.biten = yeni; save(); }
+  var sonraki = dersAktif + 1;
+  g.innerHTML =
+    '<div class="card" style="text-align:center;padding:28px 16px">' +
+    '<div style="font-size:44px">&#127881;</div>' +
+    '<div style="font-size:20px;font-weight:800;margin-top:8px">Ders tamamlandı</div>' +
+    '<div class="hint" style="margin-top:6px">' + dersDogru + ' / 4 doğru</div></div>' +
+    (sonraki < DERS.length
+      ? '<button class="btn" id="dSonraki">' + (dersKilitli(sonraki)
+          ? 'Sonraki ders Pro ile açılır' : 'Sonraki ders: ' + DERS[sonraki].ad) + '</button>'
+      : '<div class="hint" style="text-align:center">Elifbanın sonuna geldin. Mushaf metniyle ' +
+        'okuma dersleri sonraki sürümde eklenecek.</div>') +
+    '<button class="btn ghost" id="dBitir" style="margin-top:9px">Ders listesine dön</button>';
+  var sb = $('dSonraki');
+  if (sb) sb.onclick = function(){
+    if (dersKilitli(sonraki)){ proAc('Sonraki ders Seher Pro ile açılıyor'); return; }
+    dersAc(sonraki);
+  };
+  $('dBitir').onclick = dersKapat;
+}
+
+/* Soru: dersin kendi öğelerinden biri sorulur, çeldiriciler aynı dersten
+   gelir (farklı derslerden gelseydi soru anlamsız derecede kolay olurdu). */
+function dersSoruUret(d){
+  var i = Math.floor(Math.random()*d.o.length), dogru = d.o[i];
+  var havuz = d.o.filter(function(x){ return x.n !== dogru.n; });
+  var sec = [dogru.n];
+  while (sec.length < Math.min(4, d.o.length) && havuz.length){
+    var j = Math.floor(Math.random()*havuz.length);
+    sec.push(havuz[j].n); havuz.splice(j,1);
+  }
+  for (var k = sec.length-1; k > 0; k--){
+    var r = Math.floor(Math.random()*(k+1)), t = sec[k]; sec[k] = sec[r]; sec[r] = t;
+  }
+  return { dogru:dogru, secenek:sec };
+}
+
+$('bDersGeri').onclick = dersKapat;
+Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), function(b){
+  b.onclick = function(){
+    var o = b.getAttribute('data-o');
+    Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), function(x){
+      x.classList.toggle('on', x === b); });
+    $('oElifba').style.display = (o === 'elifba') ? '' : 'none';
+    $('oEsma').style.display   = (o === 'esma')   ? '' : 'none';
+  };
+});
 
 /* =====================  AYARLAR  ===================== */
 function ayarlarKur(){
@@ -1083,9 +2079,56 @@ var Ads = {
   }
 };
 
+/* =====================  PRO  =====================
+   Pro iki sekilde acilir: abonelik (aylik/yillik) ya da eski tek seferlik
+   "Reklamsiz surum" alimi -- o da reklamlari kaldirir ama kilitli kart ve
+   dersleri acmaz. proMu() tek kapidir; kilit denetimi baska yerde yapilmaz. */
+function proMu(){ return !!S.pro; }
+var PRO_PAKET = [
+  { id:'proYil', ad:'Yıllık', alt:'En uygunu · istediğin an iptal', vurgu:true },
+  { id:'proAy',  ad:'Aylık',  alt:'Her ay yenilenir · istediğin an iptal' }
+];
+var proSecim = 'proYil';
+
+function proAc(neden){
+  proFiyatCiz();
+  $('sheetPro').classList.remove('hide');
+  if (neden) toast(neden);
+}
+function proFiyatCiz(){
+  var h = '';
+  PRO_PAKET.forEach(function(pk){
+    var u = IAP.urun(CFG.iap[pk.id]);
+    var fiyat = (u && u.fiyat) ? u.fiyat : 'fiyat mağazadan alınıyor';
+    h += '<div class="profiyat' + (proSecim === pk.id ? ' secili' : '') + '" data-p="' + pk.id + '">' +
+         '<b>' + pk.ad + ' · ' + fiyat + '</b><small>' + pk.alt + '</small></div>';
+  });
+  $('proFiyatlar').innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#proFiyatlar .profiyat'), function(el){
+    el.onclick = function(){ proSecim = el.getAttribute('data-p'); proFiyatCiz(); };
+  });
+  /* Apple 3.1.2 ve Play, abonelik ekraninda sure/fiyat/otomatik yenileme ve
+     sartlar-gizlilik baglantilarini ZORUNLU tutuyor; yoksa surum reddedilir. */
+  var u = IAP.urun(CFG.iap[proSecim]);
+  $('proSart').innerHTML =
+    'Seher Pro otomatik yenilenen bir aboneliktir. Ödeme, satın alma onaylandığında ' +
+    (Ads.platform() === 'ios' ? 'Apple Kimliğinden' : 'Google Play hesabından') + ' tahsil edilir. ' +
+    'Abonelik, dönem bitmeden en az 24 saat önce kapatılmazsa kendiliğinden yenilenir ve ' +
+    'aynı tutar tahsil edilir. Aboneliği ' +
+    (Ads.platform() === 'ios' ? 'App Store hesap ayarlarından' : 'Google Play abonelikler sayfasından') +
+    ' istediğin an yönetebilir veya iptal edebilirsin. ' +
+    (u && u.fiyat ? 'Seçili paket: ' + u.fiyat + '. ' : '') +
+    '<a href="#" id="lProTerms">Kullanım Şartları</a> · <a href="#" id="lProPrivacy">Gizlilik Politikası</a>';
+  var t = $('lProTerms'), g = $('lProPrivacy');
+  if (t) t.onclick = dis(CFG.termsUrl);
+  if (g) g.onclick = dis(CFG.privacyUrl);
+}
+function proKapat(){ $('sheetPro').classList.add('hide'); }
+
 /* =====================  SATIN ALMA  ===================== */
 var IAP = {
-  ready:false,
+  ready:false, urunler:{},
+  urun: function(id){ return this.urunler[id] || null; },
   init: function(){
     var CP = window.CdvPurchase;
     if (!CP || !CP.store) return;
@@ -1094,33 +2137,68 @@ var IAP = {
     else if (plat === 'ios') p0 = CP.Platform.APPLE_APPSTORE;
     else return;
     try {
-      st.register([{ id:CFG.iap.removeAds, type:CP.ProductType.NON_CONSUMABLE, platform:p0 }]);
+      st.register([
+        { id:CFG.iap.removeAds, type:CP.ProductType.NON_CONSUMABLE,    platform:p0 },
+        { id:CFG.iap.proAy,     type:CP.ProductType.PAID_SUBSCRIPTION, platform:p0 },
+        { id:CFG.iap.proYil,    type:CP.ProductType.PAID_SUBSCRIPTION, platform:p0 }
+      ]);
       st.when()
-        .approved(function(t){ t.finish(); })
-        .finished(function(t){
-          if (t.products && t.products.some(function(p){ return p.id === CFG.iap.removeAds; })) IAP.grant();
-        });
-      st.initialize([p0]).then(function(){ IAP.ready = true; }).catch(function(){});
+        .productUpdated(function(){ IAP.fiyatlariOku(); })
+        .approved(function(t){ t.verify ? t.verify() : t.finish(); })
+        .verified(function(r){ r.finish && r.finish(); })
+        .finished(function(t){ IAP.durumOku(); });
+      st.initialize([p0]).then(function(){
+        IAP.ready = true; IAP.fiyatlariOku(); IAP.durumOku();
+      }).catch(function(){});
     } catch(e){}
   },
-  grant: function(){
-    if (S.noAds) return;
-    S.noAds = true; save(); toast('Reklamlar kaldırıldı. Teşekkürler.');
+  fiyatlariOku: function(){
+    var CP = window.CdvPurchase;
+    if (!CP) return;
+    [CFG.iap.removeAds, CFG.iap.proAy, CFG.iap.proYil].forEach(function(id){
+      try {
+        var p = CP.store.get(id, null);
+        var o = p && p.getOffer && p.getOffer();
+        var f = o && o.pricingPhases && o.pricingPhases[0] && o.pricingPhases[0].price;
+        IAP.urunler[id] = { fiyat: f || (p && p.pricing && p.pricing.price) || '' };
+      } catch(e){}
+    });
+    if (!$('sheetPro').classList.contains('hide')) proFiyatCiz();
   },
-  buy: function(){
+  /* Sahiplik magazadan okunur; cihazda tuttugumuz bayrak yalniz onbellektir. */
+  durumOku: function(){
+    var CP = window.CdvPurchase;
+    if (!CP) return;
+    var proVar = false, reklamsiz = false;
+    try {
+      if (CP.store.owned(CFG.iap.proAy) || CP.store.owned(CFG.iap.proYil)) proVar = true;
+      if (CP.store.owned(CFG.iap.removeAds)) reklamsiz = true;
+    } catch(e){}
+    var degisti = (S.pro !== proVar) || (S.noAds !== (reklamsiz || proVar));
+    S.pro = proVar;
+    S.noAds = reklamsiz || proVar;
+    if (degisti){
+      save(); kartGrupCiz(); dersListeCiz(); ayarProYenile();
+      /* Acik duran izgara yeniden cizilmezse satin almadan sonra PRO rozetleri
+         ekranda kalir ve kullanici parayi odedigi halde kilitli saniyor. */
+      if (kartAcik >= 0 && !$('sheetKart').classList.contains('hide')) kartIzgaraAc(kartAcik);
+      if (!$('sheetPro').classList.contains('hide') && S.pro){ proKapat(); toast('Seher Pro etkin'); }
+    }
+  },
+  al: function(id){
     var CP = window.CdvPurchase;
     if (!this.ready || !CP){ toast('Mağaza şu an kullanılamıyor'); return; }
     try {
-      var p = CP.store.get(CFG.iap.removeAds, null), offer = p && p.getOffer();
+      var p = CP.store.get(id, null), offer = p && p.getOffer();
       if (!offer){ toast('Ürün bulunamadı'); return; }
-      CP.store.order(offer).catch(function(){ toast('Satın alma iptal edildi'); });
+      CP.store.order(offer).catch(function(){ toast('Satın alma tamamlanmadı'); });
     } catch(e){ toast('Satın alma başarısız'); }
   },
-  restore: function(){
+  geriYukle: function(){
     var CP = window.CdvPurchase;
     if (!this.ready || !CP){ toast('Mağaza şu an kullanılamıyor'); return; }
     toast('Geri yükleniyor...');
-    try { CP.store.restorePurchases(); } catch(e){}
+    try { CP.store.restorePurchases().then(function(){ IAP.durumOku(); }); } catch(e){}
   }
 };
 
@@ -1138,8 +2216,23 @@ Array.prototype.forEach.call(document.querySelectorAll('#nav button'), function(
   };
 });
 $('bQPerm').onclick = pusulaBaslat;
-$('bNoAds').onclick = function(){ IAP.buy(); };
-$('bRestore').onclick = function(){ IAP.restore(); };
+$('bNoAds').onclick  = function(){ IAP.al(CFG.iap.removeAds); };
+$('bRestore').onclick = function(){ IAP.geriYukle(); };
+$('bProAyar').onclick = function(){ proAc(); };
+$('bProGeri').onclick = proKapat;
+$('bProGeriYukle').onclick = function(){ IAP.geriYukle(); };
+$('bProAl').onclick = function(){ IAP.al(CFG.iap[proSecim]); };
+function ayarProYenile(){
+  var k = $('proKutu');
+  if (!k) return;
+  if (S.pro) k.innerHTML = '<div style="font-size:15px;font-weight:700">Seher Pro etkin' +
+      '<span class="prorozet">PRO</span></div>' +
+      '<div class="hint" style="margin-top:6px">Bütün kartlar ve dersler açık, reklam yok. ' +
+      'Aboneliği ' + (Ads.platform() === 'ios' ? 'App Store' : 'Google Play') + ' hesap ayarlarından yönetebilirsin.</div>';
+  else if (S.noAds) k.innerHTML = '<div style="font-size:15px;font-weight:700">Reklamsız sürüm etkin</div>' +
+      '<div class="hint" style="margin-top:6px">Reklamlar kapalı. Kilitli kartlar ve dersler için Seher Pro gerekiyor.</div>';
+  else k.innerHTML = '<div class="hint" style="margin:0">Kilitli tebrik kartları, elifbanın bütün dersleri ve reklamsız kullanım.</div>';
+}
 $('bInfo').onclick = function(){ $('sheetInfo').classList.remove('hide'); };
 $('bInfoClose').onclick = function(){ $('sheetInfo').classList.add('hide'); };
 $('lConsent').onclick = function(e){ e.preventDefault(); Ads.consent(true); };
@@ -1162,6 +2255,7 @@ document.addEventListener('visibilitychange', function(){
 function baslat(){
   $('iVer').textContent = 'Sürüm ' + CFG.version + ' · ' + CFG.bundleId;
   esmaCiz(); zikirYenile(); ayarlarKur();
+  dersListeCiz(); ayarProYenile();
   if (S.lat === null){
     /* İlk açılış: cihazın saat dilimiyle aynı dilimde bir şehir varsa onu seç,
        yoksa İstanbul. Kullanıcı ilk ekrandan değiştirebilir. */
@@ -1170,6 +2264,9 @@ function baslat(){
     var aday = SEHIRLER.filter(function(c){ return c[3] === cihazZone; })[0] || SEHIRLER[0];
     S.lat = aday[1]; S.lng = aday[2]; S.zone = aday[3]; S.city = aday[0];
   }
+  /* Kart tarihleri konumun saat dilimine gore hesaplaniyor; konum varsayilani
+     atandiktan SONRA cizilmeli. */
+  kartGrupCiz();
   vakitleriYenile(); kibleCiz(); ekranAcik();
   /* Gün dönüşü CİHAZIN değil, SEÇİLİ YERİN gece yarısında olur; cihaz saatine
      bakmak başka dilime bakan kullanıcıda listeyi saatlerce bayat bırakırdı.
@@ -1328,6 +2425,76 @@ if (q.get('selftest') === '1'){
   sahteKur(2026, 5, 21, 23 + 59/60); vakitleriYenile();
   var gece = siradakiVakit();
   if (!gece || gece.k !== 'imsak' || !gece.yarin) hata.push('gece yarisinda yarinin imsaki bulunamadi');
+  /* ---- tebrik kartları ---- */
+  var kToplam = 0, kBos = 0, kUzun = 0;
+  KART.forEach(function(g, gi){
+    kToplam += g.m.length;
+    if (g.m.length < 10) hata.push(g.id + ' grubunda ' + g.m.length + ' kart var, en az 10 olmali');
+    if (g.bedava < 1 || g.bedava >= g.m.length)
+      hata.push(g.id + ' grubunda bedava kart sayisi mantiksiz: ' + g.bedava);
+    var benzersiz = {};
+    g.m.forEach(function(t, ki){
+      if (!t || t.length < 20) kBos++;
+      if (t.length > 130) kUzun++;
+      if (benzersiz[t]) hata.push(g.id + ' grubunda ayni metin iki kez var');
+      benzersiz[t] = 1;
+      /* Alinti yapilmamali: dogrulanmamis ayet/hadis dagitmak bu urunde kabul edilemez. */
+      if (/["“”]/.test(t)) hata.push(g.id + '/' + ki + ' kart metninde tirnak icinde alinti var');
+    });
+  });
+  if (kBos) hata.push(kBos + ' kart metni cok kisa');
+  if (kUzun) hata.push(kUzun + ' kart metni karta sigmayacak kadar uzun');
+  not.push('kart=' + kToplam);
+  /* Kart cizimi calisiyor mu ve DETERMINISTIK mi (iki kez ciz, ayni olmali) */
+  var cvA = document.createElement('canvas'), cvB = document.createElement('canvas');
+  kartCiz(cvA, 216, 270, 3, 2); kartCiz(cvB, 216, 270, 3, 2);
+  var dA = cvA.toDataURL(), dB = cvB.toDataURL();
+  if (dA.length < 2000) hata.push('kart cizilemedi (bos gorsel)');
+  if (dA !== dB) hata.push('ayni kart iki cizimde farkli cikti - kart deterministik degil');
+  /* Pro kilidi: pro degilken kilitli kart onizleme yerine paywall acmali */
+  S.pro = false;
+  var kilitliG = 0, kilitliK = -1;
+  KART.forEach(function(g, gi){ if (kilitliK < 0 && kartPro(gi, g.m.length-1)){ kilitliG = gi; kilitliK = g.m.length-1; } });
+  kartOnizleAc(kilitliG, kilitliK);
+  if ($('sheetPro').classList.contains('hide')) hata.push('kilitli kart Pro ekranini acmadi');
+  if (!$('sheetOnizle').classList.contains('hide')) hata.push('kilitli kart onizlemesi acildi');
+  proKapat();
+  S.pro = true;
+  kartOnizleAc(kilitliG, kilitliK);
+  if ($('sheetOnizle').classList.contains('hide')) hata.push('Pro kullanicida kilitli kart acilmadi');
+  $('sheetOnizle').classList.add('hide');
+  S.pro = false;
+
+  /* ---- elifba dersleri ---- */
+  if (DERS.length < 10) hata.push('ders sayisi ' + DERS.length + ', en az 10 olmali');
+  var dHata = 0;
+  DERS.forEach(function(d){
+    if (!d.o || d.o.length < 4) dHata++;
+    d.o.forEach(function(o){ if (!o.a || !o.n) dHata++; });
+  });
+  if (dHata) hata.push(dHata + ' ders ogesi eksik');
+  not.push('ders=' + DERS.length);
+  /* Soru uretimi: dogru cevap secenekler arasinda ve secenekler benzersiz olmali */
+  for (var sq = 0; sq < 40; sq++){
+    var d0 = DERS[sq % DERS.length], q = dersSoruUret(d0);
+    if (q.secenek.indexOf(q.dogru.n) < 0) hata.push('soruda dogru cevap seceneklerde yok');
+    var tekrar = {};
+    q.secenek.forEach(function(x){ if (tekrar[x]) hata.push('soru seceneklerinde tekrar var'); tekrar[x] = 1; });
+  }
+  /* Ders kilidi */
+  S.pro = false;
+  if (dersKilitli(0) || dersKilitli(DERS_BEDAVA - 1)) hata.push('bedava dersler kilitli gorunuyor');
+  if (!dersKilitli(DERS_BEDAVA)) hata.push('ucretsiz ders sinirindan sonrasi kilitli degil');
+  S.pro = true;
+  if (dersKilitli(DERS.length - 1)) hata.push('Pro kullanicida son ders hala kilitli');
+  S.pro = false;
+  /* Ders akisi bastan sona yurusun */
+  dersAc(0);
+  var guvenlik = 0;
+  while (dersAdim < DERS[0].o.length && guvenlik++ < 50){ dersAdim++; dersCiz(); }
+  if (!$('dersGovde').innerHTML) hata.push('ders ekrani bos');
+  dersKapat();
+
   /* 30 günlük liste ana ekranla AYNI hesabı kullanmalı; ayrı bir yol açılsaydı
      iki ekran zamanla birbirinden saparadı. */
   ayListesi(true);
@@ -1399,12 +2566,14 @@ if (q.get('selftest') === '1'){
     S.method = 'diyanet'; S.asr = 1; S.zikirHedef = 33;
     var T = +(q.get('t') || 0);
     var SAHNE = [
-      { t:0,  sn:7, tab:'tVakit', yazi:'Sıradaki vakte geri sayım' },
-      { t:7,  sn:5, tab:'tVakit', ay:true, yazi:'30 günlük liste · imsakiye' },
-      { t:12, sn:6, tab:'tKible', yazi:'Kıbleyi anında bul' },
-      { t:18, sn:5, tab:'tZikir', yazi:'Zikirmatik · 33 ve 99' },
-      { t:23, sn:4, tab:'tEsma',  yazi:'Esmâü’l-Hüsnâ' },
-      { t:27, sn:5, tab:'tAyar',  yazi:'Kendi takvimine oturt' }
+      { t:0,  sn:6, tab:'tVakit', yazi:'Sıradaki vakte geri sayım' },
+      { t:6,  sn:4, tab:'tVakit', ay:true, yazi:'30 günlük liste · imsakiye' },
+      { t:10, sn:5, tab:'tKart',  kartG:8, yazi:'Kandil ve bayrama hazır kartlar' },
+      { t:15, sn:4, tab:'tKart',  onizleG:8, onizleK:1, yazi:'Seç, paylaş' },
+      { t:19, sn:5, tab:'tKible', yazi:'Kıbleyi anında bul' },
+      { t:24, sn:4, tab:'tOgren', yazi:'Kur’an elifbası, adım adım' },
+      { t:28, sn:3, tab:'tZikir', yazi:'Zikirmatik · 33 ve 99' },
+      { t:31, sn:4, tab:'tAyar',  yazi:'Kendi takvimine oturt' }
     ];
     var sh = SAHNE[0];
     for (var si = 0; si < SAHNE.length; si++) if (T >= SAHNE[si].t) sh = SAHNE[si];
@@ -1429,15 +2598,22 @@ if (q.get('selftest') === '1'){
     if (sh.ay){
       ayListesi(true);
       $('sheetAy').scrollTop = ilerleme * 1200;
+    } else if (sh.kartG !== undefined){
+      kartGrupCiz(); kartIzgaraAc(sh.kartG);
+      $('sheetKart').scrollTop = ilerleme * 900;
+    } else if (sh.onizleG !== undefined){
+      S.pro = true;
+      kartOnizleAc(sh.onizleG, sh.onizleK + Math.floor(ilerleme * 2.99));
     } else {
-      var kaydir = { tEsma:[0,1100], tAyar:[60,700] }[sh.tab];
+      var kaydir = { tOgren:[0,420], tAyar:[60,700] }[sh.tab];
       if (kaydir) $('app').scrollTop = kaydir[0] + ilerleme * (kaydir[1] - kaydir[0]);
     }
   }
 
   if (q.get('shot') === '1'){
     var s = q.get('s') || 'vakit';
-    var harita = { vakit:'tVakit', kible:'tKible', zikir:'tZikir', esma:'tEsma', ayar:'tAyar' };
+    var harita = { vakit:'tVakit', kible:'tKible', kart:'tKart', ogren:'tOgren',
+                   zikir:'tZikir', esma:'tOgren', ayar:'tAyar' };
     var hedef = harita[s] || 'tVakit';
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(x){ x.classList.remove('on'); });
     Array.prototype.forEach.call(document.querySelectorAll('#nav button'), function(x){
@@ -1449,30 +2625,46 @@ if (q.get('selftest') === '1'){
     vakitleriYenile(); zikirYenile(); ayarlarKur();
     if (hedef === 'tKible'){ cihazYonu = +(q.get('yon') || 120); kibleCiz(); }
     if (q.get('sayfa') === 'ay') ayListesi(true);
-    if (+q.get('sc')) setTimeout(function(){
-      ($('sheetAy').classList.contains('hide') ? $('app') : $('sheetAy')).scrollTop = +q.get('sc');
-    }, 0);
+    if (q.get('sayfa') === 'kartlar') kartIzgaraAc(+(q.get('g') || 0));
+    if (q.get('sayfa') === 'onizle'){ S.pro = true; kartOnizleAc(+(q.get('g') || 0), +(q.get('k') || 0)); }
+    if (q.get('sayfa') === 'ders'){ S.pro = true; dersAc(+(q.get('d') || 0)); }
+    if (q.get('sayfa') === 'pro') proAc();
+    if (q.get('s') === 'esma'){
+      Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), function(x){
+        x.classList.toggle('on', x.getAttribute('data-o') === 'esma'); });
+      $('oElifba').style.display = 'none'; $('oEsma').style.display = '';
+    }
     /* Mağaza karesi başlığı. İki biçim var, çünkü 1080x1920 (Play'in izin
        verdiği en uzun oran) iri bir başlıkla altı vakti birden göstermiyor:
          ?h0=  tek satır, ince şerit  (liste tam sığar)
-         ?h1= (+ ?h2=) iri başlık     (liste bilerek kırpılır)               */
-    var tek = q.get('h0'), bas = q.get('h1');
+         ?h1= (+ ?h2=) iri başlık     (liste bilerek kırpılır)
+       Başlık AÇIK OLAN SAYFANIN içine konur; #app'e konulduğunda sayfa onu
+       tamamen örtüyor ve kareye hiç girmiyordu. */
+    var basElem = null, tek = q.get('h0'), bas = q.get('h1');
     if (tek){
-      var d0 = document.createElement('div');
-      d0.style.cssText = 'position:sticky;top:-14px;z-index:5;margin:-14px -16px 0;' +
+      basElem = document.createElement('div');
+      basElem.style.cssText = 'position:sticky;top:-14px;z-index:5;' +
         'padding:16px 8px 12px;text-align:center;font-size:17px;background:#071a17;' +
         'font-weight:800;color:var(--gold);letter-spacing:.01em';
-      d0.textContent = tek;
-      $('app').insertBefore(d0, $('app').firstChild);
+      basElem.textContent = tek;
     } else if (bas){
-      var d = document.createElement('div');
-      d.style.cssText = 'position:sticky;top:-14px;z-index:5;margin:-14px -16px 0;' +
+      basElem = document.createElement('div');
+      basElem.style.cssText = 'position:sticky;top:-14px;z-index:5;' +
         'padding:26px 22px 20px;text-align:center;background:#071a17';
-      d.innerHTML = '<div style="font-size:30px;font-weight:900;line-height:1.2;letter-spacing:-.01em">' +
+      basElem.innerHTML = '<div style="font-size:30px;font-weight:900;line-height:1.2;letter-spacing:-.01em">' +
         bas + '</div>' +
         (q.get('h2') ? '<div style="font-size:15px;color:var(--dim);font-weight:600;margin-top:8px;line-height:1.5">' + q.get('h2') + '</div>' : '');
-      $('app').insertBefore(d, $('app').firstChild);
     }
+    var acikSayfa = null;
+    ['sheetAy','sheetKart','sheetOnizle','sheetDers','sheetPro','sheetCity','sheetInfo'].forEach(function(id){
+      if (!$(id).classList.contains('hide')) acikSayfa = $(id);
+    });
+    var kap = acikSayfa || $('app');
+    if (basElem){
+      basElem.style.margin = acikSayfa ? '-20px -20px 14px' : '-14px -16px 0';
+      kap.insertBefore(basElem, kap.firstChild);
+    }
+    if (+q.get('sc')) setTimeout(function(){ kap.scrollTop = +q.get('sc'); }, 0);
   }
 }
 </script>

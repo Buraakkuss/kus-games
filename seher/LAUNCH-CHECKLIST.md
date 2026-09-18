@@ -73,7 +73,13 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
 - [ ] `app.config.json` → `admob.real` alanlarını doldur, `useTest: false` yap
 - [ ] `bash tools/set-identity.sh`
 - [ ] Play Console → Ürünler → Uygulama içi ürünler → `remove_ads` (tek seferlik, ~2,99 $)
-- [ ] App Store Connect → Uygulama içi satın alma → `remove_ads` (**Non-Consumable**, aynı fiyat)
+- [ ] Play Console → Ürünler → **Abonelikler** → `seher_pro_aylik` (P1M) ve `seher_pro_yillik` (P1Y),
+      ikisi de **temel planı yayınlanmış** olmalı — yayınlanmazsa uygulamada fiyat boş görünür
+- [ ] App Store Connect → Uygulama içi satın alma → `remove_ads` (**Non-Consumable**)
+- [ ] App Store Connect → **Abonelikler** → tek bir "Seher Pro" grubu içinde
+      `seher_pro_aylik` ve `seher_pro_yillik` (**Auto-Renewable**)
+- [ ] Her iki abonelik için açıklama alanına süre + otomatik yenileme + iptal yolu yaz
+      (Apple 3.1.2 bunu şart koşuyor; uygulama içindeki metnin aynısı yeterli)
 - [ ] `node tools/check.js` → "Hata yok, 0 uyarı" görmeden devam etme
 
 ---
@@ -105,6 +111,13 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
       reklam **gelmemeli**. Bu ürünün en önemli davranışıdır.
 - [ ] `remove_ads` satın alınabilmeli; satın alınca reklam tamamen kesilmeli;
       "Satın almayı geri yükle" çalışmalı.
+- [ ] **Abonelik ekranı**: fiyatlar mağazadan gelmeli ("fiyat mağazadan alınıyor" yazısı
+      kalıyorsa ürün mağazada yayınlanmamış demektir). Aylık ve yıllık ayrı ayrı denenmeli.
+- [ ] Pro satın alınca kilitli kartlar ve dersler **anında** açılmalı, uygulama yeniden
+      başlatılmadan.
+- [ ] **Kart paylaşımı**: gerçek cihazda Paylaş → WhatsApp ve Instagram listede çıkmalı,
+      giden görsel 1080x1350 ve köşesinde Seher işareti olmalı.
+- [ ] **Kaydet**: dosyalara yazmalı ve "kaydedildi" bildirimi gelmeli.
 - [ ] Küçük ekranda (SE) ve büyük ekranda (Pro Max) yerleşim taşmıyor mu?
 - [ ] Gece yarısını geç: liste yeni güne dönmeli, geri sayım yarının imsakını göstermeli.
 
@@ -119,7 +132,8 @@ Kayıt gerçek kişi olarak yapıldı. Sonuçları:
       `assets/screenshots/android-*.png`
 - [ ] Veri güvenliği formu: `store/data-safety.md` (**konum ve reklam kimliği "Evet"**)
 - [ ] Reklam kimliği beyanı: **Evet** · Reklam içeriyor: **Evet**
-- [ ] İçerik derecelendirme: `store/content-rating.md`
+- [ ] İçerik derecelendirme: `store/content-rating.md` — abonelik olduğu için
+      "dijital satın alma" sorusuna **evet**
 - [ ] Hedef kitle: **13+**
 - [ ] Kategori: **Yaşam Tarzı**
 - [ ] Ülkeler: **Türkiye dahil tüm ülkeler**

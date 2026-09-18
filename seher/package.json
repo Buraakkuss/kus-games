@@ -14,17 +14,19 @@
     "check": "node tools/check.js"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^7.0.0",
+    "@capacitor-community/keep-awake": "^7.0.0",
     "@capacitor/android": "^7.0.0",
     "@capacitor/browser": "^7.0.0",
     "@capacitor/core": "^7.0.0",
+    "@capacitor/filesystem": "^7.0.0",
     "@capacitor/geolocation": "^7.0.0",
     "@capacitor/haptics": "^7.0.0",
     "@capacitor/ios": "^7.0.0",
     "@capacitor/local-notifications": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
     "@capacitor/splash-screen": "^7.0.0",
     "@capacitor/status-bar": "^7.0.0",
-    "@capacitor-community/admob": "^7.0.0",
-    "@capacitor-community/keep-awake": "^7.0.0",
     "cordova-plugin-purchase": "^13.12.1"
   },
   "devDependencies": {

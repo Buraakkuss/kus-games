@@ -50,6 +50,12 @@ Bulunduğun yerden Kâbe'ye giden en kısa yolun açısı ve Kâbe'ye uzaklığ�
 ZİKİRMATİK
 33, 99 veya sınırsız hedef. Halka doldukça ilerler, hedefte titrer. Sayaç uygulamayı kapatsan da yerinde durur.
 
+TEBRİK KARTLARI
+Kandil, bayram, arefe, Hicri yılbaşı, aşure ve cuma için 150'den fazla hazır kart. Seç, önizle, WhatsApp veya Instagram'dan paylaş. Kartlar telefonunda çizilir; internet gerekmez.
+
+KUR'AN ELİFBASI
+Harfler, harekeler ve okuma alıştırmaları; her ders küçük bir alıştırmayla biter, ilerlemen kayıtlı kalır.
+
 30 GÜNLÜK LİSTE
 Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer, internetsiz açılır.
 
@@ -67,14 +73,16 @@ Seher bir hesaplama aracıdır, dinî bir otorite değildir. Bağlayıcı olan, 
 GİZLİLİK
 Hesap yok, kayıt yok, giriş yok. Konumun vakitleri hesaplamak için telefonunda kullanılır ve bizim tarafımızdan hiçbir yere gönderilmez. Konum iznini hiç vermeden de kullanabilirsin: şehir listesinden seç ya da koordinatı elle yaz.
 
-REKLAMLAR VE SATIN ALMA
-Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan az kalmışken reklam gösterilmez; kıble pusulası ve zikirmatik açıkken de gösterilmez. Tek seferlik "Reklamsız sürüm" satın alımıyla reklamlar tamamen kalkar; yeni cihazda "Satın almayı geri yükle" ile geri gelir.
+REKLAMLAR VE SEHER PRO
+Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan az kalmışken reklam gösterilmez; kıble pusulası ve zikirmatik açıkken de gösterilmez.
+
+Seher Pro (aylık veya yıllık abonelik) kilitli tebrik kartlarının tamamını ve elifbanın bütün derslerini açar, reklamları kaldırır. Abonelik, dönem bitmeden en az 24 saat önce kapatılmazsa otomatik yenilenir; App Store hesap ayarlarından istediğin an yönetebilirsin. Yalnızca reklamları kaldırmak isteyenler için tek seferlik bir satın alma da vardır. Yeni cihazda "Satın almayı geri yükle" ile geri gelir.
 ```
 
 ## Sürüm notları (What's New — 500 karakter sınırı)
 
 ```
-İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, 30 günlük liste, kıble pusulası, zikirmatik ve Esmâü'l-Hüsnâ. Tamamı internetsiz çalışır.
+İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, 30 günlük liste, kıble pusulası, zikirmatik, Esmâü'l-Hüsnâ, tebrik kartları ve Kur'an elifbası. Tamamı internetsiz çalışır.
 ```
 (129 karakter)
 
@@ -87,7 +95,7 @@ Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan 
 
 ## Uygulama bilgileri
 
-- Kategori: **Yaşam Tarzı** / ikincil: **Referans**
+- Kategori: **Yaşam Tarzı** / ikincil: **Eğitim**
 - Yaş sınırı: 4+
 - Destek adresi: `https://kusgrupgames.github.io/seher/support.html`
 - Pazarlama adresi: `https://kusgrupgames.github.io/seher/`
@@ -98,11 +106,15 @@ Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan 
 
 | Alan | Değer |
 |---|---|
-| Ürün kimliği | `remove_ads` |
-| Tür | Tüketilemez (non-consumable) |
-| Görünen ad | Reklamsız sürüm |
-| Açıklama | Uygulamadaki tüm reklamları kalıcı olarak kaldırır. |
-| Fiyat kademesi | ~2,99 USD |
+| Ürün kimliği | Tür | Görünen ad | Fiyat |
+|---|---|---|---|
+| `remove_ads` | Tüketilemez | Reklamsız sürüm | ~2,99 USD |
+| `seher_pro_aylik` | Otomatik yenilenen abonelik (1 ay) | Seher Pro – Aylık | ~1,99 USD |
+| `seher_pro_yillik` | Otomatik yenilenen abonelik (1 yıl) | Seher Pro – Yıllık | ~9,99 USD |
+
+İki abonelik **tek bir abonelik grubunda** (“Seher Pro”) tanımlanmalı, yoksa
+kullanıcı ikisine birden abone olabilir. Abonelik açıklaması alanına uygulama
+içindeki metnin aynısı yazılmalı: otomatik yenileme, 24 saat kuralı ve iptal yolu.
 
 İncelemeye gönderirken ürünün ekran görüntüsünü de yükle (Ayarlar ekranındaki
 "Reklamsız sürüm" düğmesi yeterlidir).
@@ -114,7 +126,9 @@ Uygulama giriş gerektirmez; test hesabı yoktur. ("Sign-in required" kutusunu �
 
 Vakitler cihazda astronomik olarak hesaplanır; sunucuya bağlanmaz. Konum izni ZORUNLU DEĞİLDİR: Ayarlar ekranından şehir listesinden seçim yapılabilir veya enlem/boylam elle girilebilir. İzin verilmeden de uygulamanın tamamı çalışır.
 
-Uygulama içi satın alma "remove_ads" tek seferliktir ve Ayarlar ekranındaki "Reklamsız sürüm" düğmesiyle denenebilir; "Satın almayı geri yükle" düğmesi hemen altındadır.
+Uygulama içi satın almalar Ayarlar ekranındaki "Seher Pro" düğmesinden görülebilir: "remove_ads" tek seferlik, "seher_pro_aylik" ve "seher_pro_yillik" otomatik yenilenen aboneliktir. Abonelik ekranında süre, fiyat, otomatik yenileme koşulu, iptal yolu ve Kullanım Şartları / Gizlilik Politikası bağlantıları yer alır. "Satın almayı geri yükle" aynı ekrandadır.
+
+Uygulamadaki "Kur'an elifbası" bölümü harfleri, harekeleri ve okuma alıştırmalarını öğretir. Alıştırmalardaki heceler öğretim amacıyla oluşturulmuştur; bu sürümde Kur'an-ı Kerim metni YER ALMAMAKTADIR. Tebrik kartlarındaki metinler uygulama için yazılmıştır ve âyet/hadis alıntısı içermez.
 
 Uygulama dinî bir otorite değil, bir hesaplama aracıdır; bu, uygulama içi "Hakkında" sayfasında ve Kullanım Şartları'nın 3. maddesinde açıkça yazılıdır.
 ```

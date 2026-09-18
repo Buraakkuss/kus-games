@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${1:-$ROOT/marketing/seher-tanitim.mp4}"
 CHROME="${CHROME:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}"
 FPS="${FPS:-12}"
-DUR="${DUR:-32}"
+DUR="${DUR:-35}"
 W=500; H=1080                      # telefon orani (430x932 ile ayni), headless alt siniri 500
 JOBS="${JOBS:-6}"
 

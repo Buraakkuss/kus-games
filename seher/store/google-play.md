@@ -36,6 +36,12 @@ Bulunduğun yerden Kâbe'ye giden en kısa yolun açısı ve Kâbe'ye uzaklığ�
 ZİKİRMATİK
 33, 99 veya sınırsız hedef. Halka ilerledikçe dolar, hedefe ulaşınca titrer. Sayaç uygulamayı kapatsan da yerinde durur.
 
+TEBRİK KARTLARI
+Kandil, bayram, arefe, Hicri yılbaşı, aşure ve cuma için 150'den fazla hazır kart. Seç, önizle, WhatsApp veya Instagram'dan paylaş. Kartlar telefonunda çizilir; internet gerekmez.
+
+KUR'AN ELİFBASI
+Harfler, harekeler ve okuma alıştırmaları; her ders küçük bir alıştırmayla biter, ilerlemen kayıtlı kalır.
+
 30 GÜNLÜK LİSTE
 Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer; yazdırmaya gerek yok, internetsiz açılır.
 
@@ -53,8 +59,10 @@ Seher bir hesaplama aracıdır, dinî bir otorite değildir. Vakitler; verdiğin
 GİZLİLİK
 Hesap yok, kayıt yok, giriş yok. Konumun vakitleri hesaplamak için telefonunda kullanılır ve bizim tarafımızdan hiçbir yere gönderilmez. Konum iznini hiç vermeden de kullanabilirsin: şehir listesinden seç ya da koordinatı elle yaz.
 
-REKLAMLAR
-Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan az kalmışken reklam gösterilmez; kıble pusulası ve zikirmatik açıkken de gösterilmez. Tek seferlik "Reklamsız sürüm" satın alımıyla reklamlar tamamen kalkar.
+REKLAMLAR VE SEHER PRO
+Uygulama ücretsizdir ve ara ara tam ekran reklam gösterir. Vakte on dakikadan az kalmışken reklam gösterilmez; kıble pusulası ve zikirmatik açıkken de gösterilmez.
+
+Seher Pro (aylık veya yıllık abonelik) kilitli tebrik kartlarının tamamını ve elifbanın bütün derslerini açar, reklamları kaldırır. Yalnızca reklamları kaldırmak isteyenler için tek seferlik bir satın alma da vardır. Abonelik otomatik yenilenir; istediğin an Google Play hesabından iptal edebilirsin.
 
 Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 ```
@@ -70,7 +78,7 @@ Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 ## Kategori ve etiketler
 
 - Kategori: **Yaşam Tarzı** (alternatif: Referans)
-- Etiketler: namaz vakti, ezan, kıble, zikirmatik, esmaül hüsna, imsakiye, 30 günlük vakit
+- Etiketler: namaz vakti, ezan, kıble, zikirmatik, esmaül hüsna, imsakiye, kandil mesajları, bayram tebriği, elifba
 - Web sitesi: `https://kusgrupgames.github.io/seher/`
 - Gizlilik politikası: `https://kusgrupgames.github.io/seher/privacy.html`
 - E-posta: `kusgrupgames@gmail.com`
@@ -78,7 +86,7 @@ Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 ## Sürüm notları (v1.0.0)
 
 ```
-İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, 30 günlük liste, kıble pusulası, zikirmatik ve Esmâü'l-Hüsnâ. Tamamı internetsiz çalışır.
+İlk sürüm. Namaz vakitleri, geri sayım, vakit bildirimleri, 30 günlük liste, kıble pusulası, zikirmatik, Esmâü'l-Hüsnâ, tebrik kartları ve Kur'an elifbası. Tamamı internetsiz çalışır.
 ```
 
 ## Yayın öncesi
@@ -88,3 +96,6 @@ Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 3. `node tools/check.js` → hata yok.
 4. `store/data-safety.md` ve `store/content-rating.md` formlarını doldur.
 5. Hedef kitle: 13 yaş ve üzeri. Reklam içerir: **Evet**. Uygulama içi satın alma: **Evet**.
+6. Play Console → Ürünler → **Abonelikler**: `seher_pro_aylik` (P1M) ve `seher_pro_yillik` (P1Y).
+   Her ikisi de tek bir "Seher Pro" abonelik grubunda olmalı ve **temel plan** tanımlanmalı;
+   plan yayınlanmazsa uygulamada fiyat boş görünür ve satın alma çalışmaz.

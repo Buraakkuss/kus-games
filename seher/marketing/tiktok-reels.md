@@ -3,6 +3,10 @@
 Kural: **video içinde mağaza linki yok.** Link bio'da. Link koyarsan erişim düşer.
 Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 
+> **Kandil ve bayram günlerinde kart videosu yayınla.** Bu kategorideki en yüksek
+> erişim o günlerde. Tarihler uygulamanın Kartlar sekmesinde "… gün sonra" olarak
+> yazıyor; içeriği bir hafta önceden hazırla.
+
 > **Bu ürüne özel üç kural. Üçü de pazarlık konusu değil.**
 >
 > 1. **Dinî iddia yok.** "Namazını kaçırmazsın", "sevabı şu kadar", "bu uygulamayla
@@ -11,6 +15,8 @@ Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 > 2. **Kurum iması yok.** Hiçbir videoda Diyanet, TDV, cami logosu, ezan sesi
 >    kaydı ya da "resmî" kelimesi geçmeyecek. Bu, mağazadan kaldırılma sebebidir.
 > 3. **Kur'an-ı Kerim, ezan ve ibadet görüntüsü arka plan malzemesi değildir.**
+>    Elifba videolarında da yalnız uygulama ekranı gösterilir; mushaf görüntüsü
+>    kullanma — uygulamada zaten mushaf metni yok.
 >    Trend sesle birleştirilmez, hızlandırılmaz, komik kurguya konmaz.
 >    Videolarda yalnız uygulama ekranı ve sade bir müzik/sessizlik kullan.
 
@@ -80,6 +86,19 @@ Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 - **Görüntü:** Ayarlar → Reklamsız sürüm düğmesi.
 - **Ekran metni:** `bir kere. abonelik değil.`
 
+### 10b · Tebrik kartı — en güçlü video bu
+- **Görüntü:** Kartlar sekmesi → bir grup → kart ızgarasında kaydır → bir karta bas →
+  Paylaş → WhatsApp seç → sohbete düşen kartı göster. Kesintisiz tek çekim.
+- **Ekran metni:** `kandil mesajı aramaya son`
+- **Açıklama:** `158 hazır kart, hepsi telefonda çiziliyor, internet gerekmiyor`
+- **Neden işe yarar:** Paylaşılan kartın köşesinde Seher işareti var; videoyu
+  görmeyen ama kartı alan kişi de uygulamayı öğreniyor. Kandil sabahı yayınla.
+
+### 10c · Elifba
+- **Görüntü:** Öğren → Harfler 1 → birkaç harf → alıştırma sorusu → doğru cevap.
+- **Ekran metni:** `sıfırdan elifba, her ders bir alıştırmayla bitiyor`
+- **Açıklama:** `harfler, harekeler, med, şedde, tenvin`
+
 ## C GRUBU — Bağlam videoları (dönemsel)
 
 ### 11 · Seyahat
@@ -117,8 +136,9 @@ Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 | 4 | 6 | — | 1 |
 | 5 | 7, 8 | 4 | 2 |
 | 6 | 9 | — | 1 |
-| 7 | 15 | 15 | 2 |
-| 8-14 | kalanlar, günde 1-2 | en iyi performans göstereni tekrar | 1-2 |
+| 7 | 10b, 10c | 10b | 2 |
+| 8 | 15 | 15 | 2 |
+| 9-14 | kalanlar, günde 1-2 | en iyi performans göstereni tekrar | 1-2 |
 
 Kural: **ilk üç günde bırakma.** İlk video patlamazsa dördüncüsü patlar; kategori
 büyük ve arama hacmi sürekli.

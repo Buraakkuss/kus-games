@@ -43,6 +43,17 @@ console.log('\n1) Uygulama betigi');
   else ok('reklam kapisi yerinde (vakte 10 dk kala reklam yok)');
   /* Global "top" window.top ile cakisir ve sessizce NaN uretir. */
   if (/\bvar\s+top\s*=/.test(html)) bad('global "var top" kullanilmis - window.top ile cakisir');
+  /* Tebrik kartlari ve elifba dersleri kodda duruyor mu */
+  if (!/var KART = \[/.test(html)) bad('KART (tebrik kartlari) tablosu yok');
+  if (!/var DERS = \[/.test(html)) bad('DERS (elifba dersleri) tablosu yok');
+  if (!/function proMu\(\)/.test(html)) bad('proMu() kapisi yok - kilit denetimi tek yerden yapilmali');
+  /* Abonelik ekraninda zorunlu aciklamalar: Apple 3.1.2 ve Play bunlari ister,
+     yoksa surum reddedilir. */
+  ['otomatik yenilenen', '24 saat', 'iptal'].forEach(k => {
+    if (html.indexOf(k) < 0) bad('abonelik aciklamasinda "' + k + '" gecmiyor - magaza bunu sart kosuyor');
+  });
+  if (!/lProTerms/.test(html) || !/lProPrivacy/.test(html))
+    bad('abonelik ekraninda sartlar/gizlilik baglantisi yok - magaza sart kosuyor');
 }
 
 console.log('\n2) Tarayicida self-test');
@@ -77,7 +88,7 @@ console.log('\n3) Magaza gorselleri');
     'assets/icon-1024.png': [1024, 1024], 'assets/icon-512.png': [512, 512],
     'assets/feature-graphic-1024x500.png': [1024, 500], 'assets/splash-2732.png': [2732, 2732]
   };
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 8; i++) {
     need['assets/screenshots/android-' + i + '-1080x1920.png'] = [1080, 1920];
     need['assets/screenshots/ios69-' + i + '-1290x2796.png'] = [1290, 2796];
     need['assets/screenshots/ios65-' + i + '-1284x2778.png'] = [1284, 2778];
@@ -245,10 +256,22 @@ console.log('\n6) Yayin oncesi ayarlar');
   }
   if (cfg.versionCode < 1 || cfg.versionCode % 1 !== 0) bad('app.config.json versionCode tam sayi olmali');
   else ok('versionCode ' + cfg.versionCode + ' (her Play yuklemesinde artmali)');
-  if (!cfg.iap || !cfg.iap.removeAds || !cfg.iap.removeAds.id) bad('app.config.json: iap.removeAds.id bos');
-  else if (!html.includes("removeAds: '" + cfg.iap.removeAds.id + "'"))
-    bad('www/index.html icindeki satin alma kimligi app.config.json ile ayni degil');
-  else ok('satin alma kimligi ' + cfg.iap.removeAds.id);
+  /* Urun kimlikleri app.config.json ile kodda birebir ayni olmali; biri
+     bayatlarsa magaza "urun bulunamadi" der ve satin alma hic calismaz. */
+  [['removeAds','removeAds'],['proAy','proAy'],['proYil','proYil']].forEach(([k, anahtar]) => {
+    const u = cfg.iap && cfg.iap[k];
+    if (!u || !u.id) { bad('app.config.json: iap.' + k + '.id bos'); return; }
+    if (!html.includes(anahtar + ": '" + u.id + "'"))
+      bad('www/index.html icindeki ' + k + ' kimligi app.config.json ile ayni degil (' + u.id + ')');
+    else ok('urun kimligi ' + k + ' = ' + u.id);
+  });
+  /* Paylasim ve dosya yazma eklentileri olmadan kart paylasimi sessizce calismaz */
+  {
+    const pkg2 = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+    ['@capacitor/share', '@capacitor/filesystem'].forEach(d => {
+      if (!pkg2.dependencies[d]) bad('package.json: ' + d + ' eksik - kart paylasimi native tarafta calismaz');
+    });
+  }
 }
 
 console.log('\n' + (fail ? '\x1b[31m' + fail + ' hata' : '\x1b[32mHata yok') + '\x1b[0m, ' + warn + ' uyari.\n');

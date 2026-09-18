@@ -17,7 +17,8 @@ Güncel sürüm: **v1.0.0**.
    `cp www/index.html ../docs/seher/play/index.html` (check.js ikisinin aynı olmasını şart koşar).
 7. Reklam kimlikleri, e-posta ve bundle id **yalnız `app.config.json`** içinde değişir,
    ardından `bash tools/set-identity.sh`.
-8. Token tasarrufu: `index.html` ~1200 satırdır, tamamını okuma; `grep -n` ile hedefe git.
+8. Token tasarrufu: `index.html` ~2600 satırdır, **tamamını okuma**; `grep -n` ile
+   hedefe git. Bölüm başlıkları `/* ===== BAŞLIK ===== */` biçiminde.
 
 ## Ürünün kırmızı çizgileri
 
@@ -33,6 +34,51 @@ Bunlar pazarlama tercihi değil, ürünün var olma sebebidir. Değiştirmeden �
   düzeltmesiyle oturtulabileceği her yerde söylenir. Bu cümleleri silme.
 - **Sağlık/ibadet vaadi yok.** "Namazını kaçırmazsın" gibi kesinlik iddiası hem
   yanlıştır (bildirimler en iyi çaba ilkesiyle çalışır) hem de mağaza riski.
+
+## Bölümler
+
+| Sekme | İçerik |
+|---|---|
+| Vakitler | geri sayım, altı vakit, 30 günlük liste |
+| Kıble | pusula ve Kâbe'ye uzaklık |
+| Kartlar | 14 grup, 158 hazır tebrik kartı, paylaş/kaydet |
+| Öğren | Kur'an elifbası (14 ders) + Esmâü'l-Hüsnâ |
+| Zikir | zikirmatik |
+| Ayarlar | konum, hesaplama, bildirim, Seher Pro |
+
+## Tebrik kartları
+
+- Kart **hazır görsel değildir, çizilir**: `kartCiz(cv, W, H, grup, indeks)`.
+  Yüzlerce PNG uygulamayı onlarca megabayt şişirirdi; burada paylaşım anında
+  1080×1350 üretiliyor ve uygulama birkaç kilobayt büyüyor.
+- Görüntü `(palet, tema)` çiftinden gelir ve **deterministiktir**: ızgaradaki
+  küçük kart, önizleme ve paylaşılan dosya birebir aynı. Self-test iki kez
+  çizip karşılaştırıyor.
+- Her kartın altında küçük Seher işareti var — ürünün büyüme yolu bu.
+- **Kart metinlerinde âyet/hadis alıntısı YOK.** Doğrulanmamış bir alıntıyı yüz
+  binlerce kişiye dağıtmak bu üründe kabul edilemez. `check.js` metinlerde tırnak
+  içi alıntı arıyor ve bulursa **hata** veriyor. Bu kuralı gevşetme.
+- Kandil/bayram tarihleri hicrî takvimden hesaplanır (`sonrakiHicri`), resmî
+  ilanla bir gün oynayabilir; arayüzde "… gün sonra" olarak gösterilir.
+
+## Kur'an elifbası
+
+- Kapsam **bilerek** harfler, harekeler ve okuma alıştırmalarıyla sınırlı.
+  Alıştırma heceleri öğretim için üretilmiştir, **Kur'an-ı Kerim metni değildir**.
+- **Mushaf metni bu sürümde yok.** Doğrulanmış bir kaynak olmadan âyet dizmek bu
+  üründe kabul edilemez: tek bir harekenin yanlış olması kabul edilemez bir hatadır.
+  Kaynak geldiğinde `DERS` dizisine yeni dersler eklenir, motor hazır.
+- İlk `DERS_BEDAVA` (3) ders ücretsiz, gerisi Pro.
+
+## Seher Pro
+
+- `proMu()` **tek kapıdır**; kilit denetimi başka yerde yapılmaz.
+- İki abonelik (`seher_pro_aylik`, `seher_pro_yillik`) + eski tek seferlik
+  `remove_ads`. Tek seferlik alım yalnız reklamı kaldırır, kilitleri açmaz.
+- Sahiplik **mağazadan** okunur (`IAP.durumOku`); cihazdaki bayrak yalnız önbellek.
+- Abonelik ekranında süre, fiyat, otomatik yenileme, 24 saat kuralı, iptal yolu ve
+  şartlar/gizlilik bağlantıları **zorunludur** — Apple 3.1.2 ve Play bunu şart
+  koşuyor, eksikse sürüm reddedilir. `check.js` bu ifadeleri arıyor.
 
 ## Hesabın mimarisi
 
@@ -79,14 +125,16 @@ geri sayımı saatlerce şaşar ve bu, tek bir saat diliminde test edilirken hi�
 |---|---|
 | `www/index.html` | normal uygulama |
 | `www/index.html?selftest=1` | hesabı bilinen değerlerle sınar, **arayüzü de kurup DOM'u denetler**, sonucu `document.title` içine yazar |
-| `www/index.html?shot=1&s=...` | mağaza karesi kompozisyonu (parametreler `tools/gen.sh` içinde); `&sayfa=ay` 30 günlük listeyi açar |
+| `www/index.html?shot=1&s=...` | mağaza karesi (`s=vakit\|kible\|kart\|ogren\|zikir\|ayar`) |
+| `…&sayfa=ay\|kartlar&g=N\|onizle&g=N&k=M\|ders&d=N\|pro` | ilgili sayfayı açar |
 | `www/index.html?t=2026-06-21T13:00` | saati sabitler — **seçili yerin duvar saati** olarak (tüm arayüz `simdiki()` üzerinden okur) |
 | `www/index.html?film=1&t=<saniye>` | tanıtım videosunun tek karesi (`tools/film.sh` birleştirir) |
 
 **Self-test kuralı:** `SELFTEST OK` dışında her şey hatadır. Test yalnız matematiği
 değil arayüzü de sınar: altı satır çiziliyor mu, sıralı mı, dakika düzeltmesi ekrana
 yansıyor mu, gece yarısından sonra yarının imsakı bulunuyor mu, vakte 5 dakika kala
-reklam kapısı tutuyor mu, 30 günlük liste ana ekranla aynı saatleri mi veriyor.
+reklam kapısı tutuyor mu, 30 günlük liste ana ekranla aynı saatleri mi veriyor,
+kartlar deterministik mi ve Pro kilidi hem kartta hem derste tutuyor mu.
 Yeni bir özellik eklerken karşılığını buraya da yaz.
 
 `check.js` self-test'i **üç ayrı cihaz saat diliminde** çalıştırır (UTC, New York,
@@ -108,6 +156,13 @@ tek dilimde test edilirken görünmemesi bu ürünün en sinsi hata sınıfıdı
 - **Esmâü'l-Hüsnâ 99 isimdir**; "Allah" lafza-i celâli listeye eklenince 100 oldu.
   `check.js` sayıyı denetliyor. Arapça hat v1'de bilerek yok: yanlış bir harf dinî
   içerikte kabul edilemez, doğrulanmış bir kaynakla eklenecek.
+- **Kart metnine tırnak koyma.** Tırnak içi bir cümle alıntı gibi okunur; kaynağı
+  doğrulanmamış bir alıntıyı bu ölçekte dağıtmak kabul edilemez. `check.js` yakalar.
+- **Yeni kart grubu eklerken `bedava` alanını unutma**: 0 verilirse grubun tamamı
+  kilitlenir, grup uzunluğuna eşit verilirse hiçbiri kilitlenmez. Self-test ikisini de
+  hata sayıyor.
+- **`?shot=1&sayfa=onizle` ve `sayfa=ders` `S.pro`'yu açar** — mağaza kareleri için.
+  Bu yalnız `shot` kipinde olur, normal açılışta değil.
 - **`tools/film.sh` sabit port kullanmaz — ve bu bir kez çok kötü sonuç verdi.**
   Betik kareleri kendi başlattığı `python3 -m http.server` üzerinden çekiyor.
   Port 8877'de sabitken, başka bir ürünün film.sh çalışmasından kalan sunucu

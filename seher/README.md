@@ -22,12 +22,26 @@ aynı dosya çalışır; reklam ve satın alma köprüleri native değilse sessi
   Doğru yöne dönünce bir kez titrer.
 - **Zikirmatik.** 33, 99 veya sınırsız; ilerleme halkası ve hedefte titreşim.
 - **30 günlük liste.** Önümüzdeki otuz günün altı vakti tek ekranda — Ramazan imsakiyesinin karşılığı.
+- **Tebrik kartları.** 14 grup, 158 hazır kart: kandiller, iki bayram ve arefeleri,
+  Ramazan başlangıcı, Kadir Gecesi, Hicri yılbaşı, aşure ve cuma. Kart telefonda
+  çizilir, paylaşırken 1080×1350 üretilir, köşesinde küçük Seher işareti vardır.
+- **Kur'an elifbası.** 14 ders: harfler, harekeler, cezm, şedde, tenvin, med ve
+  okuma alıştırmaları; her ders küçük bir alıştırmayla biter.
 - **Esmâü'l-Hüsnâ** — doksan dokuz ismin okunuşu ve Türkçe anlamı.
 
 Vakitler **cihazda** hesaplanır: Jülyen günü → güneşin deklinasyonu ve zaman denklemi
 → istenen yükseklik açısı için saat açısı. Sunucu yok, internet yok, hesap yok.
 Yedi hesaplama yöntemi (Diyanet, MWL, ISNA, Mısır, Karaçi, Ümmü'l-Kurâ, Tahran),
 ikindi için Şâfiî/Hanefî gölge oranı ve vakit başına dakika düzeltmesi var.
+
+### İki kasıtlı sınır
+
+- **Kart metinlerinde âyet/hadis alıntısı yok.** Doğrulanmamış bir alıntıyı yüz
+  binlerce kişiye dağıtmak bu üründe kabul edilemez; `check.js` tırnak içi alıntı
+  arıyor ve bulursa hata veriyor.
+- **Mushaf metni bu sürümde yok.** Elifba bölümü harfleri, harekeleri ve *üretilmiş*
+  okuma hecelerini öğretir. Kur'an-ı Kerim metniyle dersler, doğrulanmış bir kaynakla
+  birlikte sonraki sürümde eklenecek — motor hazır, veri yok.
 
 > **Uygulama dinî bir otorite değil, bir hesaplama aracıdır.** Kurumların eklediği
 > "temkin" payı bölgeye göre değiştiği için resmî takvimlerle birkaç dakika fark
@@ -37,9 +51,9 @@ ikindi için Şâfiî/Hanefî gölge oranı ve vakit başına dakika düzeltmesi
 ## Klasörler
 | Klasör | İçerik |
 |---|---|
-| `www/index.html` | **Uygulamanın tamamı.** Tek dosya, bağımlılık yok. Reklam ve satın alma köprüleri içinde. |
+| `www/index.html` | **Uygulamanın tamamı.** Tek dosya (~2600 satır), bağımlılık yok. Kart çizimi, dersler, reklam ve satın alma köprüleri içinde. |
 | `app.config.json` | Kimlik bilgilerinin tek kaynağı (bundle id, e-posta, AdMob kimlikleri). |
-| `assets/` | Simgeler, bildirim simgesi, açılış ekranı, öne çıkan grafik, 15 mağaza ekran görüntüsü — hepsi üretilmiş. |
+| `assets/` | Simgeler, bildirim simgesi, açılış ekranı, öne çıkan grafik, 24 mağaza ekran görüntüsü — hepsi üretilmiş. |
 | `../docs/seher/` | GitHub Pages ile yayına giren gizlilik/şartlar/destek sayfaları (EN + TR) ve tarayıcıda denenecek kopya. |
 | `store/` | Play ve App Store metinleri, Veri Güvenliği, App Privacy ve yaş derecelendirme cevapları. |
 | `native/` | Android ve iOS derleme adımları, kopyalanabilir Manifest/Info.plist parçaları. |

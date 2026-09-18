@@ -89,9 +89,11 @@ G="file://$ROOT/www/index.html?shot=1&t=2026-06-21T13%3A00"
 declare -a SH=(
  "s=vakit&h0=G%C3%BCn%C3%BCn%20alt%C4%B1%20vakti%20%C2%B7%20geri%20say%C4%B1m%20%C2%B7%20internetsiz"
  "s=kible&yon=95&h0=Pusulayla%20k%C4%B1bleyi%20an%C4%B1nda%20bul"
+ "s=kart&sayfa=kartlar&g=8&h1=Kandil%20ve%20bayrama%20haz%C4%B1r%20kartlar&h2=Se%C3%A7%2C%20payla%C5%9F%20%C2%B7%20WhatsApp%2C%20Instagram%2C%20Facebook"
+ "s=kart&sayfa=onizle&g=5&k=1&h0=Tek%20dokunu%C5%9Fla%20payla%C5%9F"
+ "s=ogren&h1=Kur%27an%20elifbas%C4%B1%2C%20ad%C4%B1m%20ad%C4%B1m&h2=Harfler%20%C2%B7%20harekeler%20%C2%B7%20okuma%20al%C4%B1%C5%9Ft%C4%B1rmalar%C4%B1"
+ "s=ogren&sayfa=ders&d=0&h0=Her%20ders%20k%C3%BC%C3%A7%C3%BCk%20bir%20al%C4%B1%C5%9Ft%C4%B1rmayla%20biter"
  "s=zikir&zikir=21&h1=Zikirmatik&h2=33%20ve%2099%20hedefi%20%C2%B7%20hedefte%20titre%C5%9Fim"
- "s=esma&h1=Esm%C3%A2%C3%BC%27l-H%C3%BCsn%C3%A2&h2=Doksan%20dokuz%20ismin%20okunu%C5%9Fu%20ve%20anlam%C4%B1"
- "s=ayar&sc=412&h1=Kendi%20takvimine%20oturt&h2=Yedi%20hesap%20y%C3%B6ntemi%20%C2%B7%20%C5%9E%C3%A2fi%C3%AE%2FHanef%C3%AE%20%C2%B7%20dakika%20d%C3%BCzeltmesi"
  "s=vakit&sayfa=ay&sc=0&h0=30%20g%C3%BCnl%C3%BCk%20liste%20%C2%B7%20imsakiye"
 )
 i=1

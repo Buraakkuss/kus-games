@@ -30,8 +30,13 @@ ve Apple, üçüncü taraf bileşenin topladığını da geliştiriciye yazdır�
 - Kimliğe bağlı: **Evet** · İzleme: **Evet**
 
 ### Satın Alımlar
-- Toplanıyor: **Hayır** — satın alma tamamen App Store tarafından yürütülür,
-  uygulama yalnız "satın alındı mı" bilgisini okur.
+- Toplanıyor: **Hayır** — satın alma ve abonelik tamamen App Store tarafından yürütülür,
+  uygulama yalnız "etkin mi" bilgisini okur. Fatura, kart ve hesap bilgisi uygulamaya hiç gelmez.
+
+### Kullanıcı İçeriği (paylaşılan kartlar)
+- Toplanıyor: **Hayır** — kart cihazda çizilir, geçici bir dosyaya yazılır ve
+  işletim sisteminin paylaşım penceresine verilir. Hangi kartın seçildiği, kime
+  gönderildiği ve gönderilip gönderilmediği uygulamaya dönmez.
 
 ### İletişim Bilgileri, Kişiler, Kullanıcı İçeriği, Arama Geçmişi, Tanılama,
 ### Sağlık ve Fitness, Finansal Bilgiler, Hassas Veriler

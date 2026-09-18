@@ -23,6 +23,16 @@ Her videoda seti aynen kopyalama — 2-3 tanesini değiştir.
 #zikirmatik #tesbih #esmaulhusna #kıblepusulası #namazvakti
 ```
 
+## Set E — tebrik kartları (kandil/bayram günlerinde)
+```
+#kandilmesajları #bayramtebriği #hayırlıcumalar #kandil #tebrikkartı
+```
+
+## Set F — elifba
+```
+#elifba #kuranöğreniyorum #arapçaharfler #elifbaöğreniyorum
+```
+
 ## Set C — seyahat / yurt dışı
 ```
 #gurbet #yurtdışında #seyahat #namazvakti #kıble
