@@ -53,7 +53,11 @@ fi
 
 # sadece iPhone, dikey, surum
 if [ -f "$PBX" ]; then
-  sed -i.bak -E "s/TARGETED_DEVICE_FAMILY = \"?[0-9,]+\"?;/TARGETED_DEVICE_FAMILY = \"1\";/g; \
+  # IPHONEOS_DEPLOYMENT_TARGET: Capacitor 14.0 ile geliyor. Apple 2027 baharindan
+  # itibaren en az 15.0 istiyor (ITMS-90068 uyarisi bir kez geldi). Bugun engel
+  # degil ama simdi cozulmezse unutulur.
+  sed -i.bak -E "s/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]+;/IPHONEOS_DEPLOYMENT_TARGET = 15.0;/g; \
+                 s/TARGETED_DEVICE_FAMILY = \"?[0-9,]+\"?;/TARGETED_DEVICE_FAMILY = \"1\";/g; \
                  s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = $VER;/g; \
                  s/CURRENT_PROJECT_VERSION = [^;]+;/CURRENT_PROJECT_VERSION = $VCODE;/g" "$PBX"
   rm -f "$PBX.bak"
