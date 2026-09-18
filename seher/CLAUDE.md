@@ -42,7 +42,7 @@ Bunlar pazarlama tercihi değil, ürünün var olma sebebidir. Değiştirmeden �
 | Vakitler | geri sayım, altı vakit, 30 günlük liste |
 | Kıble | pusula ve Kâbe'ye uzaklık |
 | Kartlar | 14 grup, 158 hazır tebrik kartı, paylaş/kaydet |
-| Öğren | Kur'an elifbası (14 ders) + Esmâü'l-Hüsnâ |
+| Öğren | Elifba (14 ders) · Tecvid (12 ders) · Sözlük (144 terim) · Esmâü'l-Hüsnâ |
 | Zikir | zikirmatik |
 | Ayarlar | konum, hesaplama, bildirim, Seher Pro |
 
@@ -60,6 +60,31 @@ Bunlar pazarlama tercihi değil, ürünün var olma sebebidir. Değiştirmeden �
   içi alıntı arıyor ve bulursa **hata** veriyor. Bu kuralı gevşetme.
 - Kandil/bayram tarihleri hicrî takvimden hesaplanır (`sonrakiHicri`), resmî
   ilanla bir gün oynayabilir; arayüzde "… gün sonra" olarak gösterilir.
+
+## Öğren bölümü: dört alt bölüm
+
+`Elifba · Tecvid · Sözlük · Esmâ`. Elifba ve Tecvid **aynı ders motorunu**
+kullanır (`MUFREDAT` tablosu); ayrı yazılsaydı biri düzeltilip diğeri unutulurdu.
+Her müfredatın kendi ilerlemesi (`S.ogren.biten` / `S.ogren.bitenT`) ve kendi
+ücretsiz ders sayısı var. Sözlük 144 terimdir, arama kutusu vardır ve **ücretsizdir** —
+elde tutma ve mağaza aramasında bulunurluk için bilerek kilitlenmedi.
+
+## İçerik kaynağı — değişmez sınır
+
+Uygulamada **mushaf metni, meal, tefsir, başka bir sözlükten alıntı ve kıraat
+sesi YOKTUR.** Elifba, tecvid ve terim sözlüğünün tamamı bu uygulama için
+yazılmıştır; tecvid örnekleri kuralı göstermek için oluşturulmuş sıradan Arapça
+birleşimlerdir, Kur'an metninden alıntı değildir.
+
+Bu bir eksiklik değil, karardır. Bir kurumun (ör. Diyanet'in) meal/tefsir metnini
+taşımak hem telif ihlalidir hem de "resmî uygulama" izlenimi verir; ikisi de
+App Store 5.2 ve Play IP politikasında **doğrudan kaldırma** sebebidir ve
+geliştirici hesabının tamamını riske atar. Meşru yol `LAUNCH-CHECKLIST.md`
+içindeki "İçerik kaynağı kararı" bölümünde yazılı (Tanzil'in verbatim izni,
+DİB'e yazılı izin başvurusu, Quran Foundation API).
+
+`check.js` bu sınırı anlatan cümlelerin uygulamada durduğunu denetliyor — biri
+"hızlıca ekleyeyim" derse önce bu denetimi görmek zorunda kalır.
 
 ## Kur'an elifbası
 
@@ -126,7 +151,8 @@ geri sayımı saatlerce şaşar ve bu, tek bir saat diliminde test edilirken hi�
 | `www/index.html` | normal uygulama |
 | `www/index.html?selftest=1` | hesabı bilinen değerlerle sınar, **arayüzü de kurup DOM'u denetler**, sonucu `document.title` içine yazar |
 | `www/index.html?shot=1&s=...` | mağaza karesi (`s=vakit\|kible\|kart\|ogren\|zikir\|ayar`) |
-| `…&sayfa=ay\|kartlar&g=N\|onizle&g=N&k=M\|ders&d=N\|pro` | ilgili sayfayı açar |
+| `…&sayfa=ay\|kartlar&g=N\|onizle&g=N&k=M\|ders&d=N&set=elifba\|tecvid\|pro` | ilgili sayfayı açar |
+| `…&s=ogren&o=elifba\|tecvid\|sozluk\|esma` | Öğren'in alt bölümünü seçer |
 | `www/index.html?t=2026-06-21T13:00` | saati sabitler — **seçili yerin duvar saati** olarak (tüm arayüz `simdiki()` üzerinden okur) |
 | `www/index.html?film=1&t=<saniye>` | tanıtım videosunun tek karesi (`tools/film.sh` birleştirir) |
 

@@ -39,8 +39,11 @@ ZİKİRMATİK
 TEBRİK KARTLARI
 Kandil, bayram, arefe, Hicri yılbaşı, aşure ve cuma için 150'den fazla hazır kart. Seç, önizle, WhatsApp veya Instagram'dan paylaş. Kartlar telefonunda çizilir; internet gerekmez.
 
-KUR'AN ELİFBASI
-Harfler, harekeler ve okuma alıştırmaları; her ders küçük bir alıştırmayla biter, ilerlemen kayıtlı kalır.
+KUR'AN ELİFBASI VE TECVİD
+Harfler, harekeler ve okuma alıştırmalarıyla 14 ders; ardından 12 tecvid dersi: med, izhâr, idgam, iklâb, ihfâ, gunne, kalkale ve durak işaretleri. Her ders küçük bir alıştırmayla biter, ilerlemen kayıtlı kalır.
+
+TERİM SÖZLÜĞÜ
+Kur'an okurken ve dinlerken karşılaşılan 144 terim, arama kutusuyla. Ücretsiz.
 
 30 GÜNLÜK LİSTE
 Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer; yazdırmaya gerek yok, internetsiz açılır.
@@ -78,7 +81,10 @@ Boyutu küçük, hızlı açılır, arka planda çalışmaz, pilini yemez.
 ## Kategori ve etiketler
 
 - Kategori: **Yaşam Tarzı** (alternatif: Referans)
-- Etiketler: namaz vakti, ezan, kıble, zikirmatik, esmaül hüsna, imsakiye, kandil mesajları, bayram tebriği, elifba
+- Etiketler: namaz vakti, ezan, kıble, zikirmatik, esmaül hüsna, imsakiye, kandil mesajları, bayram tebriği, elifba, tecvid
+- **Uyarı:** mağaza metinlerinde, adda, simgede veya ekran görüntülerinde hiçbir
+  kurumun adı/logosu kullanılmaz. "Diyanet" yalnızca bir hesaplama yönteminin adı
+  olarak geçer. Bu, doğrudan kaldırma sebebidir.
 - Web sitesi: `https://kusgrupgames.github.io/seher/`
 - Gizlilik politikası: `https://kusgrupgames.github.io/seher/privacy.html`
 - E-posta: `kusgrupgames@gmail.com`

@@ -53,8 +53,11 @@ ZİKİRMATİK
 TEBRİK KARTLARI
 Kandil, bayram, arefe, Hicri yılbaşı, aşure ve cuma için 150'den fazla hazır kart. Seç, önizle, WhatsApp veya Instagram'dan paylaş. Kartlar telefonunda çizilir; internet gerekmez.
 
-KUR'AN ELİFBASI
-Harfler, harekeler ve okuma alıştırmaları; her ders küçük bir alıştırmayla biter, ilerlemen kayıtlı kalır.
+KUR'AN ELİFBASI VE TECVİD
+Harfler, harekeler ve okuma alıştırmalarıyla 14 ders; ardından 12 tecvid dersi: med, izhâr, idgam, iklâb, ihfâ, gunne, kalkale ve durak işaretleri. Her ders küçük bir alıştırmayla biter, ilerlemen kayıtlı kalır.
+
+TERİM SÖZLÜĞÜ
+Kur'an okurken ve dinlerken karşılaşılan 144 terim, arama kutusuyla. Ücretsiz.
 
 30 GÜNLÜK LİSTE
 Önümüzdeki otuz günün altı vakti tek ekranda. Ramazan'da imsakiye yerine geçer, internetsiz açılır.
@@ -128,7 +131,9 @@ Vakitler cihazda astronomik olarak hesaplanır; sunucuya bağlanmaz. Konum izni 
 
 Uygulama içi satın almalar Ayarlar ekranındaki "Seher Pro" düğmesinden görülebilir: "remove_ads" tek seferlik, "seher_pro_aylik" ve "seher_pro_yillik" otomatik yenilenen aboneliktir. Abonelik ekranında süre, fiyat, otomatik yenileme koşulu, iptal yolu ve Kullanım Şartları / Gizlilik Politikası bağlantıları yer alır. "Satın almayı geri yükle" aynı ekrandadır.
 
-Uygulamadaki "Kur'an elifbası" bölümü harfleri, harekeleri ve okuma alıştırmalarını öğretir. Alıştırmalardaki heceler öğretim amacıyla oluşturulmuştur; bu sürümde Kur'an-ı Kerim metni YER ALMAMAKTADIR. Tebrik kartlarındaki metinler uygulama için yazılmıştır ve âyet/hadis alıntısı içermez.
+Öğren bölümündeki elifba, tecvid ve terim sözlüğünün tamamı bu uygulama için yazılmıştır. Alıştırma ve örnekler kuralı göstermek üzere oluşturulmuştur; bu sürümde Kur'an-ı Kerim metni, meal, tefsir ve kıraat kaydı YER ALMAMAKTADIR ve üçüncü tarafa ait hiçbir sözlük, meal veya öğretim materyali çoğaltılmamıştır. Tebrik kartlarındaki metinler de uygulama için yazılmıştır ve âyet/hadis alıntısı içermez.
+
+Uygulama hiçbir kurumun resmî yayını değildir, hiçbir kurumla bağlantısı yoktur ve mağaza sayfasında da böyle bir izlenim verilmemektedir.
 
 Uygulama dinî bir otorite değil, bir hesaplama aracıdır; bu, uygulama içi "Hakkında" sayfasında ve Kullanım Şartları'nın 3. maddesinde açıkça yazılıdır.
 ```

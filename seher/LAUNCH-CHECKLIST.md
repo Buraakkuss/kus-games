@@ -197,6 +197,55 @@ node tools/check.js
 | Self-test yeşil | Vakit sıralaması, dakika düzeltmesi ve reklam kapısı sınanır |
 | `docs/seher/play/index.html` güncel | Tarayıcıda denenen sürüm, gönderilen sürümle aynı olmalı |
 
+## Kur'an metni, meal, tefsir ve ses — içerik kaynağı kararı
+
+Uygulamada şu an **mushaf metni, meal, tefsir, sözlük alıntısı ve kıraat sesi
+YOKTUR.** Bu bir eksiklik değil, bilinçli bir karar: bunların hepsi başkasının
+telifli eseridir ve izinsiz taşınırsa sonucu uygulamanın kaldırılmasıyla
+sınırlı kalmaz, **geliştirici hesabının tamamı kapanabilir** — Slot, Latch,
+Orbita ve Lull da o hesapta duruyor.
+
+### Alınamayacak olan
+
+| İçerik | Durum |
+|---|---|
+| Kur'an Yolu Meal ve Tefsiri | DİB yayını, **her hakkı saklıdır**, adı geçen bir heyetin eseri |
+| kuran.diyanet.gov.tr üzerindeki meal/tefsir/sözlük metinleri | aynı şekilde telifli |
+| Sitedeki kıraat kayıtları | hem icra hem yapım hakkı var |
+| Diyanet'in elifba/tecvid anlatımı ve görselleri | telifli |
+| Diyanet adı, logosu, sayfa tasarımı | ayrıca marka ve "resmî uygulama izlenimi" riski |
+
+**Bir kurumun içeriğini taşımak, o kurumun uygulamasıymış izlenimi verir.**
+Bu, App Store 5.2 ve Play "Impersonation / Intellectual Property" politikalarının
+doğrudan kaldırma sebebidir.
+
+### Alınabilecek olan (sırayla dene)
+
+1. **Arapça mushaf metni — Tanzil Project (tanzil.net).**
+   Şartı açık: *"Permission is granted to copy and distribute verbatim copies of
+   the Quran text provided here, but changing the text is not allowed."* Kaynağın
+   Tanzil olduğu belirtilmeli ve tanzil.net'e bağlantı verilmeli. Metin **hiç
+   değiştirilmeden** taşınmalı.
+2. **Meal.** Telifsiz bir meal yok sayılır; üç yol var:
+   - DİB'e **yazılı izin başvurusu** (kurumun izin süreci vardır; eserin adı,
+     kullanılacağı uygulama, ticari model ve atıf şekli yazılarak istenir),
+   - hak sahibiyle doğrudan lisans anlaşması yapılabilen bir meal,
+   - ya da meal hiç konmaz; uygulama "okuma ve öğrenme" aracı olarak kalır.
+3. **Kıraat sesi ve kelime kelime takip (ok takip).** Kayıtların yeniden
+   dağıtım izni okuyucudan/yapımcıdan alınmalı. Kelime zamanlaması olmadan
+   "ok takip" yapılamaz; zamanlama verisi de ayrı bir kaynaktır.
+4. **Quran Foundation API (api-docs.quran.foundation).** Kayıt ve uygulama
+   kimliği gerekiyor; şartları başvuru sırasında okunmalı. Çevrimiçi çalışır —
+   uygulamanın "internetsiz" vaadiyle çelişmemesi için bu bölüm ayrı tutulmalı.
+
+- [ ] Hangi yolun seçileceğine karar ver (izin başvurusu / lisans / hiç koyma)
+- [ ] Seçilen kaynağın lisans metnini `seher/store/` altına kaydet
+- [ ] Atıf cümlesini uygulama içine ve `docs/seher/terms.html` içine ekle
+- [ ] İzin yazısı gelmeden **tek satır** metin taşıma
+
+> Bu arada uygulamanın **kendi** öğrenme içeriği (elifba, tecvid, terim sözlüğü)
+> tamamen özgün yazıldı ve hiçbir izne bağlı değil.
+
 ## Bilinen riskler (dürüst liste)
 
 1. **"Vakitler yanlış" yorumları.** Kesin: gelecekler. Hesap doğru ama resmî
@@ -213,6 +262,9 @@ node tools/check.js
    uygulama `--:--` gösterir. Sayı uydurmak yanlış olurdu. Bu bir hata değil,
    `terms.html` madde 3'te yazılı.
 5. **AdMob ödeme eşiği 100 $.** Altında ödeme yapılmaz, birikir.
-6. **Rekabet çok yoğun.** Kategoride on milyon indirmeli uygulamalar var. Ayrışma
+6. **Telifli içerik taşıma isteği.** En büyük hukuki risk bu. Bir kurumun
+   meal/tefsir metnini "nasılsa herkes kullanıyor" diyerek almak, hesabın
+   tamamını riske atar. Yukarıdaki bölüm bunun yolunu yazıyor.
+7. **Rekabet çok yoğun.** Kategoride on milyon indirmeli uygulamalar var. Ayrışma
    noktan üç şey: internetsiz çalışması, vakitte reklam göstermemesi ve
    kendi takvimine dakika dakika oturtulabilmesi. Mağaza metninde bu üçünü öne çıkar.

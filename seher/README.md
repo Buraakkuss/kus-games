@@ -27,6 +27,9 @@ aynı dosya çalışır; reklam ve satın alma köprüleri native değilse sessi
   çizilir, paylaşırken 1080×1350 üretilir, köşesinde küçük Seher işareti vardır.
 - **Kur'an elifbası.** 14 ders: harfler, harekeler, cezm, şedde, tenvin, med ve
   okuma alıştırmaları; her ders küçük bir alıştırmayla biter.
+- **Tecvid.** 12 ders: mahreç, kalın/ince harfler, med çeşitleri, izhâr, idgam,
+  iklâb, ihfâ, sâkin mîm, gunne, kalkale, vakf işaretleri.
+- **Kur'an terimleri sözlüğü.** 144 terim, arama kutusuyla. Ücretsiz.
 - **Esmâü'l-Hüsnâ** — doksan dokuz ismin okunuşu ve Türkçe anlamı.
 
 Vakitler **cihazda** hesaplanır: Jülyen günü → güneşin deklinasyonu ve zaman denklemi
@@ -39,9 +42,12 @@ ikindi için Şâfiî/Hanefî gölge oranı ve vakit başına dakika düzeltmesi
 - **Kart metinlerinde âyet/hadis alıntısı yok.** Doğrulanmamış bir alıntıyı yüz
   binlerce kişiye dağıtmak bu üründe kabul edilemez; `check.js` tırnak içi alıntı
   arıyor ve bulursa hata veriyor.
-- **Mushaf metni bu sürümde yok.** Elifba bölümü harfleri, harekeleri ve *üretilmiş*
-  okuma hecelerini öğretir. Kur'an-ı Kerim metniyle dersler, doğrulanmış bir kaynakla
-  birlikte sonraki sürümde eklenecek — motor hazır, veri yok.
+- **Mushaf metni, meal, tefsir ve kıraat sesi bu sürümde yok.** Elifba, tecvid ve
+  sözlüğün tamamı bu uygulama için yazıldı; tecvid örnekleri kuralı gösteren
+  oluşturulmuş birleşimlerdir, Kur'an metninden alıntı değildir. Bir kurumun
+  telifli meal/tefsir metnini taşımak hem telif ihlali hem de "resmî uygulama"
+  izlenimi demektir; ikisi de mağazadan kaldırma sebebidir. Meşru kaynak yolu
+  `LAUNCH-CHECKLIST.md` içindeki "İçerik kaynağı kararı" bölümünde.
 
 > **Uygulama dinî bir otorite değil, bir hesaplama aracıdır.** Kurumların eklediği
 > "temkin" payı bölgeye göre değiştiği için resmî takvimlerle birkaç dakika fark

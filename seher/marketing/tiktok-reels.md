@@ -15,8 +15,11 @@ Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 > 2. **Kurum iması yok.** Hiçbir videoda Diyanet, TDV, cami logosu, ezan sesi
 >    kaydı ya da "resmî" kelimesi geçmeyecek. Bu, mağazadan kaldırılma sebebidir.
 > 3. **Kur'an-ı Kerim, ezan ve ibadet görüntüsü arka plan malzemesi değildir.**
->    Elifba videolarında da yalnız uygulama ekranı gösterilir; mushaf görüntüsü
->    kullanma — uygulamada zaten mushaf metni yok.
+>    Elifba ve tecvid videolarında da yalnız uygulama ekranı gösterilir; mushaf
+>    görüntüsü kullanma — uygulamada zaten mushaf metni yok.
+> 4. **Uygulamayı hiçbir kurumun uygulamasıymış gibi anlatma.** "Diyanet
+>    uygulaması", "resmî vakitler" gibi ifadeler hem yanlış hem de mağazadan
+>    kaldırma sebebi. Doğrusu: "Diyanet yöntemiyle hesaplayabiliyorsun."
 >    Trend sesle birleştirilmez, hızlandırılmaz, komik kurguya konmaz.
 >    Videolarda yalnız uygulama ekranı ve sade bir müzik/sessizlik kullan.
 
@@ -93,6 +96,16 @@ Her video 9:16, 1080×1920, 8-15 saniye, ilk kare hareketli.
 - **Açıklama:** `158 hazır kart, hepsi telefonda çiziliyor, internet gerekmiyor`
 - **Neden işe yarar:** Paylaşılan kartın köşesinde Seher işareti var; videoyu
   görmeyen ama kartı alan kişi de uygulamayı öğreniyor. Kandil sabahı yayınla.
+
+### 10d · Tecvid
+- **Görüntü:** Öğren → Tecvid → "İdgam" dersi → harf grubunu göster → alıştırma.
+- **Ekran metni:** `idgam, ihfâ, iklâb — sırayla ve sade`
+- **Açıklama:** `12 tecvid dersi, her biri kısa`
+
+### 10e · Terim sözlüğü
+- **Görüntü:** Öğren → Sözlük → arama kutusuna "vakf" yaz → sonuç.
+- **Ekran metni:** `okurken takıldığın kelime burada`
+- **Açıklama:** `144 terim, ücretsiz`
 
 ### 10c · Elifba
 - **Görüntü:** Öğren → Harfler 1 → birkaç harf → alıştırma sorusu → doğru cevap.

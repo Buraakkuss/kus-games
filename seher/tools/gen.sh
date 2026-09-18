@@ -91,7 +91,7 @@ declare -a SH=(
  "s=kible&yon=95&h0=Pusulayla%20k%C4%B1bleyi%20an%C4%B1nda%20bul"
  "s=kart&sayfa=kartlar&g=8&h1=Kandil%20ve%20bayrama%20haz%C4%B1r%20kartlar&h2=Se%C3%A7%2C%20payla%C5%9F%20%C2%B7%20WhatsApp%2C%20Instagram%2C%20Facebook"
  "s=kart&sayfa=onizle&g=5&k=1&h0=Tek%20dokunu%C5%9Fla%20payla%C5%9F"
- "s=ogren&h1=Kur%27an%20elifbas%C4%B1%2C%20ad%C4%B1m%20ad%C4%B1m&h2=Harfler%20%C2%B7%20harekeler%20%C2%B7%20okuma%20al%C4%B1%C5%9Ft%C4%B1rmalar%C4%B1"
+ "s=ogren&h1=Elifba%2C%20tecvid%20ve%20terim%20s%C3%B6zl%C3%BC%C4%9F%C3%BC&h2=Ad%C4%B1m%20ad%C4%B1m%20dersler%20%C2%B7%20her%20ders%20bir%20al%C4%B1%C5%9Ft%C4%B1rmayla%20biter"
  "s=ogren&sayfa=ders&d=0&h0=Her%20ders%20k%C3%BC%C3%A7%C3%BCk%20bir%20al%C4%B1%C5%9Ft%C4%B1rmayla%20biter"
  "s=zikir&zikir=21&h1=Zikirmatik&h2=33%20ve%2099%20hedefi%20%C2%B7%20hedefte%20titre%C5%9Fim"
  "s=vakit&sayfa=ay&sc=0&h0=30%20g%C3%BCnl%C3%BCk%20liste%20%C2%B7%20imsakiye"

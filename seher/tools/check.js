@@ -46,6 +46,16 @@ console.log('\n1) Uygulama betigi');
   /* Tebrik kartlari ve elifba dersleri kodda duruyor mu */
   if (!/var KART = \[/.test(html)) bad('KART (tebrik kartlari) tablosu yok');
   if (!/var DERS = \[/.test(html)) bad('DERS (elifba dersleri) tablosu yok');
+  if (!/var TECVID = \[/.test(html)) bad('TECVID tablosu yok');
+  if (!/var SOZLUK = \[/.test(html)) bad('SOZLUK tablosu yok');
+  /* Bu urunun en buyuk hukuki riski: baskasinin telifli metnini tasimak.
+     Uygulamada mushaf metni, meal ve tefsir YOKTUR; bu satir o sinirin
+     yazili oldugunu denetler, boylece biri "hizlica ekleyeyim" derse
+     once bu denetimi gormek zorunda kalir. */
+  if (!/Mushaf metniyle okuma dersleri/.test(html))
+    bad('elifba bolumundeki "mushaf metni yok" aciklamasi kaldirilmis');
+  if (!/alıntı değildir/.test(html))
+    bad('tecvid bolumundeki "alinti degildir" aciklamasi kaldirilmis');
   if (!/function proMu\(\)/.test(html)) bad('proMu() kapisi yok - kilit denetimi tek yerden yapilmali');
   /* Abonelik ekraninda zorunlu aciklamalar: Apple 3.1.2 ve Play bunlari ister,
      yoksa surum reddedilir. */

@@ -163,6 +163,12 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
 .ilerlecubuk{height:7px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin-top:10px}
 .ilerlecubuk i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--gold));width:0}
 
+.soz{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.soz b{display:block;font-size:15px;font-weight:800}
+.soz span{display:block;font-size:13px;color:var(--dim);margin-top:3px;line-height:1.55;font-weight:500}
+#sozAra{width:100%;padding:13px;border-radius:14px;border:1px solid var(--line);
+  background:rgba(255,255,255,.06);color:var(--ink);font-size:15px;font-family:inherit;font-weight:600}
+
 /* ---------- pro ---------- */
 .prorozet{display:inline-block;background:linear-gradient(180deg,#f0c75f,#d19a22);color:#2a1d00;
   font-size:10px;font-weight:900;letter-spacing:.06em;padding:3px 8px;border-radius:99px;margin-left:8px;vertical-align:middle}
@@ -248,13 +254,26 @@ label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 6px;font-wei
   <section class="tab" id="tOgren">
     <h2>Öğren</h2>
     <div class="seg" id="ogrenSeg" style="margin-bottom:14px">
-      <button class="sg on" data-o="elifba">Kur'an elifbası</button>
-      <button class="sg" data-o="esma">Esmâü'l-Hüsnâ</button>
+      <button class="sg on" data-o="elifba">Elifba</button>
+      <button class="sg" data-o="tecvid">Tecvid</button>
+      <button class="sg" data-o="sozluk">Sözlük</button>
+      <button class="sg" data-o="esma">Esmâ</button>
     </div>
 
     <div id="oElifba">
       <div class="card" id="oIlerleme"></div>
       <div id="dersListe"></div>
+    </div>
+
+    <div id="oTecvid" style="display:none">
+      <div class="card" id="oIlerlemeT"></div>
+      <div id="dersListeT"></div>
+    </div>
+
+    <div id="oSozluk" style="display:none">
+      <div class="hint" style="margin:0 0 10px">Kur'an okurken ve dinlerken karşılaşılan terimler.</div>
+      <input type="text" id="sozAra" placeholder="Terim ara..." autocomplete="off">
+      <div id="sozListe" style="margin-top:12px"></div>
     </div>
 
     <div id="oEsma" style="display:none">
@@ -537,7 +556,7 @@ var S = {
   tune:{ imsak:0, gunes:0, ogle:0, ikindi:0, aksam:0, yatsi:0 },
   bildirim:{ imsak:true, gunes:false, ogle:true, ikindi:true, aksam:true, yatsi:true },
   vibe:true, wake:false, noAds:false, pro:false, zikir:0, zikirHedef:33,
-  ogren:{ biten:[], ders:null }
+  ogren:{ biten:[], bitenT:[], ders:null }
 };
 try {
   var raw = localStorage.getItem('seher.v1');
@@ -1688,41 +1707,323 @@ var DERS = [
 ];
 var DERS_BEDAVA = 3;
 
+/* =====================  TECVİD  =====================
+   Tamamı bu uygulama için yazılmıştır. Tecvid KURALLARI bilgidir; buradaki
+   anlatım, sıralama ve örnekler özgündür. Örnek kelimeler bilerek Kur'an
+   metninden ALINMAMIŞTIR — kuralı gösteren sıradan Arapça birleşimlerdir.
+   Harf grupları (izhâr, idgam, ihfâ, iklâb, kalkale, isti'lâ) standarttır.  */
+var TECVID = [
+{ ad:'Tecvid nedir', alt:'harfi hakkıyla vermek', tip:'bilgi', o:[
+  { a:'تَجْوِيد', n:'tecvid', k:'Her harfi kendi çıkış yerinden, kendi sıfatlarıyla okumak.' },
+  { a:'مَخْرَج', n:'mahreç', k:'Harfin ağızda çıktığı yer. Yanlış mahreç, harfi başka bir harfe çevirir.' },
+  { a:'صِفَة', n:'sıfat', k:'Harfin kalınlık, incelik, yumuşaklık gibi nitelikleri.' },
+  { a:'تَرْتِيل', n:'tertil', k:'Acele etmeden, harfleri belli ederek okumak.' },
+  { a:'لَحْن', n:'lahn', k:'Okuyuş hatası. Harfi veya harekeyi değiştiren hata ağır sayılır.' }
+]},
+{ ad:'Kalın ve ince harfler', alt:'isti’lâ · tefhîm ve terkîk', tip:'bilgi', o:[
+  { a:'خ ص ض غ ط ق ظ', n:'kalın harfler', k:'İsti’lâ harfleri. Dil kökü yükselir, ses dolgunlaşır.' },
+  { a:'ب ت ث ج ح د', n:'ince harfler', k:'Kalan harfler ince okunur; dil düz durur.' },
+  { a:'ر', n:'râ', k:'Üstün ve ötrede kalın, esrede ince okunur.' },
+  { a:'ل', n:'lâm', k:'Genelde incedir; yalnız lafzatullahta kalınlaşabilir.' },
+  { a:'اَللّٰه', n:'lafzatullah', k:'Önündeki harf üstün veya ötreli ise kalın, esreli ise ince okunur.' }
+]},
+{ ad:'Med — uzatma', alt:'med harfleri ve med-di tabiî', tip:'bilgi', o:[
+  { a:'ا و ي', n:'med harfleri', k:'Elif, vav ve ye; kendinden önceki harekeyle uyuştuğunda sesi uzatır.' },
+  { a:'بَا', n:'med-di tabiî', k:'Sebep yoksa bir elif miktarı (iki hareke) uzatılır.' },
+  { a:'بُو', n:'ötre + vav', k:'Uzun u sesi.' },
+  { a:'بِي', n:'esre + ye', k:'Uzun i sesi.' },
+  { a:'سَبَبٌ', n:'med sebebi', k:'Uzatmayı artıran iki sebep vardır: hemze ve sükûn.' }
+]},
+{ ad:'Med çeşitleri', alt:'muttasıl · munfasıl · ârız · lâzım', tip:'bilgi', o:[
+  { a:'مُتَّصِل', n:'med-di muttasıl', k:'Med harfi ile hemze AYNI kelimede. Uzatmak vaciptir.' },
+  { a:'مُنْفَصِل', n:'med-di munfasıl', k:'Med harfi bir kelimenin sonunda, hemze sonraki kelimenin başında.' },
+  { a:'عَارِض', n:'med-di ârız', k:'Durulduğu için sonda sükûn oluşur; uzatma okuyucunun tercihine göre değişir.' },
+  { a:'لَازِم', n:'med-di lâzım', k:'Sükûn asli ve sabittir; en uzun okunan meddir.' },
+  { a:'لِين', n:'med-di lîn', k:'Üstünden sonra sâkin vav veya ye gelirse yumuşak bir uzatma olur.' }
+]},
+{ ad:'Sâkin nûn ve tenvin: izhâr', alt:'açıkça okumak', tip:'kural', o:[
+  { a:'ء ه ع ح غ خ', n:'izhâr harfleri', k:'Bu altı boğaz harfinden biri gelirse nûn açıkça okunur, gunne yapılmaz.' },
+  { a:'مَنْ أَمَرَ', n:'nûn + hemze', k:'Nûn olduğu gibi duyulur.' },
+  { a:'مِنْ هُنَا', n:'nûn + he', k:'Birleştirme ve genizden ses yok.' },
+  { a:'عَنْ عِلْم', n:'nûn + ayn', k:'Açık okuyuş.' },
+  { a:'كِتَابٌ حَسَن', n:'tenvin + hâ', k:'Tenvin de aynı kurala tâbidir.' }
+]},
+{ ad:'İdgam', alt:'sonraki harfe katmak', tip:'kural', o:[
+  { a:'ي ر م ل و ن', n:'idgam harfleri', k:'“Yermelûn” harfleri. Sâkin nûn veya tenvin bunlardan birine katılır.' },
+  { a:'ي ن م و', n:'gunneli idgam', k:'Genizden ses verilerek katılır.' },
+  { a:'ل ر', n:'gunnesiz idgam', k:'Doğrudan katılır, genizden ses verilmez.' },
+  { a:'مَنْ يَعْمَل', n:'nûn + ye', k:'Nûn okunmaz, ye şeddeli gibi ve gunneli olur.' },
+  { a:'مِنْ رَبّ', n:'nûn + râ', k:'Gunne yok; nûn doğrudan râya katılır.' }
+]},
+{ ad:'İklâb', alt:'nûnu mîme çevirmek', tip:'kural', o:[
+  { a:'ب', n:'iklâb harfi', k:'Tek harftir. Sâkin nûn veya tenvinden sonra be gelirse nûn mîme dönüşür.' },
+  { a:'مَنْ بَعْدُ', n:'nûn + be', k:'“men ba‘du” değil, “mem ba‘du” gibi okunur.' },
+  { a:'سَمِيعٌ بَصِير', n:'tenvin + be', k:'Tenvinde de aynı dönüşüm olur.' },
+  { a:'غُنَّة', n:'gunne', k:'İklâbda genizden ses vardır ve bir miktar bekletilir.' }
+]},
+{ ad:'İhfâ', alt:'gizleyerek okumak', tip:'kural', o:[
+  { a:'ت ث ج د ذ ز س ش', n:'ihfâ harfleri (1)', k:'İzhâr, idgam ve iklâb dışında kalan on beş harf.' },
+  { a:'ص ض ط ظ ف ق ك', n:'ihfâ harfleri (2)', k:'Bunlardan biri gelirse nûn ne tam okunur ne tam kaybolur.' },
+  { a:'مِنْ تَحْت', n:'nûn + te', k:'Nûn gizlenir, genizden ses bir miktar tutulur.' },
+  { a:'أَنْصَار', n:'nûn + sad', k:'Kalın harfte ihfâ da kalın yapılır.' },
+  { a:'رِيحٌ صَرْصَر', n:'tenvin + sad', k:'Tenvinde de aynıdır.' }
+]},
+{ ad:'Sâkin mîm', alt:'şefevî kurallar', tip:'kural', o:[
+  { a:'ب', n:'ihfâ-i şefevî', k:'Sâkin mîmden sonra be gelirse mîm gizlenir, gunne yapılır.' },
+  { a:'م', n:'idgam-ı misleyn', k:'Sâkin mîmden sonra mîm gelirse katılır, gunne yapılır.' },
+  { a:'bütün diğer harfler', n:'izhâr-ı şefevî', k:'Kalan harflerde mîm açıkça okunur.' },
+  { a:'هُمْ بِهِ', n:'mîm + be', k:'Dudaklar hafifçe kapanır, ses genizden gelir.' },
+  { a:'لَهُمْ مَا', n:'mîm + mîm', k:'Tek ve şeddeli bir mîm gibi.' }
+]},
+{ ad:'Gunne', alt:'genizden gelen ses', tip:'kural', o:[
+  { a:'نّ مّ', n:'şeddeli nûn ve mîm', k:'Şeddeli nûn ve mîmde gunne her zaman yapılır.' },
+  { a:'غُنَّة', n:'ölçü', k:'Yaklaşık bir buçuk hareke miktarı bekletilir.' },
+  { a:'إِنَّ', n:'şeddeli nûn', k:'Genizden ses açıkça duyulur.' },
+  { a:'ثُمَّ', n:'şeddeli mîm', k:'Dudaklar kapalıyken ses genizden gelir.' }
+]},
+{ ad:'Kalkale', alt:'sıçratarak okumak', tip:'kural', o:[
+  { a:'ق ط ب ج د', n:'kalkale harfleri', k:'“Kutb-i cedd” harfleri. Sâkin olduklarında hafifçe sıçratılır.' },
+  { a:'أَبْ', n:'kelime içinde', k:'Küçük kalkale; hafif bir tıkırtı.' },
+  { a:'أَحَدْ', n:'sonda durulduğunda', k:'Büyük kalkale; daha belirgin.' },
+  { a:'قَدْ', n:'dal', k:'Sesi uzatmadan, kısa bir sıçrama.' }
+]},
+{ ad:'Vakf ve ibtidâ', alt:'durak işaretleri', tip:'bilgi', o:[
+  { a:'مـ', n:'vakf-ı lâzım', k:'Durmak gerekir; geçilirse mana bozulur.' },
+  { a:'ط', n:'vakf-ı mutlak', k:'Durmak uygundur.' },
+  { a:'ج', n:'vakf-ı câiz', k:'Durmak da geçmek de olur.' },
+  { a:'صلے', n:'vaslı evlâ', k:'Geçmek daha uygundur.' },
+  { a:'قلے', n:'vakfı evlâ', k:'Durmak daha uygundur.' },
+  { a:'∴ ∴', n:'muânaka', k:'İki noktadan yalnız birinde durulur.' },
+  { a:'لا', n:'lâ vakfe', k:'Burada durulmaz; durulursa geriden alınır.' }
+]}
+];
+
+/* =====================  KUR'AN TERİMLERİ SÖZLÜĞÜ  =====================
+   Tanımlar bu uygulama için yazılmıştır; hiçbir sözlükten alınmamıştır.
+   Kısa ve gündelik dille yazıldı: amaç akademik tanım değil, okurken
+   karşılaşılan kelimenin ne demek olduğunu hemen anlatmak.               */
+var SOZLUK = [
+['Âyet','Kur’an’ın en küçük bölümü; numaralı her bir cümle.'],
+['Sûre','Âyetlerden oluşan ve adı olan bölüm. Kur’an’da 114 sûre vardır.'],
+['Cüz','Kur’an’ın otuz eşit parçasından biri.'],
+['Hizb','Cüzün dörtte biri.'],
+['Mushaf','Kur’an’ın iki kapak arasına yazılmış hâli.'],
+['Vahiy','Allah’ın peygamberine bildirmesi.'],
+['Nüzul','İniş. Âyetlerin indirilme süreci.'],
+['Mekkî','Hicretten önce inen âyet ve sûreler.'],
+['Medenî','Hicretten sonra inen âyet ve sûreler.'],
+['Meâl','Kur’an’ın bir dile yaklaşık çevirisi. Aslın yerini tutmaz.'],
+['Tefsir','Âyetlerin açıklaması, yorumu.'],
+['Tevil','Bir âyeti muhtemel anlamlarından birine yorma.'],
+['Kıraat','Okuma; okuyuş biçimi.'],
+['Tertil','Acele etmeden, harfleri belli ederek okuma.'],
+['Tecvid','Her harfi mahrecinden ve sıfatıyla okuma ilmi.'],
+['Mahreç','Bir harfin ağızda çıktığı yer.'],
+['Hatim','Kur’an’ı baştan sona okumayı tamamlamak.'],
+['Hafız','Kur’an’ı ezberlemiş kişi.'],
+['Besmele','“Rahmân ve Rahîm olan Allah’ın adıyla” anlamına gelen başlangıç ifadesi.'],
+['Hamd','Övgü ve şükrü birlikte anlatan söz.'],
+['Tesbih','Allah’ı eksikliklerden uzak tutarak anmak.'],
+['Tehlil','“Lâ ilâhe illallah” demek.'],
+['Tekbir','“Allahu ekber” demek.'],
+['Zikir','Anmak; Allah’ı dil veya kalple hatırlamak.'],
+['Dua','İstemek; kula yakışan biçimde yardım dilemek.'],
+['İstiğfar','Bağışlanma dilemek.'],
+['Tövbe','Yaptığına pişman olup dönmek.'],
+['İhlâs','Yaptığını yalnız Allah için yapmak.'],
+['Riya','Gösteriş için ibadet etmek.'],
+['Takvâ','Sorumluluk bilinci; sakınma.'],
+['İhsan','İşi güzel yapmak; Allah’ın gördüğünü bilerek davranmak.'],
+['Sabır','Zorluk karşısında direnç göstermek, acele etmemek.'],
+['Şükür','Verilenin farkında olup karşılığını vermek.'],
+['Tevekkül','Gereğini yaptıktan sonra sonucu Allah’a bırakmak.'],
+['Niyet','Bir işi ne için yaptığına dair kalpteki karar.'],
+['İman','İnanmak; kalpten tasdik.'],
+['İslâm','Teslim olmak; dinin adı.'],
+['Mümin','İnanan kişi.'],
+['Münafık','İnanmadığı hâlde inanmış görünen kişi.'],
+['Kâfir','İnanmayan, gerçeği örten kişi.'],
+['Şirk','Allah’a ortak koşmak.'],
+['Tevhid','Allah’ın bir olduğunu kabul etmek.'],
+['Farz','Kesin ve zorunlu olan.'],
+['Vâcip','Farza yakın derecede gerekli olan.'],
+['Sünnet','Peygamberin yaptığı ve tavsiye ettiği.'],
+['Müstehap','Yapılması güzel görülen.'],
+['Mübah','Serbest olan; yapılması da yapılmaması da olur.'],
+['Mekruh','Hoş görülmeyen ama haram olmayan.'],
+['Haram','Kesin olarak yasak olan.'],
+['Helâl','İzin verilmiş olan.'],
+['Sevap','İyi davranışın karşılığı.'],
+['Günah','Yasak olanı yapmak.'],
+['Kaza','Vaktinde yapılamayan ibadeti sonradan yerine getirmek.'],
+['Kader','Olacakların Allah katında bilinmesi ve ölçüyle yaratılması.'],
+['Ecel','Belirlenmiş süre; ömrün sonu.'],
+['Rızık','Canlıya ulaşan her nimet.'],
+['Nimet','Verilen iyilik.'],
+['Bereket','Azın çoğa yetmesi; artan hayır.'],
+['Rahmet','Merhamet; kuşatıcı şefkat.'],
+['Mağfiret','Bağışlanma.'],
+['Hidayet','Doğru yola iletilmek.'],
+['Dalâlet','Yoldan sapmak.'],
+['Fitne','Karışıklık; imtihan.'],
+['İmtihan','Sınanma; iyilikle de zorlukla da denenmek.'],
+['Ahiret','Ölümden sonraki kalıcı hayat.'],
+['Kıyamet','Dünyanın sonu ve yeniden dirilme günü.'],
+['Haşir','Diriltilip toplanma.'],
+['Mizan','Amellerin tartıldığı ölçü.'],
+['Sırat','Ahirette geçilecek yol.'],
+['Cennet','İnananlara vaat edilen mutluluk yurdu.'],
+['Cehennem','Azap yurdu.'],
+['Berzah','Ölümle diriliş arasındaki geçiş.'],
+['Melek','Nurdan yaratılmış, emir üzere hareket eden varlık.'],
+['Cin','Görünmeyen, iradesi olan varlık.'],
+['Şeytan','İnsanı kötüye çağıran varlık.'],
+['Nebî','Peygamber.'],
+['Resûl','Kitap ve şeriatla gönderilen peygamber.'],
+['Ümmet','Bir peygambere uyan topluluk.'],
+['Sahâbe','Peygamberi görüp ona inanmış kimseler.'],
+['Hadis','Peygamberin sözü, davranışı ve onayı.'],
+['Siyer','Peygamberin hayatı.'],
+['Hicret','Mekke’den Medine’ye göç; hicrî takvimin başlangıcı.'],
+['Namaz','Günün beş vaktinde yapılan temel ibadet.'],
+['Rekât','Namazın kıyam, rükû ve secdeden oluşan birimi.'],
+['Kıyam','Namazda ayakta durmak.'],
+['Rükû','Namazda eğilmek.'],
+['Secde','Alnı yere koymak.'],
+['Kade','Namazda oturuş.'],
+['Selâm','Namazı bitiren söz.'],
+['Kıble','Namazda yönelinen taraf; Kâbe yönü.'],
+['Kâbe','Mekke’deki mescidin ortasındaki yapı.'],
+['İmam','Cemaate namaz kıldıran kişi.'],
+['Cemaat','Birlikte namaz kılan topluluk.'],
+['Ezan','Namaz vaktinin girdiğini bildiren çağrı.'],
+['Kamet','Namaza başlarken okunan ikinci çağrı.'],
+['Abdest','Namaz öncesi yapılan temizlik.'],
+['Gusül','Bütün bedenin yıkanması.'],
+['Teyemmüm','Su bulunmadığında toprakla yapılan temizlik.'],
+['Nafile','Farz olmayan, gönüllü ibadet.'],
+['Teheccüd','Gece kalkılarak kılınan namaz.'],
+['Teravih','Ramazan gecelerinde kılınan namaz.'],
+['Cuma','Haftalık toplu namazın kılındığı gün.'],
+['Bayram namazı','Ramazan ve Kurban bayramı sabahı kılınan namaz.'],
+['Oruç','İmsaktan akşama kadar yeme, içme ve cinsel ilişkiden uzak durmak.'],
+['İmsak','Orucun başladığı vakit.'],
+['Sahur','İmsaktan önce yenen öğün.'],
+['İftar','Orucun akşam açılması.'],
+['Fidye','Tutulamayan oruç için verilen karşılık.'],
+['İtikâf','Ramazan’ın son günlerinde mescitte kalmak.'],
+['Zekât','Belirli bir malın belirli oranını vermek.'],
+['Sadaka','Gönüllü olarak verilen yardım.'],
+['Fitre','Ramazan Bayramı öncesi verilen sadaka.'],
+['İnfak','Elindekinden harcamak, vermek.'],
+['Hac','Belirli zamanda Kâbe’yi ziyaret ibadeti.'],
+['Umre','Hac zamanı dışında yapılan Kâbe ziyareti.'],
+['İhram','Hac ve umrede girilen özel hâl.'],
+['Tavaf','Kâbe’nin etrafında dönmek.'],
+['Sa’y','Safâ ile Merve arasında gidip gelmek.'],
+['Arefe','Bayramdan bir önceki gün.'],
+['Kurban','Bayramda kesilen ve paylaşılan adak.'],
+['Adak','Bir şart karşılığında yapılmaya söz verilen ibadet.'],
+['Kandil','Dinî bakımdan değerli sayılan geceler.'],
+['Kadir Gecesi','Ramazan’ın en kıymetli sayılan gecesi.'],
+['Berat','Ayrılık, temize çıkma; Şâban ayının on beşinci gecesi.'],
+['Miraç','Yükseliş; Recep ayının yirmi yedinci gecesi anılan olay.'],
+['Regaib','Rağbet edilen; Recep ayının ilk cuma gecesi.'],
+['Mevlid','Doğum; Peygamberin doğum gecesi.'],
+['Aşure','Muharrem ayının onuncu günü.'],
+['Hicrî takvim','Ay yılına göre işleyen takvim.'],
+['Muharrem','Hicrî yılın ilk ayı.'],
+['Receb','Üç ayların ilki.'],
+['Şâban','Üç ayların ikincisi.'],
+['Ramazan','Oruç ayı; üç ayların sonuncusu.'],
+['Şevval','Ramazan Bayramı’nın olduğu ay.'],
+['Zilhicce','Hac ve Kurban Bayramı ayı.'],
+['Emanet','Korunmak üzere bırakılan; güvenilirlik.'],
+['Adalet','Herkese hakkını vermek.'],
+['Merhamet','Acımak, şefkat göstermek.'],
+['Hayâ','Utanma duygusu; edep.'],
+['Edep','Güzel davranış ölçüsü.'],
+['Salih amel','İyi, yararlı iş.'],
+['Gıybet','Birinin arkasından hoşlanmayacağı şeyi söylemek.'],
+['Sıla-i rahim','Akrabayla ilgiyi sürdürmek.'],
+['Selâmet','Esenlik, kurtuluş.']
+];
+
+/* İki müfredat aynı ders motorunu kullanır; ayrı yazılsaydı biri düzeltilip
+   diğeri unutulurdu. Her müfredatın kendi ilerlemesi ve kendi ücretsiz ders
+   sayısı var. */
+var MUFREDAT = {
+  elifba: { d:DERS,   bedava:DERS_BEDAVA, anahtar:'biten',  liste:'dersListe',  ilerleme:'oIlerleme',
+            ad:'Elifba ilerlemen' },
+  tecvid: { d:TECVID, bedava:2,           anahtar:'bitenT', liste:'dersListeT', ilerleme:'oIlerlemeT',
+            ad:'Tecvid ilerlemen' }
+};
+var dersSet = 'elifba';
+function mf(ad){ return MUFREDAT[ad || dersSet]; }
+
+
 var dersAktif = -1, dersAdim = 0, dersSoru = null, dersDogru = 0;
 
-function dersBitti(i){ return (S.ogren.biten || []).indexOf(i) >= 0; }
-function dersKilitli(i){ return i >= DERS_BEDAVA && !proMu(); }
+function dersBiten(set){
+  var k = mf(set).anahtar;
+  if (!S.ogren[k]) S.ogren[k] = [];
+  return S.ogren[k];
+}
+function dersBitti(i, set){ return dersBiten(set).indexOf(i) >= 0; }
+function dersKilitli(i, set){ return i >= mf(set).bedava && !proMu(); }
 
-function dersListeCiz(){
-  if (!$('dersListe')) return;
-  var biten = (S.ogren.biten || []).length;
-  $('oIlerleme').innerHTML =
+function dersListeCiz(set){
+  if (set === undefined){ dersListeCiz('elifba'); dersListeCiz('tecvid'); return; }
+  var M = mf(set);
+  if (!$(M.liste)) return;
+  var biten = dersBiten(set).length;
+  $(M.ilerleme).innerHTML =
     '<div style="display:flex;justify-content:space-between;align-items:center">' +
-    '<b style="font-size:15px">Elifba ilerlemen</b>' +
-    '<span style="font-size:13px;color:var(--dim);font-weight:700">' + biten + ' / ' + DERS.length + '</span></div>' +
-    '<div class="ilerlecubuk"><i style="width:' + Math.round(biten/DERS.length*100) + '%"></i></div>' +
-    (proMu() ? '' : '<div class="hint" style="margin-top:10px">İlk ' + DERS_BEDAVA +
+    '<b style="font-size:15px">' + M.ad + '</b>' +
+    '<span style="font-size:13px;color:var(--dim);font-weight:700">' + biten + ' / ' + M.d.length + '</span></div>' +
+    '<div class="ilerlecubuk"><i style="width:' + Math.round(biten/M.d.length*100) + '%"></i></div>' +
+    (proMu() ? '' : '<div class="hint" style="margin-top:10px">İlk ' + M.bedava +
       ' ders ücretsiz. Devamı Seher Pro ile açılır.</div>');
   var h = '';
-  DERS.forEach(function(d, i){
-    var kilit = dersKilitli(i), ok = dersBitti(i);
-    h += '<button class="ders' + (ok ? ' bitti' : '') + (kilit ? ' kilit' : '') + '" data-d="' + i + '">' +
+  M.d.forEach(function(d, i){
+    var kilit = dersKilitli(i, set), ok = dersBitti(i, set);
+    h += '<button class="ders' + (ok ? ' bitti' : '') + (kilit ? ' kilit' : '') +
+         '" data-d="' + i + '" data-s="' + set + '">' +
          '<div class="dn">' + (ok ? '&#10003;' : (kilit ? '&#128274;' : (i+1))) + '</div>' +
          '<div class="dm"><b>' + d.ad + (kilit ? '<span class="prorozet">PRO</span>' : '') +
          '</b><small>' + d.alt + '</small></div></button>';
   });
-  h += '<div class="hint" style="margin-top:14px">Bu bölüm harfleri, harekeleri ve ' +
-       'okuma alıştırmalarını kapsar. Alıştırmalardaki heceler öğretim amacıyla ' +
-       'oluşturulmuştur, Kur\'an-ı Kerim metni değildir. Mushaf metniyle okuma ' +
-       'dersleri, doğrulanmış bir kaynakla birlikte sonraki sürümde eklenecek.</div>';
-  $('dersListe').innerHTML = h;
-  Array.prototype.forEach.call(document.querySelectorAll('#dersListe .ders'), function(el){
+  h += '<div class="hint" style="margin-top:14px">' + (set === 'tecvid'
+    ? 'Anlatım ve örnekler bu uygulama için yazılmıştır. Örnek kelimeler kuralı ' +
+      'göstermek için oluşturulmuştur, Kur\'an-ı Kerim metninden alıntı değildir.'
+    : 'Bu bölüm harfleri, harekeleri ve okuma alıştırmalarını kapsar. ' +
+      'Alıştırmalardaki heceler öğretim amacıyla oluşturulmuştur, Kur\'an-ı Kerim ' +
+      'metni değildir. Mushaf metniyle okuma dersleri, doğrulanmış bir kaynakla ' +
+      'birlikte sonraki sürümde eklenecek.') + '</div>';
+  $(M.liste).innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll('#' + M.liste + ' .ders'), function(el){
     el.onclick = function(){
-      var i = +el.getAttribute('data-d');
-      if (dersKilitli(i)){ proAc('Bu ders Seher Pro ile açılıyor'); return; }
-      dersAc(i);
+      var i = +el.getAttribute('data-d'), st = el.getAttribute('data-s');
+      if (dersKilitli(i, st)){ proAc('Bu ders Seher Pro ile açılıyor'); return; }
+      dersAc(i, st);
     };
   });
+}
+
+/* ---------- sözlük ---------- */
+function sozlukCiz(filtre){
+  if (!$('sozListe')) return;
+  var f = (filtre || '').toLocaleLowerCase('tr').trim();
+  var h = '', n = 0;
+  SOZLUK.forEach(function(t){
+    if (f && t[0].toLocaleLowerCase('tr').indexOf(f) < 0 &&
+             t[1].toLocaleLowerCase('tr').indexOf(f) < 0) return;
+    n++;
+    h += '<div class="soz"><b>' + t[0] + '</b><span>' + t[1] + '</span></div>';
+  });
+  $('sozListe').innerHTML = h || '<div class="hint">Bu terim listede yok.</div>';
+  if (!f) $('sozListe').insertAdjacentHTML('afterbegin',
+    '<div class="hint" style="margin:0 0 10px">' + SOZLUK.length + ' terim</div>');
 }
 
 function seslendir(metin){
@@ -1735,9 +2036,10 @@ function seslendir(metin){
   } catch(e){ return false; }
 }
 
-function dersAc(i){
+function dersAc(i, set){
+  dersSet = set || dersSet;
   dersAktif = i; dersAdim = 0; dersDogru = 0; dersSoru = null;
-  $('dersBaslik').textContent = DERS[i].ad;
+  $('dersBaslik').textContent = mf().d[i].ad;
   $('sheetDers').classList.remove('hide');
   $('sheetDers').scrollTop = 0;
   dersCiz();
@@ -1745,7 +2047,7 @@ function dersAc(i){
 function dersKapat(){ $('sheetDers').classList.add('hide'); dersListeCiz(); }
 
 function dersCiz(){
-  var d = DERS[dersAktif], n = d.o.length, toplamAdim = n + 4;
+  var d = mf().d[dersAktif], n = d.o.length, toplamAdim = n + 4;
   $('dersCubuk').style.width = Math.round(dersAdim / toplamAdim * 100) + '%';
   var g = $('dersGovde');
 
@@ -1794,24 +2096,26 @@ function dersCiz(){
   }
 
   /* bitti */
-  var yeni = (S.ogren.biten || []).slice();
-  if (yeni.indexOf(dersAktif) < 0){ yeni.push(dersAktif); S.ogren.biten = yeni; save(); }
-  var sonraki = dersAktif + 1;
+  var biten = dersBiten();
+  if (biten.indexOf(dersAktif) < 0){ biten.push(dersAktif); save(); }
+  var sonraki = dersAktif + 1, kendiSet = dersSet, M = mf();
   g.innerHTML =
     '<div class="card" style="text-align:center;padding:28px 16px">' +
     '<div style="font-size:44px">&#127881;</div>' +
     '<div style="font-size:20px;font-weight:800;margin-top:8px">Ders tamamlandı</div>' +
     '<div class="hint" style="margin-top:6px">' + dersDogru + ' / 4 doğru</div></div>' +
-    (sonraki < DERS.length
-      ? '<button class="btn" id="dSonraki">' + (dersKilitli(sonraki)
-          ? 'Sonraki ders Pro ile açılır' : 'Sonraki ders: ' + DERS[sonraki].ad) + '</button>'
-      : '<div class="hint" style="text-align:center">Elifbanın sonuna geldin. Mushaf metniyle ' +
-        'okuma dersleri sonraki sürümde eklenecek.</div>') +
+    (sonraki < M.d.length
+      ? '<button class="btn" id="dSonraki">' + (dersKilitli(sonraki, kendiSet)
+          ? 'Sonraki ders Pro ile açılır' : 'Sonraki ders: ' + M.d[sonraki].ad) + '</button>'
+      : '<div class="hint" style="text-align:center">' + (kendiSet === 'tecvid'
+          ? 'Tecvid bölümünün sonuna geldin.'
+          : 'Elifbanın sonuna geldin. Mushaf metniyle okuma dersleri sonraki sürümde eklenecek.') +
+        '</div>') +
     '<button class="btn ghost" id="dBitir" style="margin-top:9px">Ders listesine dön</button>';
   var sb = $('dSonraki');
   if (sb) sb.onclick = function(){
-    if (dersKilitli(sonraki)){ proAc('Sonraki ders Seher Pro ile açılıyor'); return; }
-    dersAc(sonraki);
+    if (dersKilitli(sonraki, kendiSet)){ proAc('Sonraki ders Seher Pro ile açılıyor'); return; }
+    dersAc(sonraki, kendiSet);
   };
   $('dBitir').onclick = dersKapat;
 }
@@ -1838,10 +2142,17 @@ Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), functio
     var o = b.getAttribute('data-o');
     Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), function(x){
       x.classList.toggle('on', x === b); });
-    $('oElifba').style.display = (o === 'elifba') ? '' : 'none';
-    $('oEsma').style.display   = (o === 'esma')   ? '' : 'none';
+    ogrenBolum(o);
   };
 });
+function ogrenBolum(o){
+  [['elifba','oElifba'],['tecvid','oTecvid'],['sozluk','oSozluk'],['esma','oEsma']].forEach(function(k){
+    $(k[1]).style.display = (o === k[0]) ? '' : 'none';
+  });
+  if (o === 'sozluk' && !$('sozListe').innerHTML) sozlukCiz('');
+  $('app').scrollTop = 0;
+}
+$('sozAra').oninput = function(){ sozlukCiz(this.value); };
 
 /* =====================  AYARLAR  ===================== */
 function ayarlarKur(){
@@ -2481,19 +2792,57 @@ if (q.get('selftest') === '1'){
     var tekrar = {};
     q.secenek.forEach(function(x){ if (tekrar[x]) hata.push('soru seceneklerinde tekrar var'); tekrar[x] = 1; });
   }
-  /* Ders kilidi */
-  S.pro = false;
-  if (dersKilitli(0) || dersKilitli(DERS_BEDAVA - 1)) hata.push('bedava dersler kilitli gorunuyor');
-  if (!dersKilitli(DERS_BEDAVA)) hata.push('ucretsiz ders sinirindan sonrasi kilitli degil');
-  S.pro = true;
-  if (dersKilitli(DERS.length - 1)) hata.push('Pro kullanicida son ders hala kilitli');
-  S.pro = false;
-  /* Ders akisi bastan sona yurusun */
-  dersAc(0);
-  var guvenlik = 0;
-  while (dersAdim < DERS[0].o.length && guvenlik++ < 50){ dersAdim++; dersCiz(); }
-  if (!$('dersGovde').innerHTML) hata.push('ders ekrani bos');
-  dersKapat();
+  /* ---- tecvid ---- */
+  if (TECVID.length < 10) hata.push('tecvid ders sayisi ' + TECVID.length + ', en az 10 olmali');
+  var tHata = 0;
+  TECVID.forEach(function(d){
+    if (!d.o || d.o.length < 4) tHata++;
+    d.o.forEach(function(o){ if (!o.a || !o.n) tHata++; });
+  });
+  if (tHata) hata.push(tHata + ' tecvid ogesi eksik');
+  not.push('tecvid=' + TECVID.length);
+
+  /* ---- sozluk ---- */
+  if (SOZLUK.length < 100) hata.push('sozlukte ' + SOZLUK.length + ' terim var, en az 100 olmali');
+  var sTekrar = {}, sBos = 0;
+  SOZLUK.forEach(function(t){
+    if (!t[0] || !t[1] || t[1].length < 10) sBos++;
+    if (sTekrar[t[0]]) hata.push('sozlukte ayni terim iki kez: ' + t[0]);
+    sTekrar[t[0]] = 1;
+  });
+  if (sBos) hata.push(sBos + ' sozluk tanimi eksik veya cok kisa');
+  not.push('sozluk=' + SOZLUK.length);
+  ogrenBolum('sozluk');
+  sozlukCiz('');
+  var sHepsi = document.querySelectorAll('#sozListe .soz').length;
+  if (sHepsi !== SOZLUK.length) hata.push('sozluk ekraninda ' + sHepsi + ' terim cizildi, ' + SOZLUK.length + ' olmali');
+  sozlukCiz('namaz');
+  var sSuz = document.querySelectorAll('#sozListe .soz').length;
+  if (sSuz < 1 || sSuz >= SOZLUK.length) hata.push('sozluk aramasi suzmuyor (' + sSuz + ')');
+  sozlukCiz('zzzyokboylebirsey');
+  if (document.querySelectorAll('#sozListe .soz').length !== 0) hata.push('bos arama sonucu bos donmedi');
+  ogrenBolum('elifba');
+
+  /* ---- ders kilidi (iki mufredat) ---- */
+  ['elifba','tecvid'].forEach(function(st){
+    var M = MUFREDAT[st];
+    S.pro = false;
+    if (dersKilitli(0, st) || dersKilitli(M.bedava - 1, st))
+      hata.push(st + ': bedava dersler kilitli gorunuyor');
+    if (!dersKilitli(M.bedava, st))
+      hata.push(st + ': ucretsiz ders sinirindan sonrasi kilitli degil');
+    S.pro = true;
+    if (dersKilitli(M.d.length - 1, st)) hata.push(st + ': Pro kullanicida son ders hala kilitli');
+    S.pro = false;
+    /* Ders akisi bastan sona yurusun ve ilerleme AYRI tutulsun */
+    dersAc(0, st);
+    var guvenlik = 0;
+    while (dersAdim < M.d[0].o.length && guvenlik++ < 60){ dersAdim++; dersCiz(); }
+    if (!$('dersGovde').innerHTML) hata.push(st + ': ders ekrani bos');
+    dersKapat();
+  });
+  if (dersBiten('elifba') === dersBiten('tecvid'))
+    hata.push('iki mufredat ayni ilerleme dizisini paylasiyor');
 
   /* 30 günlük liste ana ekranla AYNI hesabı kullanmalı; ayrı bir yol açılsaydı
      iki ekran zamanla birbirinden saparadı. */
@@ -2627,13 +2976,14 @@ if (q.get('selftest') === '1'){
     if (q.get('sayfa') === 'ay') ayListesi(true);
     if (q.get('sayfa') === 'kartlar') kartIzgaraAc(+(q.get('g') || 0));
     if (q.get('sayfa') === 'onizle'){ S.pro = true; kartOnizleAc(+(q.get('g') || 0), +(q.get('k') || 0)); }
-    if (q.get('sayfa') === 'ders'){ S.pro = true; dersAc(+(q.get('d') || 0)); }
     if (q.get('sayfa') === 'pro') proAc();
-    if (q.get('s') === 'esma'){
+    var altB = q.get('o') || (q.get('s') === 'esma' ? 'esma' : '');
+    if (altB){
       Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), function(x){
-        x.classList.toggle('on', x.getAttribute('data-o') === 'esma'); });
-      $('oElifba').style.display = 'none'; $('oEsma').style.display = '';
+        x.classList.toggle('on', x.getAttribute('data-o') === altB); });
+      ogrenBolum(altB);
     }
+    if (q.get('sayfa') === 'ders'){ S.pro = true; dersAc(+(q.get('d') || 0), q.get('set') || 'elifba'); }
     /* Mağaza karesi başlığı. İki biçim var, çünkü 1080x1920 (Play'in izin
        verdiği en uzun oran) iri bir başlıkla altı vakti birden göstermiyor:
          ?h0=  tek satır, ince şerit  (liste tam sığar)
