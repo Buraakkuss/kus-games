@@ -2977,13 +2977,19 @@ if (q.get('selftest') === '1'){
     if (q.get('sayfa') === 'kartlar') kartIzgaraAc(+(q.get('g') || 0));
     if (q.get('sayfa') === 'onizle'){ S.pro = true; kartOnizleAc(+(q.get('g') || 0), +(q.get('k') || 0)); }
     if (q.get('sayfa') === 'pro') proAc();
+    if (q.get('sayfa') === 'sehir') sehirSayfasi(true);
+    if (q.get('sayfa') === 'hakkinda') $('sheetInfo').classList.remove('hide');
     var altB = q.get('o') || (q.get('s') === 'esma' ? 'esma' : '');
     if (altB){
       Array.prototype.forEach.call(document.querySelectorAll('#ogrenSeg .sg'), function(x){
         x.classList.toggle('on', x.getAttribute('data-o') === altB); });
       ogrenBolum(altB);
     }
-    if (q.get('sayfa') === 'ders'){ S.pro = true; dersAc(+(q.get('d') || 0), q.get('set') || 'elifba'); }
+    if (q.get('sayfa') === 'ders'){
+      S.pro = true; dersAc(+(q.get('d') || 0), q.get('set') || 'elifba');
+      /* &adim= ile dersin ortasina veya alistirma sorusuna atlanir */
+      if (+q.get('adim')){ dersAdim = +q.get('adim'); dersCiz(); }
+    }
     /* Mağaza karesi başlığı. İki biçim var, çünkü 1080x1920 (Play'in izin
        verdiği en uzun oran) iri bir başlıkla altı vakti birden göstermiyor:
          ?h0=  tek satır, ince şerit  (liste tam sığar)
