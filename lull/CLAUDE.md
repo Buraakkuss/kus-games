@@ -83,6 +83,11 @@ demek yetmez.
 - **Sağlık uyarısı yasal olarak gerekli.** `docs/lull/terms.html`, `privacy.html`
   ve `gizlilik.html` içindeki "tıbbi tavsiye değildir" bölümü silinmemeli;
   baş dönmesi uyarısı ve araç kullanma yasağı mağaza incelemesinde de sorulur.
+- **`navigator.vibrate` iOS'ta YOKTUR.** Safari ve WKWebView bu API'yi hiç
+  desteklemez, çağrı sessizce hiçbir şey yapmaz. Android'de ve tarayıcıda
+  çalıştığı için fark edilmez; gerçek iPhone'da titreşim hiç gelmez. Bu bir kez
+  yaşandı. `buzz()` önce `navigator.vibrate`'i dener (Android'de desenli
+  titreşim korunur), yoksa Capacitor Haptics'e düşer.
 - **Ses dosyası yok** — nefes sesi WebAudio ile üretilen dar bantlı gürültüdür.
   Saf ton denendi, gece boyunca rahatsız edici oluyor.
 - `tools/icon.html` içinde global `var top` kullanma — `window.top` ile çakışır.

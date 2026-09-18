@@ -219,18 +219,18 @@ var Snd = (function () {
 /* navigator.vibrate iOS'ta YOKTUR (Safari ve WKWebView desteklemez), sessizce
    hicbir sey yapar. Tarayicida fark edilmez, gercek iPhone'da titresim hic
    gelmez -- bu bir kez yasandi. Native tarafta Capacitor Haptics kullaniyoruz;
-   tarayicida navigator.vibrate'e dusuyoruz. Dizi (desen) yalnizca Android'de
-   anlamli; iOS'ta tek bir vurus veriliyor. */
+   Once navigator.vibrate denenir: Android'de ve tarayicida o calisir ve DESENLI
+   titresim ([12,60,12] gibi) korunur. Yoksa (iOS) Capacitor Haptics'e dusulur;
+   orada desen yoktur, suresi en uzun vurusa gore tek bir vurus verilir. */
 function buzz(ms) {
   try {
+    if (navigator.vibrate) { navigator.vibrate(ms); return; }
     var H = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Haptics;
     if (H) {
       var sure = Array.isArray(ms) ? Math.max.apply(null, ms) : ms;
       var p = H.impact({ style: sure >= 20 ? 'MEDIUM' : 'LIGHT' });
       if (p && p.catch) p.catch(function () {});
-      return;
     }
-    if (navigator.vibrate) navigator.vibrate(ms);
   } catch (e) {}
 }
 
