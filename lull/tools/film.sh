@@ -52,11 +52,16 @@ frame() {
 }
 
 echo "kareler uretiliyor ($N adet, $JOBS paralel)..."
+# DIKKAT: cipla "wait", arka plandaki http.server'i de bekler ve betik orada
+# sonsuza kadar asili kalir (kareler bitmis olsa bile video uretilmez).
+# Yalnizca kare isleri beklenmeli. Ayni hata Seher'de de yasandi.
+PIDS=()
 for i in $(seq 0 $(( N - 1 ))); do
   frame "$i" &
-  while [ "$(jobs -rp | wc -l)" -ge "$JOBS" ]; do wait -n || true; done
+  PIDS+=($!)
+  while [ "$(jobs -rp | wc -l)" -gt "$JOBS" ]; do sleep 0.2; done
 done
-wait || true
+for pid in "${PIDS[@]}"; do wait "$pid" || true; done
 
 GOT=$(ls "$DIR"/f-*.png 2>/dev/null | wc -l)
 echo "uretilen kare: $GOT / $N"

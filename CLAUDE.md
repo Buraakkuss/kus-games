@@ -6,8 +6,8 @@ ve `assets/` klasörü vardır. Ortak olan yalnızca `docs/` (GitHub Pages) ve
 `.github/workflows/`.
 
 **Hepsi oyun değil.** `slot`, `latch`, `orbita` oyundur; `lull` bir nefes/uyku
-uygulamasıdır. Altyapı aynı, ürün tipi farklı — bir klasörde çalışırken önce
-onun kendi `CLAUDE.md`'sini oku.
+uygulaması, `seher` bir namaz vakti/kıble aracıdır. Altyapı aynı, ürün tipi farklı —
+bir klasörde çalışırken önce onun kendi `CLAUDE.md`'sini oku.
 
 ## Değişmez kurallar
 
@@ -25,6 +25,15 @@ onun kendi `CLAUDE.md`'sini oku.
    Bayat kalırlarsa betik sessizce hiçbir şey değiştirmez — `OLD_URL` bir kez böyle
    bayatladı. Artık `check.js` bunu **hata** olarak yakalıyor.
 6. Token tasarrufu: oyun dosyaları ~1200-1300 satırdır, tamamını okuma; `grep -n` kullan.
+7. **Gördüğün hatayı sorma, düzelt.** Bir hata fark edildiğinde "istersen düzeltirim"
+   denmez; düzeltilir, doğrulanır ve sonra "düzelttim" denir. Kullanıcı yazılımcı
+   değil — hangi hatanın düzeltilmeye değer olduğuna karar vermesi beklenemez.
+   Bu kural hangi üründe çalışılırsa çalışılsın geçerlidir.
+8. **Bir üründe bulunan hata, aynı kodun kopyalandığı her üründe aranır.** Klasörler
+   birbirinden kopyalanarak açıldığı için bir hata neredeyse hiçbir zaman tek yerde
+   değildir. Düzeltmeden önce `grep -rn "<hatalı kalıp>" */tools/` çalıştır ve
+   hepsini birlikte düzelt. (`film.sh` içindeki çıplak `wait` tam olarak böyleydi:
+   önce `seher`'de yakalandı, aynısı `lull`'da duruyordu.)
 
 ## GitHub Pages
 
@@ -59,6 +68,7 @@ https://kusgrupgames.github.io/<oyun>/privacy.html
 | `latch/` | Latch: One Tap Swing | ipi at, salın, 45°'de bırak |
 | `orbita/` | Orbita: One Tap Orbit Jump | yörüngeden teğet boyunca fırla |
 | `lull/` | Lull: Breathe Yourself Down | **oyun değil** — nefesini ölçüp yavaşlatır |
+| `seher/` | Seher: Namaz Vakti ve Kıble | **oyun değil** — vakit, kıble, zikirmatik |
 
 Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
 
@@ -70,6 +80,7 @@ Her oyunun kendi `CLAUDE.md`'si var; denge ve tuzaklar orada.
 | `latch/` | mükemmel | `deaths=0` **ve** `fallback=0` zorunlu → her çengel ulaşılabilir |
 | `orbita/` | sezgisel (ölebilir) | yalnızca oyun döngüsünün çalıştığı ve çökmediği |
 | `lull/` | hızlandırılmış seans | tempo **iniyor** (artmıyor), veriş/alış oranı 1'in altına düşmüyor, seans tam süresinde bitiyor |
+| `seher/` | yok — hesap sınaması | bilinen kıble/gündüz değerleri tutuyor, altı vakit sıralı, dakika düzeltmesi ekrana yansıyor, vakte yakın reklam gösterilmiyor |
 
 Orbita'nınki daha zayıf bir güvence: ölüm sayısı > 0 olması hata değildir. Orbita'ya
 "adaletsiz bölüm üretilmiyor" güvencesi eklemek istersen önce mükemmel oynayan bir
