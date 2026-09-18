@@ -77,7 +77,10 @@ jobs:
 
       - name: Derle (simulator, imzasiz)
         working-directory: ${{ matrix.dir }}/ios/App
+        # pipefail olmadan "xcodebuild | tail" derleme coktugunde bile YESIL
+        # doner (cikis kodu tail'e aittir). Sessiz yesil, kirmizidan kotudur.
         run: |
+          set -o pipefail
           xcodebuild -workspace App.xcworkspace -scheme App \
             -configuration Release -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \

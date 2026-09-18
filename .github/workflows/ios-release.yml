@@ -93,7 +93,16 @@ jobs:
 
       - name: Arsivle
         working-directory: ${{ inputs.app }}/ios/App
+        # pipefail SART: "xcodebuild ... | tail" boru hattinin cikis kodu tail'e
+        # aittir, yani arsivleme cokse bile adim YESIL gorunur ve hata ancak bir
+        # sonraki adimda "arsiv bulunamadi" diye ortaya cikar. Bu bir kez yasandi.
+        #
+        # CODE_SIGN_IDENTITY="Apple Distribution": bunu yazmazsak Xcode otomatik
+        # imzada GELISTIRME profili uretmeye calisiyor, o da kayitli cihaz
+        # istiyor ("your team has no devices"). Magazaya yukleme icin dagitim
+        # imzasi gerekir ve dagitim profili cihaz istemez.
         run: |
+          set -o pipefail
           xcodebuild -workspace App.xcworkspace -scheme App \
             -configuration Release -destination 'generic/platform=iOS' \
             -archivePath "$PWD/build/App.xcarchive" archive \
@@ -102,7 +111,8 @@ jobs:
             -authenticationKeyID "$KEY_ID" \
             -authenticationKeyIssuerID "$ISSUER_ID" \
             DEVELOPMENT_TEAM="$TEAM_ID" \
-            CODE_SIGN_STYLE=Automatic | tail -40
+            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_IDENTITY="Apple Distribution" | tail -60
 
       - name: IPA uret
         working-directory: ${{ inputs.app }}/ios/App
