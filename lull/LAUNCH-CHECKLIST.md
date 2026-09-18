@@ -148,7 +148,7 @@ native hazırlık betikleri bu bayrakları okuyup izinleri ve SDK anahtarların�
 ### App Store
 - [ ] App Store Connect → Yeni uygulama → bundle id `com.kusgrup.lull`
 - [ ] Metinler: `store/app-store.md`
-- [ ] Ekran görüntüleri: `assets/screenshots/ios67-*.png` (6.7")
+- [ ] Ekran görüntüleri: `assets/screenshots/ios69-*.png` (6.9") veya `ios65-*.png` (6.5") — App Store Connect hangi slotu gösteriyorsa
 - [ ] App Privacy: `store/app-privacy.md`
 - [ ] IDFA beyanı: **No** (uygulama IDFA'ya hiç dokunmuyor)
 - [ ] App Review notlarını yapıştır (`store/app-store.md`) — kontrol şeması ilk paragrafta
