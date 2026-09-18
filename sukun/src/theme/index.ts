@@ -39,7 +39,8 @@ export interface Theme {
   radius: typeof radius;
   opacity: typeof opacity;
   typography: typeof typography;
-  duration: typeof duration;
+  /** Süreler ms. Reduced-motion açıkken tema katmanı hepsini 0'a çeker. */
+  duration: Record<keyof typeof duration, number>;
   easing: typeof easing;
 }
 

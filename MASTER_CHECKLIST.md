@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 8 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 13 · dış engele bağlı 31**
 
 
 ## FAZ 0 — Audit, mimari, design system, veritabanı mimarisi
@@ -16,11 +16,11 @@
 - [x] BrandConfig (§7) — tek noktadan marka yönetimi
 - [x] Design token katmanı: colors, spacing, typography, radius, shadows, opacity, animations, icons (§8)
 - [x] Light/Dark tema (§8)
-- [ ] Reusable component kütüphanesi (§8 listesi, 22 bileşen)
-- [ ] Görsel dil: düşük opaklıkta geometrik motif (§9)
-- [ ] Typography: Türkçe sans-serif + Arapça/Kur'an fontu, RTL (§10)
-- [ ] Supabase şeması (§70)
-- [ ] RLS politikaları (§71)
+- [x] Reusable component kütüphanesi (§8) — 29 bileşen + 32 ikonluk kendi SVG seti
+- [x] Görsel dil: düşük opaklıkta geometrik motif (§9) — 5 desen, figüratif öge yok
+- [x] Typography: Latin sistem yazı tipi + Amiri/Amiri Quran (OFL), RTL katmanı (§10)
+- [x] Supabase şeması (§70) — 10 migration, 39 tablo, yerelde uygulanarak doğrulandı
+- [x] RLS politikaları (§71) — davranış sınaması + kapsama denetimi, mutasyonla sınandı
 - [x] Quality gate: tsc + lint + test + build
 
 ## FAZ 1 — Çekirdek

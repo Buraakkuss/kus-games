@@ -111,3 +111,56 @@ Tümü `src/config/brand.ts` içinde tek noktadan yönetilir.
 **Neden:** Ürün felsefesi "çok özellik, az karmaşa, huzurlu". "Sükûn" bunu
 karşılıyor, Türkçede kolay okunuyor ve mağaza aramasında tekil. Mağaza adı ayrıca
 aranan kelimeleri taşıyor.
+
+---
+
+## D9 — Yazı tipi: Latin sistem, Arapça Amiri
+
+**Karar:** Türkçe/Latin arayüz **sistem yazı tipini** kullanır (iOS: San
+Francisco, Android: Roboto). Arapça metin için **Amiri** ve **Amiri Quran**
+paketle birlikte dağıtılır (`sukun/assets/fonts/`).
+
+**Neden:** Sistem yazı tipi Dynamic Type ile tam uyumludur, Türkçe'ye özgü
+harfleri eksiksiz taşır ve paket boyutunu büyütmez. Arapça'da ise sistem yüzü
+yeterli değil: mushaf metninde hareke yerleşimi ve durak işaretleri özel
+tasarım ister. Amiri her ikisini de karşılıyor ve **SIL Open Font License
+1.1** altında; lisans metni OFL'nin şartı gereği
+`assets/fonts/Amiri-OFL.txt` olarak birlikte dağıtılıyor.
+
+**Sonuç:** Arapça metin `ArabicText` bileşeninden geçer; satır aralığı oranı
+sabittir (harekeler üst satıra değmesin diye) ve sistem yazı ölçeği kapatılıp
+kullanıcı ölçeği tek çarpan olarak uygulanır.
+
+---
+
+## D10 — Şema: içerik, kullanıcı, topluluk, AI ayrı katmanlar
+
+**Karar:** Supabase şeması dört ayrı migration katmanında kurulur: içerik
+(`0002`), kullanıcı (`0003`), topluluk (`0004`), AI (`0005`). Her tabloda RLS
+açıktır ve politikası olmayan tablo kimseye görünmez.
+
+**Neden:** İzinlerin karışması bu tür bir üründe en pahalı hatadır: bir dua
+talebinin yazarını sızdırmak ya da bir kullanıcının yer imlerini başkasına
+göstermek geri alınamaz. "Varsayılan reddet" bunu yapısal olarak engeller.
+
+**Sonuç:** Şu üç kural şemada zorlanır, kod nezaketine bırakılmaz:
+- Kaynağı olmayan dinî içerik giremez (`source_id` not null).
+- Taslak metin son kullanıcıya görünmez (okuma politikasında `published` şartı).
+- İstemci asistan yanıtı yazamaz (`ai_messages` insert politikası `role = 'user'`).
+
+Akış anonimliği de görünüm düzeyinde korunur: uygulama `prayer_feed`
+görünümünü okur, o görünümde `author_id` sütunu yoktur.
+
+---
+
+## D11 — Veritabanı doğrulaması yerelde çalışır
+
+**Karar:** `bash sukun/tools/verify-db.sh` geçici bir PostgreSQL kümesi kurup
+tüm migration'ları uygular, RLS davranış sınamalarını çalıştırır, sonra kümeyi
+siler. Kalite kapısının (`npm run gate`) parçası değildir; PostgreSQL her
+ortamda bulunmadığı için ayrı komuttur ve sunucu yoksa hata vermeden atlar.
+
+**Neden:** RLS politikası "yazıldı" ile "çalışıyor" arasındaki fark, bu üründe
+veri sızıntısı demek. Politikalar mutasyon sınamasıyla denetlendi: `bookmarks`
+sahiplik politikası gevşetildiğinde ve taslak meal herkese açıldığında
+sınamalar ikisini de yakaladı. Yakalamayan sınama, sınama değildir.

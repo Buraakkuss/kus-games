@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 0 — Repository audit, mimari, design system, veritabanı mimarisi**
+**FAZ 1 — Çekirdek** (FAZ 0 tamamlandı)
 
 ## Tamamlanan
 
@@ -33,19 +33,25 @@
 - [x] Hicri takvim çekirdeği + 13 dinî gün tanımı
 - [x] 4 test dosyası / 32 test — hepsi yeşil
 - [x] `CONTENT_SOURCES.md` — telif durumu kalem kalem yazıldı
+- [x] Bileşen kütüphanesi: 29 bileşen, 32 ikonluk kendi SVG seti (§8)
+- [x] Geometrik motif dili: 5 desen, figüratif öge yok (§9)
+- [x] Arapça tipografi: Amiri + Amiri Quran (SIL OFL 1.1), RTL katmanı (§10)
+- [x] Supabase şeması: 10 migration, 39 tablo (§70)
+- [x] RLS politikaları + davranış sınaması + kapsama denetimi (§71)
+
+**FAZ 0 tamamlandı.**
 
 ## Devam eden
 
-- [ ] Yeniden kullanılabilir component kütüphanesi (§8)
-- [ ] Geometrik motif görsel dili (§9)
-- [ ] Türkçe + Arapça tipografi, RTL (§10)
+- [ ] FAZ 1 — navigasyon, yerelleştirme, kalıcılık, hata sınırı, ağ katmanı
 
 ## Sıradaki iş
 
-1. Component kütüphanesi (22 bileşen) + tema sağlayıcı
-2. Geometrik motif katmanı (SVG, düşük opaklık, tekrarlanabilir)
-3. Arapça tipografi + RTL desteği
-4. Supabase şeması (§70) + RLS politikaları (§71) + migration'lar
+1. expo-router sekme düzeni: Ana Sayfa · Kur'an · İbadet · Keşfet · Profil (§11)
+2. Yerelleştirme altyapısı, metin gömme yasağı, TR tam + EN/AR/DE/FR temel (§61)
+3. Kalıcılık: SQLite (FTS5) + AsyncStorage + SecureStore (§5)
+4. Global hata sınırı, çevrimdışı şeridi, yeniden deneme (§82)
+5. Ağ katmanı: zaman aşımı, yeniden deneme, önbellek, yedek (§76)
 
 ## Build durumu
 
@@ -53,7 +59,8 @@
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 4 suite / 32 test |
+| Test | ✅ 6 suite / 43 test |
+| Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |
 | Android build | henüz denenmedi |
 
