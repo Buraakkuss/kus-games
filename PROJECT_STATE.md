@@ -112,17 +112,25 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 - [x] Cuma modu: yalnız cuma görünen kart, Kehf kısayolu (§50)
 - [x] Hac/Umre rehberi + hazırlık listesi, tamamen çevrimdışı (§54)
 
+**FAZ 10-11 — yapılabilecek kısım tamam:**
+
+- [x] Eşitleme birleştirme motoru: çakışma çözümü, mezar taşı, sayaç
+      birleştirme (§58). Taşıma katmanı Supabase projesine bağlı ⛔B5
+- [x] Global arama: âyet başvurusu, sure, dua, esmâ, bilgi, Arapça (§51, §78)
+- [x] Birleşik favoriler (§63)
+- [x] Özel hatırlatıcılar: sabit saat / vakte göre / hafta günü (§64)
+
 ## Devam eden
 
-- [ ] FAZ 10 — hesap, bulut eşitleme, profil ve ayarlar (⛔B5 Supabase projesi)
+- [ ] FAZ 12-16 — widget, topluluk, AI, admin, abonelik (çoğu dış engele bağlı)
 
 ## Sıradaki iş
 
-1. Misafir kullanım + isteğe bağlı hesap akışı (§57)
-2. Supabase istemcisi ve oturum katmanı (§57) ⛔B5
-3. Çevrimdışı öncelikli eşitleme ve çakışma çözümü (§58)
-4. Profil ve ayarlar ekranı (§59, §60)
-5. Hesap silme ve veri dışa aktarma (§69)
+1. Paylaşım kartı üreticisi — kaynak künyesi görünür (§62)
+2. Profil ve ayarlar ekranının tamamlanması (§59, §60)
+3. Freemium sınırları ve Pro kapıları (§66)
+4. Reklam yerleşim kuralları ve uygunsuz kategori engelleme (§68)
+5. Erişilebilirlik ve performans geçişi (§79, §80)
 
 ## Build durumu
 
@@ -130,7 +138,7 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 25 suite / 306 test |
+| Test | ✅ 28 suite / 350 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |

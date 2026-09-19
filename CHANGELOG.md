@@ -172,3 +172,20 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
 - Hac ve Umre rehberi: hazırlık, umre, hac günleri ve uyarılar (4 bölüm,
   17 adım) + 18 maddelik hazırlık listesi. Tamamen çevrimdışı — hac sırasında
   şebeke çoğu zaman tıkalıdır.
+
+### FAZ 10-11 — Eşitleme motoru, arama, hatırlatıcılar
+
+- Eşitleme birleştirme motoru yazıldı ve sınandı. Supabase projesi henüz yok
+  (⛔B5) ama eşitlemenin zor kısmı ağ değil, iki cihazın aynı kaydı farklı
+  değiştirmesidir:
+  - silme "silindi" işaretiyle taşınır, çevrimdışı cihaz silineni diriltmez;
+  - eşit zaman damgasında kararlı bir ayraç kullanılır, yoksa iki cihaz
+    birbirini sonsuza kadar ezer;
+  - kaza sayacı gibi biriken değerlerde "son yazan kazanır" yanlıştır, iki
+    cihazın değişimi toplanır — yoksa bir cihazda kılınan namaz kaybolur.
+  Birleştirme idempotent ve yön bağımsız; ikisi de sınanıyor.
+- Global arama: "2:255", "bakara 255", "kehf", "bağışlayan", "yolculuk",
+  "nisap" ve Arapça kelime aynı kutuda çalışıyor. Latin sorguda mushaf metni
+  hiç taranmıyor — 6236 âyeti boşuna gezmemek için.
+- Özel hatırlatıcılar: sabit saatte ya da vakte göre (ör. akşamdan 30 dk önce),
+  hafta günü seçimiyle. Kutupta oluşmayan vakte bağlı hatırlatıcı kurulmuyor.

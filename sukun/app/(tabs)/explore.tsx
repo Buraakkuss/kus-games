@@ -11,6 +11,9 @@ export default function ExploreScreen() {
     <Screen scroll motif="arch">
       <SectionHeader title={t('explore.title')} />
       <Card padding="sm">
+        <ListItem title={t('search.title')} icon="search" onPress={() => router.push('/search')} />
+      </Card>
+      <Card padding="sm">
         <ListItem title={t('explore.dailyDua')} icon="heart" onPress={() => router.push('/duas')} />
         <ListItem title={t('explore.dailyInfo')} icon="info" onPress={() => router.push('/knowledge')} />
         <ListItem title={t('worship.names')} icon="star" onPress={() => router.push('/names')} />

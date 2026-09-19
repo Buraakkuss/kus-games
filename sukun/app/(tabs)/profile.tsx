@@ -1,5 +1,6 @@
 /** Profil ve ayarlar — şartname §59, §60. */
 import React from 'react';
+import { router } from 'expo-router';
 import { Screen, SectionHeader, Card, ListItem, Segmented, Column, Text, Icon } from '@/ui';
 import { useI18n, useT, LANGUAGES, LANGUAGE_NAMES } from '@/lib/i18n';
 import { useThemeContext, type ThemeMode } from '@/theme/ThemeProvider';
@@ -42,6 +43,12 @@ export default function ProfileScreen() {
             onPress={() => setLanguage(l)}
           />
         ))}
+      </Card>
+
+      <SectionHeader title={t('settings.notifications')} />
+      <Card padding="sm">
+        <ListItem title={t('reminder.title')} icon="bell" onPress={() => router.push('/reminders')} />
+        <ListItem title={t('prayer.settings')} icon="clock" onPress={() => router.push('/prayer-settings')} />
       </Card>
 
       <SectionHeader title={t('settings.about')} />

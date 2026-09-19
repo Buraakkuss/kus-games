@@ -97,6 +97,21 @@ const worshipCodec = {
       quranMinutes: z.number().int().min(0).default(0),
       note: z.string().optional(),
     })).default({}),
+    reminders: z.array(z.object({
+      id: z.string(),
+      title: z.string(),
+      body: z.string().optional(),
+      trigger: z.union([
+        z.object({ kind: z.literal('time'), hour: z.number().int().min(0).max(23), minute: z.number().int().min(0).max(59) }),
+        z.object({
+          kind: z.literal('prayer'),
+          slot: z.enum(['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha']),
+          offsetMinutes: z.number().int().min(-180).max(180),
+        }),
+      ]),
+      weekdays: z.array(z.number().int().min(0).max(6)).default([]),
+      enabled: z.boolean(),
+    })).default([]),
     khatms: z.array(z.object({
       id: z.string(), title: z.string(), startedOn: z.string(),
       targetOn: z.string().optional(),
@@ -153,7 +168,7 @@ export async function hydrateAll(): Promise<BootState> {
   });
   useWorshipStore.subscribe((s) => {
     void kv.write(KEYS.worship, {
-      sessions: s.sessions, khatms: s.khatms, qada: s.qada,
+      sessions: s.sessions, khatms: s.khatms, reminders: s.reminders, qada: s.qada,
       qadaHistory: s.qadaHistory, days: s.days, fasts: s.fasts,
     });
   });

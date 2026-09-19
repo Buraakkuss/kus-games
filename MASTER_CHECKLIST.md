@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 58 · kısmen tamamlanan 11 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 63 · kısmen tamamlanan 11 · dış engele bağlı 31**
 >
 > `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
@@ -122,17 +122,17 @@
 - [ ] Guest kullanım + opsiyonel hesap (§57)
 - [ ] Sign in with Apple / Google / Email (§57)  ⛔B5
 - [ ] Cloud sync: favoriler, yer imleri, ilerleme, zikir, ayarlar, kaza (§58)  ⛔B5
-- [ ] Offline-first + çakışma çözümü (§58)
+- [x] Çevrimdışı öncelikli birleştirme ve çakışma çözümü (§58) — mezar taşı, kararlı çözüm, sayaç birleştirme; 17 sınama
 - [ ] Profil ekranı (§59) ve Settings (§60)
 - [ ] Hesap silme, veri dışa aktarma, KVKK/GDPR (§69)  ⛔B5
 
 ## FAZ 11 — Arama, paylaşım, hatırlatıcı
 
-- [ ] Akıllı global arama (§51)
-- [ ] Türkçe + Arapça normalizasyon, diacritics-aware (§78)
+- [x] Akıllı global arama (§51) — sure adı, âyet başvurusu (2:255 / bakara 255), dua, esmâ, bilgi, Arapça metin
+- [x] Türkçe + Arapça normalizasyon, diacritics-aware (§78)
 - [ ] Share card generator: story/square/portrait, kaynak görünür (§62)
-- [ ] Unified favorites (§63)
-- [ ] Özel hatırlatıcılar (§64)
+- [x] Birleşik favoriler (§63) — dua, esmâ, âyet aynı listede
+- [x] Özel hatırlatıcılar (§64) — sabit saat ve vakte göre, hafta günü seçimi
 
 ## FAZ 12 — Widget ve Live Activity
 

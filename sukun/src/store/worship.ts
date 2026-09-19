@@ -4,6 +4,7 @@
  */
 import { create } from 'zustand';
 import type { DhikrSession } from '@/features/dhikr/stats';
+import type { Reminder } from '@/features/notifications/reminders';
 
 /** Kaza sayaçları beş farz + vitir (§41). */
 export const QADA_SLOTS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'witr'] as const;
@@ -52,6 +53,7 @@ const bosSayac = (): QadaCounters => ({ fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, i
 export interface WorshipSnapshot {
   sessions?: DhikrSession[];
   khatms?: Khatm[];
+  reminders?: Reminder[];
   qada?: Partial<QadaCounters>;
   qadaHistory?: QadaEntry[];
   days?: Record<string, WorshipDay>;
@@ -61,6 +63,7 @@ export interface WorshipSnapshot {
 interface WorshipState {
   sessions: DhikrSession[];
   khatms: Khatm[];
+  reminders: Reminder[];
   qada: QadaCounters;
   qadaHistory: QadaEntry[];
   days: Record<string, WorshipDay>;
@@ -91,11 +94,16 @@ interface WorshipState {
   finishKhatm: (khatmId: string) => void;
   removeKhatm: (khatmId: string) => void;
   activeKhatm: () => Khatm | null;
+
+  addReminder: (reminder: Omit<Reminder, 'id'>) => Reminder;
+  updateReminder: (id: string, patch: Partial<Reminder>) => void;
+  removeReminder: (id: string) => void;
 }
 
 export const useWorshipStore = create<WorshipState>((set, get) => ({
   sessions: [],
   khatms: [],
+  reminders: [],
   qada: bosSayac(),
   qadaHistory: [],
   days: {},
@@ -105,6 +113,7 @@ export const useWorshipStore = create<WorshipState>((set, get) => ({
   hydrate: (data) => set({
     sessions: data.sessions ?? [],
     khatms: data.khatms ?? [],
+    reminders: data.reminders ?? [],
     qada: { ...bosSayac(), ...(data.qada ?? {}) },
     qadaHistory: data.qadaHistory ?? [],
     days: data.days ?? {},
@@ -229,4 +238,16 @@ export const useWorshipStore = create<WorshipState>((set, get) => ({
   removeKhatm: (khatmId) => set({ khatms: get().khatms.filter((k) => k.id !== khatmId) }),
 
   activeKhatm: () => get().khatms.find((k) => k.active) ?? null,
+
+  addReminder: (reminder) => {
+    const kayit: Reminder = { ...reminder, id: `rem-${Date.now()}` };
+    set({ reminders: [kayit, ...get().reminders] });
+    return kayit;
+  },
+
+  updateReminder: (id, patch) => set({
+    reminders: get().reminders.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+  }),
+
+  removeReminder: (id) => set({ reminders: get().reminders.filter((r) => r.id !== id) }),
 }));
