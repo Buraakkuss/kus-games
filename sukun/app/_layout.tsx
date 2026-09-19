@@ -32,6 +32,11 @@ function RootStack() {
         <Stack.Screen name="location" options={{ presentation: 'modal' }} />
         <Stack.Screen name="prayer-settings" />
         <Stack.Screen name="prayer-calendar" />
+        <Stack.Screen name="home-layout" />
+        <Stack.Screen name="names" />
+        <Stack.Screen name="duas" />
+        <Stack.Screen name="knowledge" />
+        <Stack.Screen name="hijri" />
       </Stack>
     </>
   );

@@ -77,3 +77,23 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   (kutup) için bildirim üretilmez, iOS'un 64 bekleyen bildirim sınırı aşılmaz.
 - Çoklu kayıtlı konum: birincil konum kuralı ("her zaman tam bir birincil")
   sınamayla güvence altına alındı.
+
+### FAZ 3 — Ana sayfa ve günlük içerik
+
+- Ana sayfa sekiz karttan oluşuyor ve kullanıcı kartları gizleyip
+  sıralayabiliyor. "Sıradaki vakit" kartı kapatılamaz. Yeni sürümde eklenen
+  kart, eski kullanıcının düzenini bozmadan listenin sonuna geliyor.
+- Günün içeriği seçimi: aynı gün hep aynı içerik, **herhangi** N ardışık günde
+  tekrar yok. İlk çözüm tur sınırında tekrar üretiyordu (34 günlük pencerede
+  34 yerine 26 farklı madde); liste uzunluğuyla aralarında asal bir adım
+  kullanılarak tekrar yapısal olarak imkânsız hâle getirildi.
+- 34 özgün Türkçe dua (14 kategori) ve 43 özgün bilgi maddesi (6 konu).
+  Hiçbiri âyet veya hadis alıntısı değil; arayüzde de böyle belirtiliyor.
+- Esmâü'l-Hüsnâ: 99 isim, arama, favori, günün esması. Arapça yazım bilerek
+  boş: doğrulanmış kaynaktan gelecek.
+- Hicrî takvim: bugünün tarihi, çift yönlü çevirici, ±2 gün düzeltme,
+  13 dinî gün için geri sayım.
+- Ay durumu: evre, aydınlanma oranı, ay yaşı, sonraki yeni ay ve dolunay.
+  Model dört bilinen yeni ay anıyla karşılaştırıldı; sapma yarım günün altında.
+  Arayüzde bunun rüyet yerine geçmediği yazılı.
+- Birleşik favoriler: dua, esmâ ve ileride âyet/hadis aynı listede.

@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 29 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 37 · dış engele bağlı 31**
 
 
 ## FAZ 0 — Audit, mimari, design system, veritabanı mimarisi
@@ -50,16 +50,16 @@
 
 ## FAZ 3 — Ana sayfa ve günlük içerik
 
-- [ ] Ana sayfa düzeni (§20)
-- [ ] Home customization: gizle/göster/drag-drop + cloud sync (§21)
+- [x] Ana sayfa düzeni (§20) — sekiz kart, sıradaki vakit sabit
+- [x] Ana sayfa özelleştirme: gizle/göster/sırala (§21) — bulut eşitleme FAZ 10'da ⛔B5
 - [ ] Günün Âyeti (§22)  ⛔B1
 - [ ] Günün Hadisi (§23)  ⛔B3
-- [ ] Günün Duası (§24)
-- [ ] Günün Bilgisi (§25)
-- [ ] Esmâü'l-Hüsnâ: 99 isim, arama, favori, günün esması (§26)
-- [ ] Hicri takvim + çift yönlü çevirici (§44)
-- [ ] Dini günler + geri sayım (§45)
-- [ ] Ay durumu: faz, aydınlanma, yaş (§46)
+- [x] Günün Duası (§24) — 34 özgün Türkçe dua, 14 kategori
+- [x] Günün Bilgisi (§25) — 43 özgün madde, 6 konu
+- [x] Esmâü'l-Hüsnâ: 99 isim, arama, favori, günün esması (§26) — Arapça yazım ⛔T4
+- [x] Hicri takvim + çift yönlü çevirici + gün düzeltmesi (§44)
+- [x] Dini günler + geri sayım (§45) — 13 gün
+- [x] Ay durumu: faz, aydınlanma, yaş (§46) — bilinen yeni ay anlarıyla sınandı
 
 ## FAZ 4 — Kur'an
 

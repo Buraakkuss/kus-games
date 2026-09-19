@@ -34,4 +34,5 @@ Bilinen eksikler ve engeller. Kapanan madde `CHANGELOG.md`'ye taşınır.
 |---|---|---|
 | T1 | Bildirim merkezi ekranı | Kurulu bildirim sayısı gösteriliyor; ayrı merkez ekranı FAZ 11'de yazılacak (§65). |
 | T2 | Haftalık takvim ekranı | `rangeSchedule` işlevi ve sınaması hazır; ekranı FAZ 3'te eklenecek. |
+| T4 | Esmâü'l-Hüsnâ Arapça yazımı | Okunuş ve Türkçe anlam tam; Arapça yazım doğrulanmış kaynaktan eklenecek. Ezberden dizilmeyeceği için bilerek boş (CONTENT_SOURCES kuralı 1). |
 | T3 | Bileşen (render) testleri | Saf mantık sınanıyor; bileşen ve E2E sınamaları FAZ 18'de eklenecek (§86). |

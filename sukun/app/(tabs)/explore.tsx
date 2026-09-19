@@ -1,7 +1,9 @@
-/** Keşfet — şartname §22–§26, §45, §53. İçerik FAZ 3'te doldurulur. */
+/** Keşfet — şartname §22–§26, §45, §53. */
 import React from 'react';
+import { router } from 'expo-router';
 import { Screen, SectionHeader, Card, ListItem } from '@/ui';
 import { useT } from '@/lib/i18n';
+import { PendingContentSection } from '@/features/daily/components/DailyCards';
 
 export default function ExploreScreen() {
   const t = useT();
@@ -9,11 +11,15 @@ export default function ExploreScreen() {
     <Screen scroll motif="arch">
       <SectionHeader title={t('explore.title')} />
       <Card padding="sm">
-        <ListItem title={t('explore.hijri')} icon="calendar" chevron />
-        <ListItem title={t('explore.religiousDays')} icon="moon" chevron />
-        <ListItem title={t('explore.articles')} icon="book" chevron />
-        <ListItem title={t('explore.community')} icon="users" chevron />
+        <ListItem title={t('explore.dailyDua')} icon="heart" onPress={() => router.push('/duas')} />
+        <ListItem title={t('explore.dailyInfo')} icon="info" onPress={() => router.push('/knowledge')} />
+        <ListItem title={t('worship.names')} icon="star" onPress={() => router.push('/names')} />
+        <ListItem title={t('explore.hijri')} icon="calendar" onPress={() => router.push('/hijri')} />
+        <ListItem title={t('explore.religiousDays')} icon="moon" onPress={() => router.push('/hijri')} />
       </Card>
+
+      <PendingContentSection title={t('explore.dailyAyah')} />
+      <PendingContentSection title={t('explore.dailyHadith')} />
     </Screen>
   );
 }

@@ -1,5 +1,6 @@
-/** İbadet — şartname §37–§49. Araçlar FAZ 7–9'da eklenir. */
+/** İbadet — şartname §37–§49. Araçlar FAZ 7–9'da tamamlanır. */
 import React from 'react';
+import { router } from 'expo-router';
 import { Screen, SectionHeader, ListItem, Card } from '@/ui';
 import { useT } from '@/lib/i18n';
 
@@ -9,10 +10,10 @@ export default function WorshipScreen() {
     <Screen scroll motif="octagonGrid">
       <SectionHeader title={t('worship.title')} />
       <Card padding="sm">
-        <ListItem title={t('worship.dhikr')} icon="beads" chevron />
-        <ListItem title={t('worship.duas')} icon="heart" chevron />
-        <ListItem title={t('worship.names')} icon="star" chevron />
-        <ListItem title={t('worship.qada')} icon="check" chevron />
+        <ListItem title={t('worship.duas')} icon="heart" onPress={() => router.push('/duas')} />
+        <ListItem title={t('worship.names')} icon="star" onPress={() => router.push('/names')} />
+        <ListItem title={t('prayer.settings')} icon="clock" onPress={() => router.push('/prayer-settings')} />
+        <ListItem title={t('prayer.calendar')} icon="calendar" onPress={() => router.push('/prayer-calendar')} />
       </Card>
     </Screen>
   );

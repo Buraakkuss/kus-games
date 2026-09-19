@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 3 — Ana sayfa ve günlük içerik** (FAZ 0, 1, 2 tamamlandı)
+**FAZ 4 — Kur'an** (FAZ 0, 1, 2, 3 tamamlandı)
 
 ## Tamamlanan
 
@@ -63,17 +63,27 @@
 - [x] Altı vakit, canlı geri sayım, aylık takvim ekranı (§14)
 - [x] Vakit bildirimleri: vakit bazlı açma/kapama, erken uyarı dakikası (§16)
 
+**FAZ 3 tamamlandı:**
+
+- [x] Ana sayfa: 8 kart, gizle/göster/sırala (§20, §21)
+- [x] Günün içeriği seçimi: aynı gün sabit, N ardışık günde tekrarsız (§22–§25)
+- [x] 34 özgün dua (14 kategori), 43 özgün bilgi maddesi (6 konu)
+- [x] Esmâü'l-Hüsnâ: 99 isim, arama, favori (§26)
+- [x] Hicrî takvim, çift yönlü çevirici, gün düzeltmesi (§44)
+- [x] Dinî günler + geri sayım (§45), ay durumu (§46)
+- [x] Birleşik favoriler altyapısı (§63)
+
 ## Devam eden
 
-- [ ] FAZ 3 — ana sayfa özelleştirme, günün içeriği, esmâ, hicri takvim
+- [ ] FAZ 4 — Kur'an: içe aktarma boruhattı, okuyucu, yer imleri, arama
 
 ## Sıradaki iş
 
-1. Ana sayfa kart düzeni ve özelleştirme (§20, §21)
-2. Günün Duası ve Günün Bilgisi (§24, §25) — telifsiz, özgün içerik
-3. Esmâü'l-Hüsnâ: 99 isim, arama, favori (§26)
-4. Hicri takvim + çevirici, dinî günler + geri sayım (§44, §45)
-5. Ay durumu: faz, aydınlanma, yaş (§46)
+1. Tanzil'den Arapça metin içe aktarma + doğrulama + checksum (§74)
+2. Kur'an ana ekranı: sureler, cüzler, sayfalar, son okunan (§27)
+3. Okuyucu: Arapça mod, ayarlar, âyet aksiyonları (§28)
+4. Yer imleri, notlar, favoriler (§30, §31)
+5. Arama altyapısı — meal gelene kadar Arapça metin üzerinde (§35)
 
 ## Build durumu
 
@@ -81,7 +91,7 @@
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 15 suite / 152 test |
+| Test | ✅ 19 suite / 195 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |
