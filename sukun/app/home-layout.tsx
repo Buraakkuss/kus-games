@@ -5,8 +5,12 @@ import { Screen, SectionHeader, Card, ListItem, Row, IconButton, Button } from '
 import { useT } from '@/lib/i18n';
 import { useHomeLayoutStore, PINNED_CARDS, type HomeCardId } from '@/store/homeLayout';
 
-const CARD_LABEL: Record<HomeCardId, 'home.card.nextPrayer' | 'home.card.todayTimes' | 'home.card.hijriDate' | 'home.card.dailyDua' | 'home.card.dailyKnowledge' | 'home.card.dailyName' | 'home.card.religiousDay' | 'home.card.moon'> = {
+import type { StringKey } from '@/lib/i18n';
+
+const CARD_LABEL: Record<HomeCardId, StringKey> = {
   nextPrayer: 'home.card.nextPrayer',
+  friday: 'friday.title',
+  ramadan: 'ramadan.title',
   todayTimes: 'home.card.todayTimes',
   hijriDate: 'home.card.hijriDate',
   dailyDua: 'home.card.dailyDua',

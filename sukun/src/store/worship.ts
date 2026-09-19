@@ -30,6 +30,16 @@ export interface WorshipDay {
 
 export type FastKind = 'ramadan' | 'qada' | 'nafile' | 'kaffara';
 
+/** Hatim/mukabele takibi (§48). */
+export interface Khatm {
+  id: string;
+  title: string;
+  startedOn: string;
+  targetOn?: string;
+  completedJuz: number[];
+  active: boolean;
+}
+
 export interface FastDay {
   date: string;
   kind: FastKind;
@@ -41,6 +51,7 @@ const bosSayac = (): QadaCounters => ({ fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, i
 /** Depoya yazılan/okunan durum kesiti — kalıcılık katmanı bunu kullanır. */
 export interface WorshipSnapshot {
   sessions?: DhikrSession[];
+  khatms?: Khatm[];
   qada?: Partial<QadaCounters>;
   qadaHistory?: QadaEntry[];
   days?: Record<string, WorshipDay>;
@@ -49,6 +60,7 @@ export interface WorshipSnapshot {
 
 interface WorshipState {
   sessions: DhikrSession[];
+  khatms: Khatm[];
   qada: QadaCounters;
   qadaHistory: QadaEntry[];
   days: Record<string, WorshipDay>;
@@ -73,10 +85,17 @@ interface WorshipState {
 
   setFast: (date: string, kind: FastKind, completed: boolean) => void;
   clearFast: (date: string) => void;
+
+  startKhatm: (title: string, startedOn: string, targetOn?: string) => Khatm;
+  toggleJuz: (khatmId: string, juz: number) => void;
+  finishKhatm: (khatmId: string) => void;
+  removeKhatm: (khatmId: string) => void;
+  activeKhatm: () => Khatm | null;
 }
 
 export const useWorshipStore = create<WorshipState>((set, get) => ({
   sessions: [],
+  khatms: [],
   qada: bosSayac(),
   qadaHistory: [],
   days: {},
@@ -85,6 +104,7 @@ export const useWorshipStore = create<WorshipState>((set, get) => ({
 
   hydrate: (data) => set({
     sessions: data.sessions ?? [],
+    khatms: data.khatms ?? [],
     qada: { ...bosSayac(), ...(data.qada ?? {}) },
     qadaHistory: data.qadaHistory ?? [],
     days: data.days ?? {},
@@ -171,4 +191,42 @@ export const useWorshipStore = create<WorshipState>((set, get) => ({
     delete kopya[date];
     set({ fasts: kopya });
   },
+
+  startKhatm: (title, startedOn, targetOn) => {
+    const kayit: Khatm = {
+      id: `khatm-${Date.now()}`,
+      title,
+      startedOn,
+      ...(targetOn ? { targetOn } : {}),
+      completedJuz: [],
+      active: true,
+    };
+    // Aynı anda tek etkin hatim olur; yenisi başlayınca eskisi pasifleşir.
+    set({ khatms: [kayit, ...get().khatms.map((k) => ({ ...k, active: false }))] });
+    return kayit;
+  },
+
+  toggleJuz: (khatmId, juz) => {
+    if (juz < 1 || juz > 30) return;
+    set({
+      khatms: get().khatms.map((k) => {
+        if (k.id !== khatmId) return k;
+        const varMi = k.completedJuz.includes(juz);
+        return {
+          ...k,
+          completedJuz: varMi
+            ? k.completedJuz.filter((j) => j !== juz)
+            : [...k.completedJuz, juz].sort((a, b) => a - b),
+        };
+      }),
+    });
+  },
+
+  finishKhatm: (khatmId) => set({
+    khatms: get().khatms.map((k) => (k.id === khatmId ? { ...k, active: false } : k)),
+  }),
+
+  removeKhatm: (khatmId) => set({ khatms: get().khatms.filter((k) => k.id !== khatmId) }),
+
+  activeKhatm: () => get().khatms.find((k) => k.active) ?? null,
 }));

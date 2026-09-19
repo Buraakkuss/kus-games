@@ -155,3 +155,20 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   Kur'an okuma dakikası, günün notu; geçmiş günlere gidilebilir.
 - Oruç takibi: Ramazan, kaza ve nafile.
 - Bu kayıtların cihazda kaldığı her ekranda yazılı.
+
+### FAZ 9 — Zekât, Ramazan, mukabele, cuma, hac
+
+- Zekât hesaplama: nakit, döviz, altın, gümüş, yatırım, ticari mal ve
+  alacaklar; borç ve temel ihtiyaçlar düşülür. Nisap ölçüsü altın (80,18 g)
+  veya gümüş (561 g) olarak seçilebilir. Metal fiyatı girilmemişse
+  **yükümlülük iddia edilmez** — eksik veriyle "şu kadar ver" denmez.
+  Kullanılan yöntem ekranda yazılı; canlı piyasa verisi bilerek çekilmiyor.
+- Fitre hesabı.
+- Ramazan modu: iftar ve imsak geri sayımı, ayın 30 günü için imsak/akşam
+  tablosu, ana sayfada Ramazan kartı. Ramazan dışında kart hiç görünmez.
+- Mukabele: 30 cüz takibi, hedef tarihe göre günlük tempo, gecikme uyarısı;
+  bir cüze uzun basınca okuyucuda o cüzün başı açılır.
+- Cuma modu: yalnız cuma günü görünen kart ve Kehf sûresi kısayolu.
+- Hac ve Umre rehberi: hazırlık, umre, hac günleri ve uyarılar (4 bölüm,
+  17 adım) + 18 maddelik hazırlık listesi. Tamamen çevrimdışı — hac sırasında
+  şebeke çoğu zaman tıkalıdır.

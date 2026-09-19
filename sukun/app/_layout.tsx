@@ -45,6 +45,10 @@ function RootStack() {
         <Stack.Screen name="qada" />
         <Stack.Screen name="worship-log" />
         <Stack.Screen name="prayer-guide" />
+        <Stack.Screen name="zakat" />
+        <Stack.Screen name="ramadan" />
+        <Stack.Screen name="khatm" />
+        <Stack.Screen name="hajj" />
       </Stack>
     </>
   );

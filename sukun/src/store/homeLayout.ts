@@ -9,12 +9,12 @@
 import { create } from 'zustand';
 
 export type HomeCardId =
-  | 'nextPrayer' | 'todayTimes' | 'hijriDate' | 'dailyDua'
-  | 'dailyKnowledge' | 'dailyName' | 'religiousDay' | 'moon';
+  | 'nextPrayer' | 'todayTimes' | 'friday' | 'ramadan' | 'hijriDate'
+  | 'dailyDua' | 'dailyKnowledge' | 'dailyName' | 'religiousDay' | 'moon';
 
 export const HOME_CARDS: readonly HomeCardId[] = [
-  'nextPrayer', 'todayTimes', 'hijriDate', 'dailyDua',
-  'dailyKnowledge', 'dailyName', 'religiousDay', 'moon',
+  'nextPrayer', 'todayTimes', 'friday', 'ramadan', 'hijriDate',
+  'dailyDua', 'dailyKnowledge', 'dailyName', 'religiousDay', 'moon',
 ];
 
 /** Kapatılamayan kartlar: bunlar olmadan ana sayfa boş kalır. */

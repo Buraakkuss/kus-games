@@ -15,6 +15,7 @@ import { DIVINE_NAMES } from '@/content/names';
 import { useFavoriteStore } from '@/store/favorites';
 import { toHijri, HIJRI_MONTHS, upcomingReligiousDays } from '@/features/hijri/calc';
 import { moonState } from '@/features/moon/phase';
+import { isFriday, ramadanState, KAHF_SURAH } from '@/features/ramadan/calc';
 
 export interface DailyContext {
   year: number;
@@ -153,6 +154,39 @@ export function MoonCard({ ctx }: { ctx: DailyContext }) {
         <Text variant="micro" tone="subtle" style={{ marginTop: theme.spacing.xxs }}>
           {t('moon.approxNote')}
         </Text>
+      </Column>
+    </Card>
+  );
+}
+
+/**
+ * Cuma kartı — şartname §50. Yalnız cuma günü görünür; diğer günlerde
+ * kart hiç çizilmez, boş kutu bırakılmaz.
+ */
+export function FridayCard({ ctx }: { ctx: DailyContext }) {
+  const t = useT();
+  if (!isFriday(ctx.year, ctx.month, ctx.day)) return null;
+  return (
+    <Card accent motif="arch" onPress={() => router.push(`/reader?surah=${KAHF_SURAH}&ayah=1`)}>
+      <Column gap="xs">
+        <Text variant="caption" tone="onAccent">{t('friday.title')}</Text>
+        <Text variant="title3" tone="onAccent">{t('friday.greeting')}</Text>
+        <Text variant="caption" tone="onAccent">{t('friday.kahf')}</Text>
+      </Column>
+    </Card>
+  );
+}
+
+/** Ramazan kartı — şartname §47. Ramazan dışında görünmez. */
+export function RamadanCard({ ctx }: { ctx: DailyContext }) {
+  const t = useT();
+  const durum = ramadanState(ctx.now, ctx.hijriOffset);
+  if (!durum.active) return null;
+  return (
+    <Card motif="girih" onPress={() => router.push('/ramadan')} accessibilityLabel={t('ramadan.title')}>
+      <Column gap="xs">
+        <Text variant="caption" tone="muted">{t('ramadan.title')}</Text>
+        <Text variant="title3" tone="accent">{t('ramadan.day', { day: durum.day })}</Text>
       </Column>
     </Card>
   );

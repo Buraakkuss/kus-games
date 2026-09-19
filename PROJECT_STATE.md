@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 9 — Zekât, Ramazan, mukabele, cuma** (FAZ 0–8 tamamlandı)
+**FAZ 10 — Hesap ve eşitleme** (FAZ 0–9 tamamlandı)
 
 ## Tamamlanan
 
@@ -103,17 +103,26 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 - [x] İbadet defteri ve oruç takibi (§42, §49)
 - [x] İslami bilgi kütüphanesi (§53)
 
+**FAZ 9 tamamlandı:**
+
+- [x] Zekât: 7 varlık kalemi, 2 düşülen kalem, altın/gümüş nisap seçimi,
+      fitre hesabı; metodoloji ekranda yazılı (§43)
+- [x] Ramazan modu: iftar/imsak geri sayımı, 30 günlük takvim (§47)
+- [x] Mukabele: 30 cüz takibi, hedef tempo, okuyucuya atlama (§48)
+- [x] Cuma modu: yalnız cuma görünen kart, Kehf kısayolu (§50)
+- [x] Hac/Umre rehberi + hazırlık listesi, tamamen çevrimdışı (§54)
+
 ## Devam eden
 
-- [ ] FAZ 9 — zekât hesaplama, Ramazan modu, mukabele, cuma modu
+- [ ] FAZ 10 — hesap, bulut eşitleme, profil ve ayarlar (⛔B5 Supabase projesi)
 
 ## Sıradaki iş
 
-1. Zekât: nakit/döviz/altın/gümüş/yatırım/ticari/alacak/borç + nisap (§43)
-2. Ramazan modu: iftar/imsak geri sayımı, 30 günlük takvim (§47)
-3. Mukabele: 30 cüz takibi, okuyucu entegrasyonu (§48)
-4. Cuma modu: minimal görünüm, Kehf kısayolu, salavat (§50)
-5. Hac/Umre rehberi + checklist (§54)
+1. Misafir kullanım + isteğe bağlı hesap akışı (§57)
+2. Supabase istemcisi ve oturum katmanı (§57) ⛔B5
+3. Çevrimdışı öncelikli eşitleme ve çakışma çözümü (§58)
+4. Profil ve ayarlar ekranı (§59, §60)
+5. Hesap silme ve veri dışa aktarma (§69)
 
 ## Build durumu
 
@@ -121,7 +130,7 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 23 suite / 274 test |
+| Test | ✅ 25 suite / 306 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |

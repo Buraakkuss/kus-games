@@ -16,6 +16,10 @@ export default function ExploreScreen() {
         <ListItem title={t('worship.names')} icon="star" onPress={() => router.push('/names')} />
         <ListItem title={t('explore.hijri')} icon="calendar" onPress={() => router.push('/hijri')} />
         <ListItem title={t('explore.religiousDays')} icon="moon" onPress={() => router.push('/hijri')} />
+        <ListItem title={t('ramadan.title')} icon="moon" onPress={() => router.push('/ramadan')} />
+        <ListItem title={t('khatm.title')} icon="book" onPress={() => router.push('/khatm')} />
+        <ListItem title={t('worship.zakat')} icon="star" onPress={() => router.push('/zakat')} />
+        <ListItem title={t('hajj.title')} icon="location" onPress={() => router.push('/hajj')} />
       </Card>
 
       <PendingContentSection title={t('explore.dailyAyah')} />

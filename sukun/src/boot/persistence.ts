@@ -97,6 +97,12 @@ const worshipCodec = {
       quranMinutes: z.number().int().min(0).default(0),
       note: z.string().optional(),
     })).default({}),
+    khatms: z.array(z.object({
+      id: z.string(), title: z.string(), startedOn: z.string(),
+      targetOn: z.string().optional(),
+      completedJuz: z.array(z.number().int().min(1).max(30)).default([]),
+      active: z.boolean(),
+    })).default([]),
     fasts: z.record(z.string(), z.object({
       date: z.string(),
       kind: z.enum(['ramadan', 'qada', 'nafile', 'kaffara']),
@@ -147,8 +153,8 @@ export async function hydrateAll(): Promise<BootState> {
   });
   useWorshipStore.subscribe((s) => {
     void kv.write(KEYS.worship, {
-      sessions: s.sessions, qada: s.qada, qadaHistory: s.qadaHistory,
-      days: s.days, fasts: s.fasts,
+      sessions: s.sessions, khatms: s.khatms, qada: s.qada,
+      qadaHistory: s.qadaHistory, days: s.days, fasts: s.fasts,
     });
   });
 

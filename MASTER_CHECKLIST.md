@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 53 · kısmen tamamlanan 10 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 58 · kısmen tamamlanan 11 · dış engele bağlı 31**
 >
 > `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
@@ -110,12 +110,12 @@
 
 ## FAZ 9 — Zekât, Ramazan, mukabele, cuma, hac
 
-- [ ] Zekât: nakit/döviz/altın/gümüş/yatırım/ticari/alacak/borç (§43)
-- [ ] Nisap + canlı değer provider abstraction + metodoloji gösterimi (§43)
-- [ ] Ramazan modu: iftar/imsak geri sayımı, 30 günlük takvim (§47)
-- [ ] Mukabele: 30 cüz takibi, Reader entegrasyonu (§48)
-- [ ] Cuma modu: minimal görünüm, Kehf kısayolu, salavat (§50)
-- [ ] Hac/Umre rehberi + checklist + offline (§54)
+- [x] Zekât: nakit/döviz/altın/gümüş/yatırım/ticari/alacak/borç + fitre (§43)
+- [~] Nisap (altın/gümüş ölçüsü seçmeli) + metodoloji ekranda yazılı; fiyatı kullanıcı girer, canlı piyasa verisi bilerek yok (§43)
+- [x] Ramazan modu: iftar/imsak geri sayımı, 30 günlük takvim, ana sayfa kartı (§47)
+- [x] Mukabele: 30 cüz takibi, hedef tempo hesabı, okuyucu entegrasyonu (§48)
+- [x] Cuma modu: yalnız cuma günü görünen kart, Kehf kısayolu (§50)
+- [x] Hac/Umre rehberi: 4 bölüm, 17 adım + 18 maddelik hazırlık listesi, tamamen çevrimdışı (§54)
 
 ## FAZ 10 — Hesap ve eşitleme
 
