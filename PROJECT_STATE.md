@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 4 — Kur'an** (FAZ 0, 1, 2, 3 tamamlandı)
+**FAZ 5 — Kur'an sesi** (FAZ 0–4 tamamlandı)
 
 ## Tamamlanan
 
@@ -73,17 +73,26 @@
 - [x] Dinî günler + geri sayım (§45), ay durumu (§46)
 - [x] Birleşik favoriler altyapısı (§63)
 
+**FAZ 4 tamamlandı (telif engelli kısımlar hariç):**
+
+- [x] Tanzil'den Arapça metin içe aktarma, doğrulama ve sağlama (§74)
+- [x] 114 sure · 6236 âyet · 604 sayfa · 30 cüz · 15 secde âyeti
+- [x] Kur'an ana ekranı: son okunan, sureler, cüzler, yer imleri (§27)
+- [x] Okuyucu: Arapça metin, yazı boyutu, âyet aksiyonları (§28)
+- [x] Yer imleri (renk + not), son okunan konum (§29, §30)
+- [x] Arapça arama: harekesiz sorgu harekeli metinde eşleşiyor (§35, §78)
+- [x] Paylaşımda kaynak künyesi her zaman gidiyor
+
 ## Devam eden
 
-- [ ] FAZ 4 — Kur'an: içe aktarma boruhattı, okuyucu, yer imleri, arama
+- [ ] FAZ 5 — Kur'an sesi altyapısı (kıraat lisansı ⛔B4)
 
 ## Sıradaki iş
 
-1. Tanzil'den Arapça metin içe aktarma + doğrulama + checksum (§74)
-2. Kur'an ana ekranı: sureler, cüzler, sayfalar, son okunan (§27)
-3. Okuyucu: Arapça mod, ayarlar, âyet aksiyonları (§28)
-4. Yer imleri, notlar, favoriler (§30, §31)
-5. Arama altyapısı — meal gelene kadar Arapça metin üzerinde (§35)
+1. Ses oynatıcı altyapısı: çalma/durdurma, tekrar, aralık, hız (§32) ⛔B4
+2. Arka planda oynatma + kilit ekranı kontrolleri (§32) ⛔B4
+3. İndirme yöneticisi + depolama göstergesi (§33) ⛔B4
+4. FAZ 6 — kıble ekranı (§36): altyapı hazır, ekran yazılacak
 
 ## Build durumu
 
@@ -91,7 +100,7 @@
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 19 suite / 195 test |
+| Test | ✅ 21 suite / 227 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |

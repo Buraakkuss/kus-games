@@ -7,7 +7,7 @@ kaynağı olmayan dinî içerik üretimde yayınlanmaz, AI âyet/hadis/dua üret
 
 | İçerik | Kaynak | Lisans durumu | Uygulamada |
 |---|---|---|---|
-| Kur'an Arapça metni | [Tanzil Project](https://tanzil.net/download/) | **Kullanılabilir** — verbatim kopyalama izinli, değiştirmek yasak, atıf ve tanzil.net bağlantısı şart | İçe aktarma boruhattı kurulacak |
+| Kur'an Arapça metni | [Tanzil Project](https://tanzil.net/download/) | **Kullanılabilir** — verbatim kopyalama izinli, değiştirmek yasak, atıf ve tanzil.net bağlantısı şart | **İçe aktarıldı** (6236 âyet, sağlama doğrulandı); künye okuyucuda, aramada ve paylaşımda görünür |
 | Türkçe meal | — | **YOK** (B1) | Şema hazır, veri yok |
 | Tefsir | — | **YOK** (B2) | Şema hazır, veri yok |
 | Hadis külliyatı | — | **YOK** (B3) | Şema hazır, veri yok |

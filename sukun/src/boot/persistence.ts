@@ -9,6 +9,7 @@ import { useSettingsStore } from '@/store/settings';
 import { useLocationStore } from '@/store/locations';
 import { useFavoriteStore, type Favorite } from '@/store/favorites';
 import { useHomeLayoutStore } from '@/store/homeLayout';
+import { useReadingStore, type Bookmark, type ReadingPosition } from '@/store/reading';
 import type { SavedLocation } from '@/features/location/types';
 import { kv } from './storage';
 
@@ -56,6 +57,26 @@ const layoutCodec = {
   fallback: null as unknown,
 };
 
+const readingCodec = {
+  parse: (raw: unknown) => z.object({
+    position: z.object({
+      surah: z.number().int().min(1).max(114),
+      ayah: z.number().int().min(1),
+      updatedAt: z.number(),
+    }).nullable().default(null),
+    bookmarks: z.array(z.object({
+      id: z.string(),
+      surah: z.number().int().min(1).max(114),
+      ayah: z.number().int().min(1),
+      color: z.string(),
+      label: z.string().optional(),
+      note: z.string().optional(),
+      createdAt: z.number(),
+    })).default([]),
+  }).parse(raw),
+  fallback: { position: null as ReadingPosition | null, bookmarks: [] as Bookmark[] },
+};
+
 const onboardingCodec = {
   parse: (raw: unknown) => raw === true,
   fallback: false,
@@ -67,18 +88,20 @@ export interface BootState {
 
 /** Açılışta tüm kalıcı durumu yükler ve yazıcıları bağlar. */
 export async function hydrateAll(): Promise<BootState> {
-  const [ayar, konum, onboarding, favoriler, duzen] = await Promise.all([
+  const [ayar, konum, onboarding, favoriler, duzen, okuma] = await Promise.all([
     kv.read(KEYS.settings, settingsCodec),
     kv.read(KEYS.locations, locationsCodec),
     kv.read(KEYS.onboardingDone, onboardingCodec),
     kv.read(KEYS.favorites, favoritesCodec),
     kv.read(KEYS.homeLayout, layoutCodec),
+    kv.read(KEYS.reading, readingCodec),
   ]);
 
   useSettingsStore.getState().hydrate(ayar);
   useLocationStore.getState().hydrate(konum.locations as SavedLocation[], konum.activeId);
   useFavoriteStore.getState().hydrate(favoriler);
   useHomeLayoutStore.getState().hydrate(duzen);
+  useReadingStore.getState().hydrate(okuma.position, okuma.bookmarks as Bookmark[]);
 
   // Hidrasyondan **sonra** bağlanır: yoksa ilk hidrasyon kendini geri yazar.
   useSettingsStore.subscribe((s) => { void kv.write(KEYS.settings, s.settings); });
@@ -87,6 +110,9 @@ export async function hydrateAll(): Promise<BootState> {
   });
   useFavoriteStore.subscribe((s) => { void kv.write(KEYS.favorites, s.items); });
   useHomeLayoutStore.subscribe((s) => { void kv.write(KEYS.homeLayout, s.cards); });
+  useReadingStore.subscribe((s) => {
+    void kv.write(KEYS.reading, { position: s.position, bookmarks: s.bookmarks });
+  });
 
   return { onboardingDone: onboarding };
 }

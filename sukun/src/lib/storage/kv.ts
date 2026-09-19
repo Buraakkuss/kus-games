@@ -73,6 +73,8 @@ export const KEYS = {
   homeLayout: 'homeLayout',
   lastSyncAt: 'lastSyncAt',
   favorites: 'favorites',
+  reading: 'reading',
+  quranSettings: 'quranSettings',
 } as const;
 
 export type StorageKey = (typeof KEYS)[keyof typeof KEYS];

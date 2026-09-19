@@ -14,7 +14,8 @@
     "gate": "npm run typecheck && npm run lint && npm run test",
     "db:verify": "bash tools/verify-db.sh",
     "bundle": "expo export --platform android --output-dir .expo/verify-bundle",
-    "verify": "npm run gate && npm run bundle"
+    "verify": "npm run gate && npm run bundle",
+    "import:quran": "node --experimental-strip-types tools/import-quran.js"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",

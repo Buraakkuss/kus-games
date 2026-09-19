@@ -97,3 +97,24 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   Model dört bilinen yeni ay anıyla karşılaştırıldı; sapma yarım günün altında.
   Arayüzde bunun rüyet yerine geçmediği yazılı.
 - Birleşik favoriler: dua, esmâ ve ileride âyet/hadis aynı listede.
+
+### FAZ 4 — Kur'an
+
+- Tanzil Project'ten Arapça mushaf metni (Uthmani) içe aktarıldı. İçe aktarma
+  betiği ile uygulama **aynı doğrulama modülünü** kullanıyor; kopya mantık yok.
+  Doğrulama geçmezse dosya yazılmıyor.
+- Doğrulanan değişmezler: 114 sure, 6236 âyet, sure başına âyet sayısı meta
+  veriyle birebir, âyet numaraları boşluksuz, her âyet metni dolu ve Arapça,
+  604 sayfa, 30 cüz, 15 secde âyeti, sağlama kararlı.
+  Bilinen sayılarla ayrıca karşılaştırıldı (Fâtiha 7, Bakara 286, Kevser 3,
+  Nâs 6) ve cüz başlangıçları doğrulandı (2. cüz Bakara 142, 30. cüz Nebe' 1).
+- Kur'an ana ekranı: kaldığın yerden devam, sure listesi, cüz listesi,
+  yer imleri.
+- Okuyucu: Amiri Quran yüzüyle Arapça metin, kullanıcı yazı boyutu,
+  âyet seçimi, yer imi (renk + not), favori, paylaşım. Paylaşılan metne
+  kaynak künyesi otomatik ekleniyor.
+- Arapça arama: kullanıcı harekesiz yazar, harekeli metinde eşleşir. Elif
+  çeşitleri, tâ merbûta, elif maksûra ve tatvîl normalize ediliyor — ama
+  yalnız aramada; ekranda gösterilen metin kaynaktaki hâliyle kalıyor.
+- Meal, tefsir ve kıraat bölümleri arayüzde duruyor; içerik yerine neden boş
+  olduğu yazılı. Lisans gelince yalnız veri yüklenecek.

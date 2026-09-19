@@ -4,7 +4,9 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 37 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 42 · kısmen tamamlanan 5 · dış engele bağlı 31**
+>
+> `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
 
 ## FAZ 0 — Audit, mimari, design system, veritabanı mimarisi
@@ -63,15 +65,15 @@
 
 ## FAZ 4 — Kur'an
 
-- [ ] Kur'an ana ekranı: son okunan, sureler, cüzler, sayfalar, favoriler (§27)
-- [ ] Arapça metin içe aktarma (Tanzil) + doğrulama + checksum (§74)
-- [ ] Reader: Arapça / Arapça+Meal / Meal modları (§28)  ⛔B1
-- [ ] Reader ayarları: font, satır aralığı, tema, scroll/page (§28)
-- [ ] Âyet aksiyonları: dinle, meal, tefsir, favori, yer imi, not, kopyala, paylaş (§28)
-- [ ] Son okunan + devam et (§29)
-- [ ] Yer imleri: renk, etiket, not (§30)
-- [ ] Favoriler + koleksiyon (§31)
-- [ ] Arama: sure adı, âyet no, meal, kelime (§35)  ⛔B1
+- [x] Kur'an ana ekranı: son okunan, sureler, cüzler, yer imleri (§27) — sayfa listesi FAZ 5'te
+- [x] Arapça metin içe aktarma (Tanzil) + doğrulama + checksum (§74) — 6236 âyet, bilinen sayılarla sınandı
+- [~] Reader: **Arapça modu tamam**; meal modları arayüzde var, içerik ⛔B1
+- [~] Reader ayarları: yazı boyutu ve tema tamam; satır aralığı hareke güvenliği için sabit oranlı, sayfa kipi FAZ 5'te (§28)
+- [~] Âyet aksiyonları: favori, yer imi, not, paylaş tamam (kaynak künyesiyle); dinle ⛔B4, meal ⛔B1, tefsir ⛔B2 (§28)
+- [x] Son okunan + devam et (§29)
+- [x] Yer imleri: renk, etiket, not (§30)
+- [~] Favoriler tamam; koleksiyonlar FAZ 11'de (§31)
+- [~] Arama: **Arapça kelime araması tamam** (harekesiz sorgu eşleşir); meal araması ⛔B1 (§35)
 - [ ] Tefsir (§34)  ⛔B2
 
 ## FAZ 5 — Kur'an sesi
