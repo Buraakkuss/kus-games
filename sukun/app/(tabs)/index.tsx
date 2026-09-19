@@ -21,7 +21,7 @@ import type { ScheduleInput } from '@/features/prayer/schedule';
 import type { MethodId, PrayerKey } from '@/features/prayer/methods';
 import { zonedNow } from '@/lib/time/zone';
 import {
-  DailyDuaCard, DailyKnowledgeCard, DailyNameCard, HijriDateCard,
+  DailyAyahCard, DailyDuaCard, DailyKnowledgeCard, DailyNameCard, HijriDateCard,
   ReligiousDayCard, MoonCard, FridayCard, RamadanCard, type DailyContext,
 } from '@/features/daily/components/DailyCards';
 
@@ -110,6 +110,7 @@ export default function HomeScreen() {
       case 'friday': return <FridayCard key={id} ctx={ctx} />;
       case 'ramadan': return <RamadanCard key={id} ctx={ctx} />;
       case 'hijriDate': return <HijriDateCard key={id} ctx={ctx} />;
+      case 'dailyAyah': return <DailyAyahCard key={id} ctx={ctx} />;
       case 'dailyDua': return <DailyDuaCard key={id} ctx={ctx} />;
       case 'dailyKnowledge': return <DailyKnowledgeCard key={id} ctx={ctx} />;
       case 'dailyName': return <DailyNameCard key={id} ctx={ctx} />;

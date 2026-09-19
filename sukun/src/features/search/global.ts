@@ -18,7 +18,7 @@ import { DUAS, DUA_CATEGORIES } from '@/content/duas';
 import { KNOWLEDGE, KNOWLEDGE_TOPICS } from '@/content/knowledge';
 import { DIVINE_NAMES } from '@/content/names';
 
-export type ResultKind = 'ayahRef' | 'surah' | 'ayahText' | 'dua' | 'name' | 'knowledge';
+export type ResultKind = 'ayahRef' | 'surah' | 'ayahText' | 'translation' | 'dua' | 'name' | 'knowledge';
 
 export interface SearchResult {
   kind: ResultKind;
@@ -43,10 +43,19 @@ export interface AyahHit {
   surahName: string;
 }
 
+export interface TranslationHitLite {
+  surah: number;
+  ayah: number;
+  surahName: string;
+  body: string;
+}
+
 export interface GlobalSearchDeps {
   surahs: readonly SurahIndexEntry[];
   /** Arapça metin araması — veri katmanından gelir. */
   searchAyahs: (query: string, limit: number) => AyahHit[];
+  /** Meal araması. Meal yüklü değilse verilmez. */
+  searchTranslations?: (query: string, limit: number) => TranslationHitLite[];
 }
 
 /** "2:255", "2/255", "bakara 255" gibi âyet başvurularını çözer. */
@@ -160,6 +169,20 @@ export function globalSearch(query: string, deps: GlobalSearchDeps, limit = 30):
         href: `/reader?surah=${hit.surah}&ayah=${hit.ayah}`,
         title: `${hit.surahName} ${hit.ayah}`,
         score: 100,
+      });
+    }
+  }
+
+  // 7. Meal — Latin sorguda en değerli kaynak, bu yüzden Arapça metinden
+  // önce gelir. Kullanıcı "sabır" yazdığında âyeti mealden bulur.
+  if (!containsArabicQuery(ham) && deps.searchTranslations && ham.length >= 3) {
+    for (const hit of deps.searchTranslations(ham, 20)) {
+      out.push({
+        kind: 'translation',
+        href: `/reader?surah=${hit.surah}&ayah=${hit.ayah}`,
+        title: `${hit.surahName} ${hit.ayah}`,
+        subtitle: hit.body.slice(0, 120),
+        score: 150,
       });
     }
   }

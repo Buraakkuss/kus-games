@@ -30,6 +30,15 @@ export const settingsSchema = z.object({
     mode: z.enum(['arabic', 'both', 'translation']).default('both'),
     translationSource: z.string().nullable().default(null),
   }).default({}),
+  /** Kıraat ayarları (§32, §33). */
+  recitation: z.object({
+    reciterId: z.string().default('ar.alafasy'),
+    bitrate: z.union([z.literal(64), z.literal(128)]).default(128),
+    /** Yalnız Wi-Fi'de indir — mobil veriyi koru. */
+    wifiOnlyDownload: z.boolean().default(true),
+    repeat: z.enum(['off', 'ayah', 'range', 'surah']).default('off'),
+    speed: z.number().min(0.5).max(2).default(1),
+  }).default({}),
   /** Hicri tarih için gün düzeltmesi (-2..+2) — bölgesel rüyet farkı (§44). */
   hijriOffset: z.number().int().min(-2).max(2).default(0),
   analyticsOptIn: z.boolean().default(false),

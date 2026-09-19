@@ -11,6 +11,7 @@ const CARD_LABEL: Record<HomeCardId, StringKey> = {
   nextPrayer: 'home.card.nextPrayer',
   friday: 'friday.title',
   ramadan: 'ramadan.title',
+  dailyAyah: 'explore.dailyAyah',
   todayTimes: 'home.card.todayTimes',
   hijriDate: 'home.card.hijriDate',
   dailyDua: 'home.card.dailyDua',

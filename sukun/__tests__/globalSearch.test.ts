@@ -10,6 +10,9 @@ const sureler: SurahIndexEntry[] = [
 const deps: GlobalSearchDeps = {
   surahs: sureler,
   searchAyahs: (_q, limit) => [{ surah: 2, ayah: 255, surahName: 'Bakara' }].slice(0, limit),
+  searchTranslations: (q, limit) =>
+    (q.includes('sab') ? [{ surah: 2, ayah: 153, surahName: 'Bakara', body: 'sabır ve namazla yardım isteyin' }] : [])
+      .slice(0, limit),
 };
 
 describe('âyet başvurusu çözümü', () => {
@@ -94,6 +97,21 @@ describe('global arama', () => {
 
   it('sonuç sayısı sınırlanır', () => {
     expect(globalSearch('aل', deps, 3).length).toBeLessThanOrEqual(3);
+  });
+
+  it('meal araması Latin sorguda çalışır', () => {
+    const r = globalSearch('sabır', deps);
+    expect(r.some((x) => x.kind === 'translation')).toBe(true);
+  });
+
+  it('Arapça sorguda meal taranmaz', () => {
+    let cagrildi = false;
+    const izleyen: GlobalSearchDeps = {
+      ...deps,
+      searchTranslations: (q, l) => { cagrildi = true; return deps.searchTranslations!(q, l); },
+    };
+    globalSearch('\u0627\u0644\u0644\u0647', izleyen);
+    expect(cagrildi).toBe(false);
   });
 
   it('eşleşmeyen sorgu boş döner', () => {

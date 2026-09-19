@@ -7,7 +7,7 @@ import {
 import { useTheme } from '@/theme/ThemeProvider';
 import { useT } from '@/lib/i18n';
 import { globalSearch, type ResultKind } from '@/features/search/global';
-import { getSurahs, searchArabic } from '@/features/quran/data';
+import { getSurahs, searchArabic, searchTranslation } from '@/features/quran/data';
 
 export default function SearchScreen() {
   const t = useT();
@@ -22,6 +22,10 @@ export default function SearchScreen() {
       searchArabic(q, limit).map((h) => ({
         surah: h.ayah.surah, ayah: h.ayah.ayah, surahName: h.surahName,
       })),
+    searchTranslations: (q: string, limit: number) =>
+      searchTranslation(q, limit).map((h) => ({
+        surah: h.surah, ayah: h.ayah, surahName: h.surahName, body: h.body,
+      })),
   }), []);
 
   const sonuclar = useMemo(() => globalSearch(sorgu, deps, 40), [sorgu, deps]);
@@ -29,7 +33,7 @@ export default function SearchScreen() {
   const etiket = (kind: ResultKind) => {
     switch (kind) {
       case 'surah': return t('search.kindSurah');
-      case 'ayahRef': case 'ayahText': return t('search.kindAyah');
+      case 'ayahRef': case 'ayahText': case 'translation': return t('search.kindAyah');
       case 'dua': return t('search.kindDua');
       case 'name': return t('search.kindName');
       case 'knowledge': return t('search.kindKnowledge');

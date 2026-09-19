@@ -25,7 +25,6 @@ export default function ExploreScreen() {
         <ListItem title={t('hajj.title')} icon="location" onPress={() => router.push('/hajj')} />
       </Card>
 
-      <PendingContentSection title={t('explore.dailyAyah')} />
       <PendingContentSection title={t('explore.dailyHadith')} />
     </Screen>
   );

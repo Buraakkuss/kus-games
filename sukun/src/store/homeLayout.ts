@@ -10,11 +10,11 @@ import { create } from 'zustand';
 
 export type HomeCardId =
   | 'nextPrayer' | 'todayTimes' | 'friday' | 'ramadan' | 'hijriDate'
-  | 'dailyDua' | 'dailyKnowledge' | 'dailyName' | 'religiousDay' | 'moon';
+  | 'dailyAyah' | 'dailyDua' | 'dailyKnowledge' | 'dailyName' | 'religiousDay' | 'moon';
 
 export const HOME_CARDS: readonly HomeCardId[] = [
   'nextPrayer', 'todayTimes', 'friday', 'ramadan', 'hijriDate',
-  'dailyDua', 'dailyKnowledge', 'dailyName', 'religiousDay', 'moon',
+  'dailyAyah', 'dailyDua', 'dailyKnowledge', 'dailyName', 'religiousDay', 'moon',
 ];
 
 /** Kapatılamayan kartlar: bunlar olmadan ana sayfa boş kalır. */

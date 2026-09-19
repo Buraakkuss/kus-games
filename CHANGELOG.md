@@ -189,3 +189,23 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   hiç taranmıyor — 6236 âyeti boşuna gezmemek için.
 - Özel hatırlatıcılar: sabit saatte ya da vakte göre (ör. akşamdan 30 dk önce),
   hafta günü seçimiyle. Kutupta oluşmayan vakte bağlı hatırlatıcı kurulmuyor.
+
+### Engeller kalktı — meal, kıraat, sunucu
+
+- **Türkçe meal geldi.** Elmalılı Hamdi Yazır'ın *Hak Dini Kur'an Dili* meali
+  kamu malı (mütercim 1942'de vefat etti; FSEK m.27 koruma süresi 2012 sonunda
+  doldu). 6236 satır içe aktarıldı, Arapça metinle aynı titizlikte doğrulandı
+  (sure başına satır sayısı, boş satır yok, sağlama). Okuyucuda üç mod
+  (Arapça / Arapça+Meal / Meal), meal araması, Günün Âyeti ve paylaşımda
+  kaynak künyesi açıldı.
+- **Kıraat geldi.** 18 okuyucu, Islamic Network CDN'inden akış; istenen sure
+  indirilip çevrimdışı dinlenebiliyor. Okuyucu listesi **ölçülerek** üretildi:
+  her okuyucunun hangi bit hızında gerçekten dosya verdiği sınandı, mükerrer
+  baskılar ayıklandı, hepsine Türkçe ad yazıldı. Arka planda çalma açık.
+  QuranicAudio.com **kullanılmadı**: şartlarında ticari kullanım açıkça yasak.
+- **Supabase v1'den çıkarıldı.** v1'in tek bir özelliği bile sunucuya muhtaç
+  değil. Kişisel veri cihazdan çıkmıyor, bakılacak sunucu ve aylık gider yok,
+  App Review'daki hesap/gizlilik soruları kendiliğinden çözülüyor. İçerik
+  güncellemeleri GitHub Pages üzerinde statik bir JSON'dan geliyor: sürüm
+  artmadan değişmiyor, şemaya uymayan paket yok sayılıyor ve kanal hiçbir şeyi
+  silemiyor. Şema, RLS ve eşitleme motoru v2 için duruyor.

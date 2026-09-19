@@ -14,7 +14,13 @@ import {
 } from '@/ui';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useT } from '@/lib/i18n';
-import { getSurah, getSurahAyahs, getSource, type QuranAyah } from '@/features/quran/data';
+import {
+  getSurah, getSurahAyahs, getSource, getSurahTranslations, getTranslationInfo,
+  surahFirstGlobalAyah, type QuranAyah,
+} from '@/features/quran/data';
+import { useRecitation } from '@/features/audio/useRecitation';
+import { getReciter, AUDIO_SOURCE } from '@/features/audio/source';
+import { localPath } from '@/features/audio/downloadManager';
 import { useReadingStore, BOOKMARK_COLORS, type BookmarkColor } from '@/store/reading';
 import { useSettingsStore } from '@/store/settings';
 import { useFavoriteStore } from '@/store/favorites';
@@ -29,6 +35,8 @@ export default function ReaderScreen() {
   const sure = useMemo(() => getSurah(sureNo), [sureNo]);
   const ayetler = useMemo(() => getSurahAyahs(sureNo), [sureNo]);
   const kaynak = useMemo(() => getSource(), []);
+  const mealler = useMemo(() => getSurahTranslations(sureNo), [sureNo]);
+  const mealKunye = useMemo(() => getTranslationInfo(), []);
 
   const settings = useSettingsStore((s) => s.settings);
   const update = useSettingsStore((s) => s.update);
@@ -40,6 +48,21 @@ export default function ReaderScreen() {
   const fav = useFavoriteStore();
 
   const [ayarlarAcik, setAyarlarAcik] = useState(false);
+
+  const ilkGlobal = useMemo(() => surahFirstGlobalAyah(sureNo) ?? 1, [sureNo]);
+  const okuyucu = getReciter(settings.recitation.reciterId);
+  const kiraat = useRecitation({
+    reciterId: settings.recitation.reciterId,
+    bitrate: settings.recitation.bitrate,
+    localUri: (global) => localPath(settings.recitation.reciterId, settings.recitation.bitrate, global),
+  });
+
+  /** Verilen âyetten başlayarak surenin sonuna kadar çalar. */
+  const dinle = useCallback((ayahNo: number) => {
+    const kuyruk = ayetler.map((a) => ({ surah: a.surah, ayah: a.ayah }));
+    const numaralar = ayetler.map((_a, i) => ilkGlobal + i);
+    kiraat.start(kuyruk, numaralar, { surah: sureNo, ayah: ayahNo });
+  }, [ayetler, ilkGlobal, kiraat, sureNo]);
   const [secili, setSecili] = useState<QuranAyah | null>(null);
   const [not, setNot] = useState('');
   const liste = useRef<FlatList<QuranAyah>>(null);
@@ -57,10 +80,11 @@ export default function ReaderScreen() {
   const paylas = useCallback(async (a: QuranAyah) => {
     const ad = getSurah(a.surah)?.nameTr ?? String(a.surah);
     // Paylaşımda kaynak künyesi **her zaman** gider (CONTENT_SOURCES kuralı 3).
+    const meal = mealler[a.ayah - 1] ?? '';
     await Share.share({
-      message: `${a.text}\n\n${ad} ${a.ayah}\n${t('quran.sourceNote')}`,
+      message: `${a.text}\n\n${meal}\n\n${ad} ${a.ayah}\n${t('quran.sourceNote')}\n${t('quran.translationSource', { name: mealKunye.name, rights: t('quran.publicDomain') })}`,
     });
-  }, [t]);
+  }, [t, mealler, mealKunye]);
 
   if (!sure) {
     return (
@@ -98,13 +122,27 @@ export default function ReaderScreen() {
                 {`${t('quran.ayahCount', { count: sure.ayahCount })} · ${sure.revelation === 'mekki' ? t('quran.mekki') : t('quran.medeni')}`}
               </Text>
             </Column>
-            <IconButton name="settings" label={t('quran.readerSettings')} onPress={() => setAyarlarAcik(true)} />
+            <Row gap="xs" align="center">
+              <IconButton
+                name={kiraat.playing ? 'pause' : 'play'}
+                label={kiraat.playing ? t('audio.pause') : t('audio.playSurah')}
+                onPress={() => (kiraat.playing ? kiraat.toggle() : dinle(1))}
+              />
+              <IconButton name="settings" label={t('quran.readerSettings')} onPress={() => setAyarlarAcik(true)} />
+            </Row>
           </Row>
         }
         ListFooterComponent={
           <Column gap="sm" style={{ marginTop: theme.spacing.xl }}>
             <SourceNote source={kaynak.name} license={kaynak.metadataLicense} />
-            <Banner tone="info" title={t('common.source')} description={t('quran.contentPending')} />
+            <SourceNote
+              source={t('quran.translationSource', {
+                name: mealKunye.name,
+                rights: t('quran.publicDomain'),
+              })}
+            />
+              <SourceNote source={`${AUDIO_SOURCE.name} · ${okuyucu?.name ?? ''}`} />
+            <Banner tone="info" title={t('quran.tafsir')} description={t('quran.contentPending')} />
           </Column>
         }
         renderItem={({ item }) => {
@@ -116,9 +154,24 @@ export default function ReaderScreen() {
                   <Badge label={String(item.ayah)} tone={imli ? 'highlight' : 'neutral'} />
                   {item.sajda ? <Badge label={t('quran.sajdaAyah')} tone="accent" /> : null}
                   <View style={{ flex: 1 }} />
+                  <IconButton
+                    name={kiraat.playing && kiraat.current?.ayah === item.ayah ? 'pause' : 'play'}
+                    label={t('audio.play')}
+                    size={16}
+                    onPress={() => (kiraat.playing && kiraat.current?.ayah === item.ayah
+                      ? kiraat.toggle()
+                      : dinle(item.ayah))}
+                  />
                   <Text variant="micro" tone="subtle">{t('quran.pageNo', { n: item.page })}</Text>
                 </Row>
-                <ArabicText scale={settings.quran.fontScale}>{item.text}</ArabicText>
+                {settings.quran.mode !== 'translation' ? (
+                  <ArabicText scale={settings.quran.fontScale}>{item.text}</ArabicText>
+                ) : null}
+                {settings.quran.mode !== 'arabic' ? (
+                  <Text variant="body" tone={settings.quran.mode === 'both' ? 'muted' : 'default'}>
+                    {mealler[item.ayah - 1] ?? ''}
+                  </Text>
+                ) : null}
               </Column>
             </Card>
           );
@@ -147,7 +200,9 @@ export default function ReaderScreen() {
             accessibilityLabel={t('quran.translation')}
           />
           {settings.quran.mode !== 'arabic' ? (
-            <Banner tone="info" title={t('quran.translation')} description={t('quran.contentPending')} />
+            <Text variant="caption" tone="muted">
+              {t('quran.translationSource', { name: mealKunye.name, rights: t('quran.publicDomain') })}
+            </Text>
           ) : null}
           <ArabicText scale={settings.quran.fontScale} size="small">
             {'بِسْمِ اللَّهِ'}
@@ -163,6 +218,7 @@ export default function ReaderScreen() {
         {secili ? (
           <Column gap="lg">
             <ArabicText scale={settings.quran.fontScale}>{secili.text}</ArabicText>
+            <Text variant="body" tone="muted">{mealler[secili.ayah - 1] ?? ''}</Text>
             <Divider />
             <Row gap="sm" wrap>
               <Button
@@ -181,6 +237,13 @@ export default function ReaderScreen() {
                 variant="secondary"
                 size="sm"
                 onPress={() => fav.toggle('ayah', `${secili.surah}:${secili.ayah}`)}
+              />
+              <Button
+                label={t('audio.play')}
+                icon="play"
+                variant="secondary"
+                size="sm"
+                onPress={() => { dinle(secili.ayah); setSecili(null); }}
               />
               <Button
                 label={t('quran.shareAyah')}

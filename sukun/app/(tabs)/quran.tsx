@@ -47,6 +47,13 @@ export default function QuranScreen() {
           size="sm"
           onPress={() => router.push('/quran-search')}
         />
+        <Button
+          label={t('audio.title')}
+          icon="play"
+          variant="secondary"
+          size="sm"
+          onPress={() => router.push('/recitation')}
+        />
       </Row>
 
       <Segmented

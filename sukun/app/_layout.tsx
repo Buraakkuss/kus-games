@@ -51,6 +51,7 @@ function RootStack() {
         <Stack.Screen name="hajj" />
         <Stack.Screen name="search" />
         <Stack.Screen name="reminders" />
+        <Stack.Screen name="recitation" />
       </Stack>
     </>
   );

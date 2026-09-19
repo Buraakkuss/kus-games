@@ -164,3 +164,101 @@ ortamda bulunmadığı için ayrı komuttur ve sunucu yoksa hata vermeden atlar.
 veri sızıntısı demek. Politikalar mutasyon sınamasıyla denetlendi: `bookmarks`
 sahiplik politikası gevşetildiğinde ve taslak meal herkese açıldığında
 sınamalar ikisini de yakaladı. Yakalamayan sınama, sınama değildir.
+
+---
+
+## D12 — v1 için Supabase'e gerek yok; içerik GitHub Pages'ten gelir
+
+**Karar:** Yayınlanacak ilk sürüm **hesapsız ve sunucusuz** çalışır. Supabase
+kurulmaz. İçerik güncellemeleri (dua, bilgi maddesi, dinî gün düzeltmesi)
+GitHub Pages üzerinde yayınlanan statik bir JSON dosyasından alınır.
+Şema, RLS ve eşitleme motoru silinmez — v2 için hazır bekler.
+
+**Neden:** Sorulması gereken soru "Supabase iyi mi" değil, "v1'de hangi
+özellik gerçekten sunucu istiyor" idi. Cevap:
+
+| Özellik | Sunucu gerekir mi | v1'de var mı |
+|---|---|---|
+| Namaz vakti, kıble, Kur'an, meal, zikir, kaza, zekât, takvim | **Hayır** — hepsi cihazda hesaplanıyor | Var |
+| Kıraat sesi | Hayır — CDN'den akıyor, hesap istemiyor | Var |
+| İçerik güncellemesi (metin yenileme) | Hayır — statik dosya yeter | Var (GitHub Pages) |
+| Çoklu cihaz eşitleme | Evet | Yok (v2) |
+| Dua kardeşliği (topluluk) | Evet | Yok (v2) |
+| AI asistan | Evet | Yok (v2) |
+| Admin paneli | Evet | Yok (v2) |
+
+Yani v1'in **tek bir özelliği bile** Supabase'e muhtaç değil.
+
+**Supabase'i v1'den çıkarmanın somut kazançları:**
+
+1. **Kişisel veri cihazdan çıkmıyor.** İbadet defteri, kaza sayacı, notlar,
+   konum — hiçbiri sunucuya gitmiyor. KVKK/GDPR yükü, veri ihlali riski ve
+   mağaza gizlilik formundaki soru sayısı buharlaşıyor. App Review'da
+   "hesap açmadan kullanılabiliyor mu" sorusu kendiliğinden çözülüyor.
+2. **Bakılacak sunucu yok.** Kullanıcı yazılımcı değil; gece 3'te düşen bir
+   veritabanını kimse kaldıramaz. Supabase ücretsiz katmanı 7 gün hareketsiz
+   kalınca projeyi duraklatır — uygulamanın kritik yolunda olsaydı, kimse
+   kullanmadığı bir hafta sonunda uygulama ölürdü.
+3. **Aylık gider yok.**
+4. **Çevrimdışı tartışması bitiyor.** Ürünün en güçlü farkı zaten internetsiz
+   çalışması; sunucuyu kritik yola koymak bu farkı kendi elimizle bozardı (D6).
+
+**GitHub Pages neyi çözer, neyi çözmez:**
+
+- **Çözer:** statik dosya yayını (ücretsiz CDN), uygulama güncellemesi
+  beklemeden metin yenileme, sürüm numarasıyla geri alma.
+- **Çözmez:** hesap, kimlik doğrulama, kullanıcıya özel kayıt, uygulamadan
+  yazma, sunucu tarafı sır (AI anahtarı), moderasyon. Bunların hiçbiri statik
+  dosyayla yapılamaz — GitHub Pages bir veritabanı değildir.
+
+**Sonuç:** B5 (Supabase projesi) artık **yayını engelleyen bir madde değil**.
+v2'de eşitleme/topluluk/AI istenirse `supabase/migrations/` olduğu gibi
+uygulanır; eşitleme birleştirme motoru (FAZ 10) zaten yazılmış ve sınanmış
+durumdadır.
+
+---
+
+## D13 — Elmalılı meali: kamu malı, paketle birlikte gelir
+
+**Karar:** Türkçe meal olarak **Elmalılı Hamdi Yazır** (Hak Dini Kur'an Dili)
+kullanılır, uygulama paketiyle birlikte dağıtılır ve çevrimdışı çalışır.
+
+**Neden:** Mütercim 1942'de vefat etti. 5846 sayılı FSEK m.27 uyarınca koruma
+süresi, ölümü izleyen yıldan itibaren 70 yıldır; süre 31.12.2012'de doldu.
+Eser kamu malıdır ve lisans pazarlığı gerektirmez.
+
+**Dikkat edilen nokta:** Kamu malı olan **eserin kendisidir**. Sonradan
+yapılmış bir *sadeleştirme* ya da *yeniden düzenleme*, FSEK m.6 anlamında
+işlenme eser sayılır ve kendi koruma süresine tabidir. Bu yüzden metin
+Tanzil'in `tr.yazir` baskısından alındı, künyesi (mütercim adı, vefat yılı,
+kaynak) uygulamada görünür tutuldu ve bir hak sahibi itirazı gelirse metnin
+tek dosyadan değiştirilebilmesi için içe aktarma boruhattı ayrı yazıldı.
+
+**Sonuç:** B1 kalktı. Meal modları, meal araması ve Günün Âyeti açıldı.
+
+---
+
+## D14 — Kıraat: akış ve isteğe bağlı indirme, paketle dağıtılmaz
+
+**Karar:** Kıraat kayıtları **Islamic Network** CDN'inden akar
+(`cdn.islamic.network`). Uygulama paketinde ses dosyası yoktur; kullanıcı
+dilediği sureyi indirip çevrimdışı dinleyebilir.
+
+**Neden:**
+
+- Bir kıraatin 6236 âyeti 500 MB'ın üzerindedir; paketlenemez.
+- Islamic Network şartları (Bölüm IV): kıraatler okuyucular ya da mirasçıları
+  tarafından lisanslanmıştır; **akış, gömme ve indirme serbesttir**; ticari
+  üründe kullanılabilir, telif okuyucularda kalır ve kaldırma talebi gelirse
+  kaldırılır. Bölüm III ayrıca "kendi ucunuzda agresif önbellekleyin" diyor —
+  cihaz indirmesi tam olarak bunu yapıyor.
+- **QuranicAudio.com kullanılmadı:** şartlarında ticari kullanım açıkça
+  yasak ("you may not use these files for commercial purposes"). Uygulama
+  abonelikli olacağı için o kaynak elenmiştir.
+
+**Okuyucu listesi ölçülerek üretildi.** `tools/probe-reciters.js` her
+okuyucunun hangi bit hızında gerçekten dosya verdiğini sınar; elle yazılmış
+bir liste bayatlar ve kullanıcı "ses gelmiyor" der. Sonuç: 18 okuyucu,
+mükerrer baskılar ayıklanmış, hepsinin Türkçe adı yazılmış.
+
+**Sonuç:** B4 kalktı.

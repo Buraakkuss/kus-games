@@ -16,6 +16,9 @@ import { useFavoriteStore } from '@/store/favorites';
 import { toHijri, HIJRI_MONTHS, upcomingReligiousDays } from '@/features/hijri/calc';
 import { moonState } from '@/features/moon/phase';
 import { isFriday, ramadanState, KAHF_SURAH } from '@/features/ramadan/calc';
+import { getQuranIndexSize, getAyahByIndex, getTranslationByIndex, getTranslationInfo } from '@/features/quran/data';
+import { dailyIndex } from '../pick';
+import { ArabicText, SourceNote } from '@/ui';
 
 export interface DailyContext {
   year: number;
@@ -154,6 +157,51 @@ export function MoonCard({ ctx }: { ctx: DailyContext }) {
         <Text variant="micro" tone="subtle" style={{ marginTop: theme.spacing.xxs }}>
           {t('moon.approxNote')}
         </Text>
+      </Column>
+    </Card>
+  );
+}
+
+/**
+ * Günün Âyeti — şartname §22.
+ *
+ * Seçim gün bazında sabittir ve rastgele değildir; aynı gün kaç kez açılırsa
+ * açılsın aynı âyet gelir. Kaynak künyesi kartın üstünde durur (§107).
+ */
+export function DailyAyahCard({ ctx }: { ctx: DailyContext }) {
+  const t = useT();
+  const fav = useFavoriteStore();
+  const toplam = getQuranIndexSize();
+  const i = dailyIndex({ year: ctx.year, month: ctx.month, day: ctx.day, length: toplam, salt: 313 });
+  const ayet = i < 0 ? null : getAyahByIndex(i);
+  if (!ayet) return null;
+  const meal = getTranslationByIndex(i);
+  const kunye = getTranslationInfo();
+  const kimlik = `${ayet.surah}:${ayet.ayah}`;
+  const secili = fav.has('ayah', kimlik);
+
+  return (
+    <Card
+      motif="rubElHizb"
+      onPress={() => router.push(`/reader?surah=${ayet.surah}&ayah=${ayet.ayah}`)}
+      accessibilityLabel={t('explore.dailyAyah')}
+    >
+      <Column gap="sm">
+        <Row align="center" justify="space-between">
+          <Text variant="caption" tone="muted">{t('explore.dailyAyah')}</Text>
+          <IconButton
+            name="heart"
+            label={secili ? t('favorite.remove') : t('favorite.add')}
+            size={18}
+            onPress={() => fav.toggle('ayah', kimlik)}
+          />
+        </Row>
+        <ArabicText size="small">{ayet.text}</ArabicText>
+        {meal ? <Text variant="body" tone="muted">{meal}</Text> : null}
+        <Text variant="micro" tone="subtle">{`${ayet.surahName} ${ayet.ayah}`}</Text>
+        <SourceNote
+          source={t('quran.translationSource', { name: kunye.name, rights: t('quran.publicDomain') })}
+        />
       </Column>
     </Card>
   );

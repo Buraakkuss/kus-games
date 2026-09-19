@@ -34,6 +34,8 @@ const config: ExpoConfig = {
     bundleIdentifier: Brand.bundleId.ios + suffix[variant],
     supportsTablet: true,
     infoPlist: {
+      // Kıraat arka planda sürsün ve kilit ekranından yönetilebilsin (§32).
+      UIBackgroundModes: ['audio'],
       // İzin metinleri App Review'da okunur: ne için istendiği açıkça yazılır.
       NSLocationWhenInUseUsageDescription:
         'Namaz vakitleri ve kıble yönü bulunduğun konuma göre hesaplanır. İzin vermezsen şehri elle seçebilirsin.',
@@ -49,6 +51,7 @@ const config: ExpoConfig = {
   plugins: [
     'expo-router',
     'expo-localization',
+    ['expo-audio', { microphonePermission: false }],
     ['expo-font', { fonts: ['./assets/fonts/Amiri-Regular.ttf', './assets/fonts/AmiriQuran-Regular.ttf'] }],
   ],
   experiments: { typedRoutes: true },

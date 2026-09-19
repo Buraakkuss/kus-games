@@ -120,6 +120,14 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 - [x] Birleşik favoriler (§63)
 - [x] Özel hatırlatıcılar: sabit saat / vakte göre / hafta günü (§64)
 
+**Engeller kalktı (kullanıcı kararıyla):**
+
+- [x] **B1 — meal**: Elmalılı Hamdi Yazır kamu malı; içe aktarıldı, okuyucuya,
+      aramaya ve Günün Âyeti'ne bağlandı (D13)
+- [x] **B4 — kıraat**: Islamic Network CDN'inden akış + indirme, 18 okuyucu (D14)
+- [x] **B5 — Supabase**: v1 için gerekmiyor; içerik GitHub Pages'ten, kişisel
+      veri cihazda kalıyor (D12)
+
 ## Devam eden
 
 - [ ] FAZ 12-16 — widget, topluluk, AI, admin, abonelik (çoğu dış engele bağlı)
@@ -138,7 +146,7 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 28 suite / 350 test |
+| Test | ✅ 31 suite / 390 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |

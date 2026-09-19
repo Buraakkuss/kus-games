@@ -15,15 +15,19 @@
     "db:verify": "bash tools/verify-db.sh",
     "bundle": "expo export --platform android --output-dir .expo/verify-bundle",
     "verify": "npm run gate && npm run bundle",
-    "import:quran": "node --experimental-strip-types tools/import-quran.js"
+    "import:quran": "node --experimental-strip-types tools/import-quran.js",
+    "import:translation": "node --experimental-strip-types tools/import-translation.js",
+    "probe:reciters": "node tools/probe-reciters.js"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/netinfo": "11.4.1",
     "@tanstack/react-query": "^5.103.1",
     "expo": "~54.0.0",
+    "expo-audio": "~1.1.1",
     "expo-constants": "~18.0.14",
     "expo-device": "~8.0.10",
+    "expo-file-system": "~19.0.24",
     "expo-font": "~14.0.12",
     "expo-haptics": "~15.0.8",
     "expo-linking": "~8.0.12",

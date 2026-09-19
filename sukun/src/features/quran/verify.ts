@@ -125,3 +125,63 @@ export function checksum(input: string): string {
 export function ayahsChecksum(ayahs: readonly AyahRecord[]): string {
   return checksum(ayahs.map((a) => `${a.surah}:${a.ayah}:${a.text}`).join('\n'));
 }
+
+// ---------------------------------------------------------------- meal
+
+export interface TranslationRecord {
+  surah: number;
+  ayah: number;
+  body: string;
+}
+
+/**
+ * Meal doğrulaması — şartname §74.
+ *
+ * Mushaf metniyle aynı titizlik: eksik ya da boş bir meal satırı, kullanıcıya
+ * "bu âyetin anlamı yok" demek olur. Arapça metinden farkı, Arapça harf
+ * şartının olmaması ve boş satırın tek başına yeterli sinyal olmasıdır.
+ */
+export function verifyTranslation(
+  rows: readonly TranslationRecord[],
+  surahs: readonly SurahMeta[],
+): VerifyResult {
+  const problems: string[] = [];
+
+  if (rows.length !== AYAH_COUNT) {
+    problems.push(`meal satırı ${rows.length}, beklenen ${AYAH_COUNT}`);
+  }
+
+  const sayac = new Map<number, number>();
+  const gorulen = new Set<string>();
+
+  for (const r of rows) {
+    const anahtar = `${r.surah}:${r.ayah}`;
+    if (gorulen.has(anahtar)) {
+      problems.push(`yinelenen meal satırı: ${anahtar}`);
+      continue;
+    }
+    gorulen.add(anahtar);
+
+    if (!Number.isInteger(r.surah) || r.surah < 1 || r.surah > SURAH_COUNT) {
+      problems.push(`geçersiz sure numarası: ${r.surah}`);
+      continue;
+    }
+    if (r.body.trim().length === 0) {
+      problems.push(`boş meal: ${anahtar}`);
+    }
+    sayac.set(r.surah, (sayac.get(r.surah) ?? 0) + 1);
+  }
+
+  for (const s of surahs) {
+    const bulunan = sayac.get(s.number) ?? 0;
+    if (bulunan !== s.ayahCount) {
+      problems.push(`sure ${s.number}: ${bulunan} meal satırı, beklenen ${s.ayahCount}`);
+    }
+  }
+
+  return { ok: problems.length === 0, problems: problems.slice(0, 50) };
+}
+
+export function translationChecksum(rows: readonly TranslationRecord[]): string {
+  return checksum(rows.map((r) => `${r.surah}:${r.ayah}:${r.body}`).join('\n'));
+}

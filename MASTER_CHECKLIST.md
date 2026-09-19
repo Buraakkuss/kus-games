@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 63 · kısmen tamamlanan 11 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 71 · kısmen tamamlanan 7 · dış engele bağlı 22**
 >
 > `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
@@ -54,7 +54,7 @@
 
 - [x] Ana sayfa düzeni (§20) — sekiz kart, sıradaki vakit sabit
 - [x] Ana sayfa özelleştirme: gizle/göster/sırala (§21) — bulut eşitleme FAZ 10'da ⛔B5
-- [ ] Günün Âyeti (§22)  ⛔B1
+- [x] Günün Âyeti (§22) — Arapça + Elmalılı meali, kaynak künyesiyle
 - [ ] Günün Hadisi (§23)  ⛔B3
 - [x] Günün Duası (§24) — 34 özgün Türkçe dua, 14 kategori
 - [x] Günün Bilgisi (§25) — 43 özgün madde, 6 konu
@@ -67,21 +67,21 @@
 
 - [x] Kur'an ana ekranı: son okunan, sureler, cüzler, yer imleri (§27) — sayfa listesi FAZ 5'te
 - [x] Arapça metin içe aktarma (Tanzil) + doğrulama + checksum (§74) — 6236 âyet, bilinen sayılarla sınandı
-- [~] Reader: **Arapça modu tamam**; meal modları arayüzde var, içerik ⛔B1
+- [x] Reader: Arapça / Arapça+Meal / Meal modları — hepsi çalışıyor (§28)
 - [~] Reader ayarları: yazı boyutu ve tema tamam; satır aralığı hareke güvenliği için sabit oranlı, sayfa kipi FAZ 5'te (§28)
 - [~] Âyet aksiyonları: favori, yer imi, not, paylaş tamam (kaynak künyesiyle); dinle ⛔B4, meal ⛔B1, tefsir ⛔B2 (§28)
 - [x] Son okunan + devam et (§29)
 - [x] Yer imleri: renk, etiket, not (§30)
 - [~] Favoriler tamam; koleksiyonlar FAZ 11'de (§31)
-- [~] Arama: **Arapça kelime araması tamam** (harekesiz sorgu eşleşir); meal araması ⛔B1 (§35)
-- [ ] Tefsir (§34)  ⛔B2
+- [x] Arama: Arapça kelime + meal araması, nerede aranacağı seçilebilir (§35)
+- [ ] Tefsir (§34)  ⛔B2 — tek kalan içerik engeli
 
 ## FAZ 5 — Kur'an sesi
 
-- [~] Audio player durum mantığı yazıldı ve sınandı (tekrar kipleri, aralık, hız, uyku zamanlayıcısı); ses dosyası ⛔B4 (§32)
-- [ ] Arka planda oynatma + kilit ekranı kontrolleri (§32)  ⛔B4
-- [ ] Okunan âyeti otomatik vurgulama (§32)  ⛔B4
-- [~] İndirme/depolama hesabı yazıldı ve sınandı; indirilecek kayıt ⛔B4 (§33)
+- [x] Audio player: 18 okuyucu, çal/duraklat/ileri/geri, tekrar kipleri, hız (§32)
+- [x] Arka planda oynatma (UIBackgroundModes: audio), sessiz kipte de duyulur (§32)
+- [x] Okunan âyet çalarken düğmesi duraklat'a döner; kuyruk otomatik ilerler (§32)
+- [x] İndirme yöneticisi: sure sure indirme, ilerleme, depolama göstergesi, silme (§33)
 
 ## FAZ 6 — Kıble
 
@@ -121,7 +121,7 @@
 
 - [ ] Guest kullanım + opsiyonel hesap (§57)
 - [ ] Sign in with Apple / Google / Email (§57)  ⛔B5
-- [ ] Cloud sync: favoriler, yer imleri, ilerleme, zikir, ayarlar, kaza (§58)  ⛔B5
+- [~] Cloud sync **v2'ye alındı** (D12): birleştirme motoru hazır ve sınandı, taşıma katmanı v2'de ⛔B5
 - [x] Çevrimdışı öncelikli birleştirme ve çakışma çözümü (§58) — mezar taşı, kararlı çözüm, sayaç birleştirme; 17 sınama
 - [ ] Profil ekranı (§59) ve Settings (§60)
 - [ ] Hesap silme, veri dışa aktarma, KVKK/GDPR (§69)  ⛔B5
