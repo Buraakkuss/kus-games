@@ -13,6 +13,8 @@ export const settingsSchema = z.object({
   language: languageSchema.default('tr'),
   themeMode: z.enum(['system', 'light', 'dark']).default('system'),
   method: z.string().default('diyanet'),
+  /** İkindi gölge oranı: 1 = Şâfiî/Mâlikî/Hanbelî (Diyanet), 2 = Hanefî (§15). */
+  asrShadow: z.union([z.literal(1), z.literal(2)]).default(1),
   /** Vakit bazlı dakika düzeltmesi (§15). */
   adjustments: z.record(z.enum(PRAYER_KEYS as unknown as [string, ...string[]]), z.number().int().min(-60).max(60))
     .default({}),

@@ -4,7 +4,7 @@
  * Sıralama önemlidir: hata sınırı en dışta durur ki sağlayıcılardan biri
  * patlarsa bile kullanıcı anlamlı bir ekran görsün.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -17,6 +17,7 @@ import { applyUiDirection } from '@/lib/i18n/rtl';
 import { ErrorBoundary } from '@/ui/ErrorBoundary';
 import { configureLogging } from '@/lib/log';
 import { KEYS } from '@/lib/storage';
+import { hydrateAll } from './persistence';
 import { kv } from './storage';
 
 // Üretimde debug/info günlüğe yazılmaz (§83).
@@ -47,22 +48,33 @@ const languageCodec = {
   fallback: null as Language | null,
 };
 
+/** Açılışta okunan, uygulama ömrü boyunca değişmeyen durum. */
+interface BootValue { onboardingDone: boolean }
+const BootContext = createContext<BootValue>({ onboardingDone: true });
+
+export function useBoot(): BootValue {
+  return useContext(BootContext);
+}
+
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const [fontsLoaded] = useFonts(FONT_ASSETS);
   const [ready, setReady] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>('system');
   const [language, setLanguage] = useState<Language | null>(null);
+  const [onboardingDone, setOnboardingDone] = useState(true);
 
   useEffect(() => {
     let alive = true;
     (async () => {
-      const [mode, lang] = await Promise.all([
+      const [mode, lang, boot] = await Promise.all([
         kv.read(KEYS.themeMode, themeModeCodec),
         kv.read(KEYS.language, languageCodec),
+        hydrateAll(),
       ]);
       if (!alive) return;
       setThemeMode(mode);
       setLanguage(lang);
+      setOnboardingDone(boot.onboardingDone);
       setReady(true);
     })();
     return () => { alive = false; };
@@ -90,7 +102,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
           onLanguageChange={saveLanguage}
         >
           <AppErrorBoundary>
-            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+            <BootContext.Provider value={{ onboardingDone }}>
+              <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+            </BootContext.Provider>
           </AppErrorBoundary>
         </I18nProvider>
       </ThemeProvider>

@@ -14,6 +14,7 @@ Bilinen eksikler ve engeller. Kapanan madde `CHANGELOG.md`'ye taşınır.
 | B6 | **Apple Developer** hesabı bu ortamda yok | §18 Live Activities, §19 iOS widget, §67 StoreKit | Apple hesabı + sertifika + ürün tanımları |
 | B7 | **Google Play** ürünleri tanımlı değil | §67 abonelik | Play Console'da abonelik ürünleri |
 | B8 | **AI sağlayıcı anahtarı** yok | §56 AI asistan | LLM API anahtarı + vektör deposu |
+| B9 | İlçe düzeyi konum verisi | Ülke + il seçimi çalışıyor; ilçe listesi için açık lisanslı bir veri kümesi gerekiyor. Vakit farkı il merkezine göre saniyeler mertebesinde olduğundan yayını engellemez. | Açık veri kümesi bulunup içe aktarılana kadar il düzeyi kullanılır |
 
 > Bu engeller şartname §104 uyarınca **diğer geliştirmeyi durdurmaz**. İlgili
 > modüllerin şeması, içe aktarma boruhattı, doğrulaması ve arayüzü tamamlanır;
@@ -29,4 +30,8 @@ Bilinen eksikler ve engeller. Kapanan madde `CHANGELOG.md`'ye taşınır.
 
 ## Açık teknik borç
 
-_(henüz yok — FAZ 0)_
+| # | Konu | Not |
+|---|---|---|
+| T1 | Bildirim merkezi ekranı | Kurulu bildirim sayısı gösteriliyor; ayrı merkez ekranı FAZ 11'de yazılacak (§65). |
+| T2 | Haftalık takvim ekranı | `rangeSchedule` işlevi ve sınaması hazır; ekranı FAZ 3'te eklenecek. |
+| T3 | Bileşen (render) testleri | Saf mantık sınanıyor; bileşen ve E2E sınamaları FAZ 18'de eklenecek (§86). |

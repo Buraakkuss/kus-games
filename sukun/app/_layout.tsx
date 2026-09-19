@@ -1,8 +1,8 @@
 /** Kök düzen — şartname §11. Tüm sağlayıcılar burada kurulur. */
 import React from 'react';
-import { Stack } from 'expo-router';
+import { Stack, Redirect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { AppProviders } from '@/boot/AppProviders';
+import { AppProviders, useBoot } from '@/boot/AppProviders';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function RootLayout() {
@@ -15,6 +15,9 @@ export default function RootLayout() {
 
 function RootStack() {
   const theme = useTheme();
+  const { onboardingDone } = useBoot();
+  // İlk açılışta onboarding'e yönlendirilir; sonraki açılışlarda görünmez (§12).
+  if (!onboardingDone) return <Redirect href="/onboarding" />;
   return (
     <>
       <StatusBar style={theme.name === 'dark' ? 'light' : 'dark'} />
@@ -25,6 +28,10 @@ function RootStack() {
         }}
       >
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="onboarding" />
+        <Stack.Screen name="location" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="prayer-settings" />
+        <Stack.Screen name="prayer-calendar" />
       </Stack>
     </>
   );

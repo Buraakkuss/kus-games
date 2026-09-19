@@ -54,3 +54,26 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   `src/boot/` olarak yeniden adlandırıldı.
 - `migrate()` kendisine verilen migration listesini yok sayıyordu
   (`pendingMigrations` her zaman genel listeyi okuyordu). Sınama yakaladı.
+
+### FAZ 2 — Onboarding, konum, namaz vakitleri
+
+- Beş aşamalı onboarding; konum dışındaki her aşama atlanabilir.
+- Konum: tek seferlik GPS okuması (sürekli izleme yok — pil kuralı §81),
+  bulunan nokta çevrimdışı olarak en yakın şehre eşlenir. 81 il + 36 dünya
+  şehri; hepsinin IANA saat dilimi doğrulandı.
+- Türkçe arama normalizasyonu: "ISTANBUL", "istanbul", "İstanbul" ve
+  "sanliurfa" aynı sonucu verir. Türkçe'nin I/İ tuzağı `toLowerCase`
+  kullanılmadan, harf harf eşlemeyle çözüldü.
+- Yedi hesaplama yöntemi, Hanefî/Şâfiî ikindi seçimi, vakit başına dakika
+  düzeltmesi.
+- `PrayerTimesProvider` soyutlaması: birincil kaynak cihazdaki hesap. Ağ
+  kaynağı seçilse bile çökerse sessizce hesaba düşer — ekran boş kalmaz.
+- Ana sayfa: sıradaki vakit halkası, canlı geri sayım, günün altı vakti.
+  Sayaç uygulama arka plana geçince durur; astronomik hesap saniyede bir
+  değil, gün dönünce yapılır.
+- Aylık vakit takvimi ekranı.
+- Bildirimler: vakit bazlı açma/kapama, erken uyarı dakikası, ses. Plan saf
+  mantık olarak yazıldı ve sınandı: geçmiş an kurulmaz, oluşmayan vakit
+  (kutup) için bildirim üretilmez, iOS'un 64 bekleyen bildirim sınırı aşılmaz.
+- Çoklu kayıtlı konum: birincil konum kuralı ("her zaman tam bir birincil")
+  sınamayla güvence altına alındı.

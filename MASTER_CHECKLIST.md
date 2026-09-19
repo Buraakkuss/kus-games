@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 22 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 29 · dış engele bağlı 31**
 
 
 ## FAZ 0 — Audit, mimari, design system, veritabanı mimarisi
@@ -37,16 +37,16 @@
 
 ## FAZ 2 — Onboarding, konum, namaz
 
-- [ ] Onboarding 5 aşama (§12)
-- [ ] GPS + manuel ülke/il/ilçe (§13)
-- [ ] Çoklu kayıtlı konum ve aralarında geçiş (§13)
-- [ ] PrayerTimesProvider abstraction + fallback + cache (§15)
-- [ ] Hesaplama yöntemleri: Diyanet/MWL/ISNA/Egypt/UmmAlQura/Karachi (§15)
-- [ ] Altı vakit + sıradaki vakit + canlı geri sayım (§14)
-- [ ] Günlük / haftalık / aylık takvim (§14)
-- [ ] Vakit bazlı bildirim ayarları, custom dakika (§16)
+- [x] Onboarding 5 aşama (§12) — hoş geldin · konum · yöntem · bildirim · hazır
+- [ ] GPS + manuel ülke/il/ilçe (§13) — **il düzeyi tamam** (81 il + 36 dünya şehri); ilçe verisi ⛔B9
+- [x] Çoklu kayıtlı konum ve aralarında geçiş (§13) — birincil konum kuralı sınandı
+- [x] PrayerTimesProvider abstraction + fallback (§15) — ağ çökerse yerel hesaba düşer; yerel hesap önbellek istemez
+- [x] Hesaplama yöntemleri (§15) — 7 yöntem + Hanefî/Şâfiî ikindi seçimi
+- [x] Altı vakit + sıradaki vakit + canlı geri sayım (§14) — arka planda sayaç durur
+- [x] Günlük ve aylık takvim ekranı + haftalık aralık işlevi (§14)
+- [x] Vakit bazlı bildirim ayarları, erken uyarı dakikası (§16) — iOS 64 sınırı hesaba katıldı
 - [ ] Ezan sesi altyapısı + indirme/cache (§17)  ⛔B4
-- [ ] Bildirim merkezi (§65)
+- [ ] Bildirim merkezi (§65) — kurulu bildirim sayacı var, merkez ekranı FAZ 11'de
 
 ## FAZ 3 — Ana sayfa ve günlük içerik
 

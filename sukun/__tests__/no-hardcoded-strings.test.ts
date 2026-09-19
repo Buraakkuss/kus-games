@@ -23,8 +23,12 @@ function tsxFiles(dir: string): string[] {
   return out;
 }
 
-/** JSX içindeki düz metin: <Text>Merhaba</Text> */
-const JSX_TEXT = />\s*([^<>{}\n][^<>{}]*?)\s*</g;
+/**
+ * JSX içindeki düz metin: `<Text>Merhaba</Text>`.
+ * Kapanış etiketi (`</`) şart: aksi hâlde `a > b` karşılaştırması ve
+ * `useMemo<T>` gibi tip parametreleri metin sanılır.
+ */
+const JSX_TEXT = />\s*([^<>{}\n][^<>{}]*?)\s*<\//g;
 /** Kullanıcıya görünen prop'lara verilen düz metin: title="Merhaba" */
 const TEXT_PROP = /\b(title|subtitle|label|description|accessibilityLabel|accessibilityHint|value|actionLabel|retryLabel)\s*=\s*"([^"]+)"/g;
 

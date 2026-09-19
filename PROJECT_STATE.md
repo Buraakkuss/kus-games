@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 2 — Onboarding, konum, namaz** (FAZ 0 ve FAZ 1 tamamlandı)
+**FAZ 3 — Ana sayfa ve günlük içerik** (FAZ 0, 1, 2 tamamlandı)
 
 ## Tamamlanan
 
@@ -53,17 +53,27 @@
 - [x] Üretim güvenli günlükleme + veri maskeleme (§83, §84)
 - [x] `expo export` ile paketleme doğrulandı (Android paketi üretiliyor)
 
+**FAZ 2 tamamlandı:**
+
+- [x] 5 aşamalı onboarding (§12)
+- [x] Konum: GPS + elle seçim, 81 il + 36 dünya şehri, çoklu kayıt (§13)
+- [x] Türkçe arama normalizasyonu — İ/ı tuzağı dahil (§78)
+- [x] 7 hesaplama yöntemi + Hanefî/Şâfiî ikindi (§15)
+- [x] PrayerTimesProvider soyutlaması, ağ çökerse yerel hesaba düşer (§15)
+- [x] Altı vakit, canlı geri sayım, aylık takvim ekranı (§14)
+- [x] Vakit bildirimleri: vakit bazlı açma/kapama, erken uyarı dakikası (§16)
+
 ## Devam eden
 
-- [ ] FAZ 2 — onboarding, konum, namaz vakitleri, bildirimler
+- [ ] FAZ 3 — ana sayfa özelleştirme, günün içeriği, esmâ, hicri takvim
 
 ## Sıradaki iş
 
-1. Onboarding 5 aşama (§12)
-2. GPS + elle ülke/il/ilçe seçimi, çoklu konum (§13)
-3. PrayerTimesProvider + yöntem seçimi + önbellek (§15)
-4. Altı vakit, canlı geri sayım, günlük/haftalık/aylık takvim (§14)
-5. Vakit bildirimleri ve bildirim merkezi (§16, §65)
+1. Ana sayfa kart düzeni ve özelleştirme (§20, §21)
+2. Günün Duası ve Günün Bilgisi (§24, §25) — telifsiz, özgün içerik
+3. Esmâü'l-Hüsnâ: 99 isim, arama, favori (§26)
+4. Hicri takvim + çevirici, dinî günler + geri sayım (§44, §45)
+5. Ay durumu: faz, aydınlanma, yaş (§46)
 
 ## Build durumu
 
@@ -71,7 +81,7 @@
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 11 suite / 98 test |
+| Test | ✅ 15 suite / 152 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |
