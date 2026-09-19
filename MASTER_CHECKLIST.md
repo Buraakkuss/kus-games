@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 47 · kısmen tamamlanan 7 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 53 · kısmen tamamlanan 10 · dış engele bağlı 31**
 >
 > `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
@@ -93,20 +93,20 @@
 
 ## FAZ 7 — Zikir, dualar, esma, hadis, bilgi
 
-- [ ] Zikirmatik: preset 33/99/100/1000/custom, haptic, ses (§37)
-- [ ] Özel zikir oluşturma (§37)
-- [ ] Zikir istatistiği: günlük/haftalık/aylık (§38)
-- [ ] Dua veritabanı: 14 kategori, Arapça+okunuş+anlam+kaynak (§39)
-- [ ] Dua favori + arama + ses altyapısı (§39)
+- [x] Zikirmatik: 8 hazır zikir, 6 hedef, özel zikir, haptic (§37)
+- [x] Özel zikir oluşturma (§37)
+- [x] Zikir istatistiği: günlük/haftalık/aylık + 14 günlük grafik + seri (§38)
+- [~] Dua veritabanı: 14 kategori, 34 özgün Türkçe dua; me'sûr duaların Arapça metni ⛔B3 (§39)
+- [~] Dua favori ve kategori süzme tamam; arama ve ses FAZ 11'de (§39)
 - [ ] Hadis kütüphanesi (§52)  ⛔B3
-- [ ] İslami bilgi kütüphanesi (§53)
+- [x] İslami bilgi kütüphanesi: 43 madde, 6 konu, arama (§53)
 
 ## FAZ 8 — İbadet rehberi ve takip
 
-- [ ] Namaz rehberi: abdest, hazırlık, vakit vakit rekat ve okunuşlar (§40)
-- [ ] Kaza namazı: 6 sayaç, toplu giriş, +/-, geçmiş, ilerleme (§41)
-- [ ] İbadet/amel defteri + takvim görünümü (§42)
-- [ ] Oruç takibi: Ramazan/kaza/nafile (§49)
+- [~] Namaz rehberi: abdest, hazırlık, kılınış, rekât sayıları, seferîlik, özür — 6 bölüm, 33 adım. Okunan sûrelerin Arapça metni ⛔B1 (§40)
+- [x] Kaza namazı: 6 sayaç, toplu giriş, +/-, geçmiş, geri alma, ilerleme (§41)
+- [x] İbadet defteri: gün gün namaz, Kuran dakikası, not (§42)
+- [x] Oruç takibi: Ramazan/kaza/nafile (§49)
 
 ## FAZ 9 — Zekât, Ramazan, mukabele, cuma, hac
 

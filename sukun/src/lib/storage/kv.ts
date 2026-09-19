@@ -75,6 +75,7 @@ export const KEYS = {
   favorites: 'favorites',
   reading: 'reading',
   quranSettings: 'quranSettings',
+  worship: 'worship',
 } as const;
 
 export type StorageKey = (typeof KEYS)[keyof typeof KEYS];

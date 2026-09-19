@@ -136,3 +136,22 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
 - Hizalanınca bir kez titreşim; "hareketi azalt" açıkken titreşim yok.
 - Pusula yalnız kıble ekranı öndeyken açılır; ekran arka plana geçince
   dinleyici kapanır. Bu, kategorinin en sık pil şikâyetinin sebebidir.
+
+### FAZ 7 ve 8 — Zikir, rehber, takip
+
+- Zikirmatik: 8 hazır zikir, 6 hazır hedef, özel zikir, hedef halkası. Her
+  dokunuşta hafif titreşim, hedefe varınca farklı bir geri bildirim — kullanıcı
+  ekrana bakmadan anlar. "Hareketi azalt" açıkken titreşim yok.
+- Zikir istatistiği: kesintisiz gün serisi, 14 günlük grafik, günlük/haftalık/
+  aylık toplam ve ortalama, en çok çekilen zikir. Gün sınırı **kullanıcının
+  konumunun** takvimine göre çizilir; yatsıdan sonra çekilen zikir yarına
+  yazılmaz.
+- Namaz rehberi: abdest, hazırlık, kılınış, rekât sayıları, seferîlik ve özür
+  durumları — 6 bölüm, 33 adım. Hüküm vermez; mezhep farkı olan yerlerde fark
+  belirtilir. Okunan sûrelerin Arapça metni yok (⛔B1) ve bu yazılı.
+- Kaza namazı: beş farz + vitir için sayaç, toplu giriş, tek tek azaltma,
+  geçmiş ve son işlemi geri alma. Sayaç asla eksiye düşmez.
+- İbadet defteri: gün gün namaz durumu (tek başına / cemaatle / kaza),
+  Kur'an okuma dakikası, günün notu; geçmiş günlere gidilebilir.
+- Oruç takibi: Ramazan, kaza ve nafile.
+- Bu kayıtların cihazda kaldığı her ekranda yazılı.

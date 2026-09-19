@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 7 — Zikir, dualar, hadis, bilgi** (FAZ 0–6 tamamlandı)
+**FAZ 9 — Zekât, Ramazan, mukabele, cuma** (FAZ 0–8 tamamlandı)
 
 ## Tamamlanan
 
@@ -94,16 +94,26 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 - [x] Hizalanınca bir kez titreşim; reduced-motion açıkken kapalı (§36, §79)
 - [x] Pusula yalnız kıble ekranı öndeyken açık (§81)
 
+**FAZ 7 ve 8 tamamlandı (telif engelli kısımlar hariç):**
+
+- [x] Zikirmatik: 8 hazır zikir, özel zikir, haptic, hedef halkası (§37)
+- [x] Zikir istatistiği: seri, 14 günlük grafik, günlük/haftalık/aylık (§38)
+- [x] Namaz rehberi: 6 bölüm, 33 adım — hüküm vermez, farkları belirtir (§40)
+- [x] Kaza namazı: 6 sayaç, toplu giriş, geri alma (§41)
+- [x] İbadet defteri ve oruç takibi (§42, §49)
+- [x] İslami bilgi kütüphanesi (§53)
+
 ## Devam eden
 
-- [ ] FAZ 7 — zikirmatik, dua ekranı genişletme, hadis (⛔B3), bilgi kütüphanesi
+- [ ] FAZ 9 — zekât hesaplama, Ramazan modu, mukabele, cuma modu
 
 ## Sıradaki iş
 
-1. Zikirmatik: preset 33/99/100/1000/özel, haptic, ses (§37)
-2. Zikir istatistiği: günlük/haftalık/aylık (§38)
-3. Dua favorileri ve arama (§39)
-4. Namaz rehberi (§40), kaza namazı sayacı (§41), ibadet defteri (§42)
+1. Zekât: nakit/döviz/altın/gümüş/yatırım/ticari/alacak/borç + nisap (§43)
+2. Ramazan modu: iftar/imsak geri sayımı, 30 günlük takvim (§47)
+3. Mukabele: 30 cüz takibi, okuyucu entegrasyonu (§48)
+4. Cuma modu: minimal görünüm, Kehf kısayolu, salavat (§50)
+5. Hac/Umre rehberi + checklist (§54)
 
 ## Build durumu
 
@@ -111,7 +121,7 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 22 suite / 245 test |
+| Test | ✅ 23 suite / 274 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |
