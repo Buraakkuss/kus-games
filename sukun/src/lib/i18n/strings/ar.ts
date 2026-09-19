@@ -1,0 +1,55 @@
+/** العربية — واجهة أساسية (§61). المفاتيح الناقصة تعود إلى التركية. */
+import type { StringKey } from './tr';
+
+export const ar: Partial<Record<StringKey, string>> = {
+  'nav.home': 'الرئيسية', 'nav.quran': 'القرآن', 'nav.worship': 'العبادة',
+  'nav.explore': 'استكشاف', 'nav.profile': 'الحساب', 'nav.back': 'رجوع', 'nav.close': 'إغلاق',
+
+  'common.ok': 'حسناً', 'common.cancel': 'إلغاء', 'common.save': 'حفظ',
+  'common.delete': 'حذف', 'common.edit': 'تعديل', 'common.done': 'تم',
+  'common.next': 'التالي', 'common.skip': 'تخطٍ', 'common.retry': 'أعد المحاولة',
+  'common.search': 'بحث', 'common.share': 'مشاركة', 'common.copy': 'نسخ',
+  'common.select': 'اختيار', 'common.loading': 'جارٍ التحميل', 'common.today': 'اليوم',
+  'common.source': 'المصدر', 'common.enable': 'تشغيل', 'common.disable': 'إيقاف',
+
+  'prayer.fajr': 'الفجر', 'prayer.sunrise': 'الشروق', 'prayer.dhuhr': 'الظهر',
+  'prayer.asr': 'العصر', 'prayer.maghrib': 'المغرب', 'prayer.isha': 'العشاء',
+  'prayer.next': 'الصلاة القادمة', 'prayer.remaining': 'الوقت المتبقي',
+  'prayer.remainingTo': 'يتبقى {time} على {name}',
+  'prayer.todayTimes': 'مواقيت اليوم', 'prayer.method': 'طريقة الحساب',
+  'prayer.adjustment': 'تعديل بالدقائق',
+
+  'location.title': 'الموقع', 'location.current': 'الموقع الحالي',
+  'location.useGps': 'استخدم موقعي', 'location.manual': 'اختر يدوياً',
+  'location.permissionTitle': 'نحتاج إذن الموقع',
+  'location.permissionBody': 'تُحسب مواقيت الصلاة حسب مكانك. وإن لم ترغب في منح الإذن فيمكنك اختيار مدينتك يدوياً.',
+  'location.timezone': 'المنطقة الزمنية',
+
+  'qibla.title': 'القبلة', 'qibla.bearing': 'اتجاه القبلة',
+  'qibla.distance': 'المسافة إلى الكعبة', 'qibla.aligned': 'أنت مستقبل القبلة',
+
+  'quran.title': 'القرآن', 'quran.surahs': 'السور', 'quran.juz': 'الأجزاء',
+  'quran.continue': 'تابع من حيث توقفت', 'quran.translation': 'الترجمة',
+  'quran.bookmarks': 'العلامات', 'quran.favorites': 'المفضلة',
+
+  'worship.title': 'العبادة', 'worship.dhikr': 'المسبحة', 'worship.duas': 'الأدعية',
+  'worship.names': 'أسماء الله الحسنى', 'worship.qada': 'الصلوات الفائتة',
+
+  'explore.title': 'استكشاف', 'profile.title': 'الحساب', 'profile.signIn': 'تسجيل الدخول',
+  'profile.signOut': 'تسجيل الخروج', 'profile.guest': 'المتابعة كضيف',
+
+  'settings.title': 'الإعدادات', 'settings.theme': 'المظهر', 'settings.themeSystem': 'حسب النظام',
+  'settings.themeLight': 'فاتح', 'settings.themeDark': 'داكن', 'settings.language': 'اللغة',
+  'settings.notifications': 'الإشعارات', 'settings.about': 'حول التطبيق',
+  'settings.privacy': 'الخصوصية', 'settings.version': 'الإصدار',
+
+  'pro.title': 'برو', 'pro.unlock': 'يُفتح مع برو', 'pro.monthly': 'شهري',
+  'pro.yearly': 'سنوي', 'pro.restore': 'استعادة المشتريات',
+
+  'error.title': 'حدث خطأ ما', 'error.generic': 'لم تتم العملية. أعد المحاولة بعد قليل.',
+  'error.network': 'لا يوجد اتصال بالإنترنت.', 'error.timeout': 'انتهت مهلة الطلب.',
+  'error.restart': 'إعادة التشغيل',
+  'offline.title': 'أنت غير متصل',
+  'offline.body': 'تعمل المواقيت والقرآن والمسبحة دون اتصال. وتستأنف المزامنة عند عودة الاتصال.',
+  'empty.title': 'لا شيء هنا بعد', 'empty.body': 'سيظهر هنا ما تضيفه.',
+};

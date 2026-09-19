@@ -10,12 +10,12 @@
 | Kod adı | **Sükûn** (geçici marka, `BrandConfig` üzerinden tek noktadan değişir) |
 | Klasör | `sukun/` |
 | Sürüm | 0.1.0 (ilk üretim sürümü hedefi: 1.0.0) |
-| Teknoloji | Expo SDK 54 · React Native 0.76.5 · TypeScript (strict) · expo-router |
+| Teknoloji | Expo SDK 54 · React Native 0.81.5 · React 19 · TypeScript (strict) · expo-router 6 |
 | Backend | Supabase (PostgreSQL + Auth + Storage + Edge Functions + RLS) |
 
 ## Mevcut faz
 
-**FAZ 1 — Çekirdek** (FAZ 0 tamamlandı)
+**FAZ 2 — Onboarding, konum, namaz** (FAZ 0 ve FAZ 1 tamamlandı)
 
 ## Tamamlanan
 
@@ -41,17 +41,29 @@
 
 **FAZ 0 tamamlandı.**
 
+**FAZ 1 tamamlandı:**
+
+- [x] expo-router sekme düzeni, 5 sekme + bulunamayan yol ekranı (§11)
+- [x] Yerelleştirme: TR tam (169 anahtar), EN/AR/DE/FR temel (85 anahtar) (§61)
+- [x] Gömülü metin yasağı — sınamayla denetleniyor (§61)
+- [x] RTL: saf yön katmanı, platform köprüsü, Arapça metin akışı (§79)
+- [x] Kalıcılık: SQLite migration çalıştırıcısı, AsyncStorage, SecureStore (§5)
+- [x] Hata sınırı, çevrimdışı şeridi, yeniden deneme (§82)
+- [x] Ağ katmanı: zaman aşımı, yeniden deneme, önbellek, bayat yedek (§76)
+- [x] Üretim güvenli günlükleme + veri maskeleme (§83, §84)
+- [x] `expo export` ile paketleme doğrulandı (Android paketi üretiliyor)
+
 ## Devam eden
 
-- [ ] FAZ 1 — navigasyon, yerelleştirme, kalıcılık, hata sınırı, ağ katmanı
+- [ ] FAZ 2 — onboarding, konum, namaz vakitleri, bildirimler
 
 ## Sıradaki iş
 
-1. expo-router sekme düzeni: Ana Sayfa · Kur'an · İbadet · Keşfet · Profil (§11)
-2. Yerelleştirme altyapısı, metin gömme yasağı, TR tam + EN/AR/DE/FR temel (§61)
-3. Kalıcılık: SQLite (FTS5) + AsyncStorage + SecureStore (§5)
-4. Global hata sınırı, çevrimdışı şeridi, yeniden deneme (§82)
-5. Ağ katmanı: zaman aşımı, yeniden deneme, önbellek, yedek (§76)
+1. Onboarding 5 aşama (§12)
+2. GPS + elle ülke/il/ilçe seçimi, çoklu konum (§13)
+3. PrayerTimesProvider + yöntem seçimi + önbellek (§15)
+4. Altı vakit, canlı geri sayım, günlük/haftalık/aylık takvim (§14)
+5. Vakit bildirimleri ve bildirim merkezi (§16, §65)
 
 ## Build durumu
 
@@ -59,8 +71,9 @@
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 6 suite / 43 test |
+| Test | ✅ 11 suite / 98 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
+| Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |
 | Android build | henüz denenmedi |
 

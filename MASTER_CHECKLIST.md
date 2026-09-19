@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 13 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 22 · dış engele bağlı 31**
 
 
 ## FAZ 0 — Audit, mimari, design system, veritabanı mimarisi
@@ -25,15 +25,15 @@
 
 ## FAZ 1 — Çekirdek
 
-- [ ] Navigation (§11): Ana Sayfa · Kur'an · İbadet · Keşfet · Profil
-- [ ] Localization altyapısı, string hardcode yok (§61)
-- [ ] Türkçe çeviri tam (§61)
-- [ ] EN / AR / DE / FR temel UI çevirileri (§61)
-- [ ] RTL desteği (§61, §79)
-- [ ] Persistence: SQLite + AsyncStorage + SecureStore (§5)
-- [ ] Global Error Boundary, offline banner, retry (§82)
-- [ ] Network katmanı: timeout, retry, cache, fallback (§76)
-- [ ] Production-safe logging (§83)
+- [x] Navigation (§11): Ana Sayfa · Kur'an · İbadet · Keşfet · Profil — expo-router, 5 sekme
+- [x] Localization altyapısı, string hardcode yok (§61) — sınamayla denetleniyor
+- [x] Türkçe çeviri tam (§61) — 169 anahtar, kaynak dil
+- [x] EN / AR / DE / FR temel UI çevirileri (§61) — 85 temel anahtar, eksiksizliği sınanıyor
+- [x] RTL desteği (§61, §79) — saf yön katmanı + platform köprüsü + Arapça metin akışı
+- [x] Persistence: SQLite + AsyncStorage + SecureStore (§5) — 3 migration, işlemli çalıştırıcı
+- [x] Global Error Boundary, offline banner, retry (§82)
+- [x] Network katmanı: timeout, retry, cache, fallback (§76) — bayat önbellek yedeği dahil
+- [x] Production-safe logging (§83) — konum/e-posta/jeton maskeleme sınandı
 
 ## FAZ 2 — Onboarding, konum, namaz
 

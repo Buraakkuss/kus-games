@@ -25,3 +25,32 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
 - Supabase şeması: 10 migration, 39 tablo, tümünde RLS.
 - RLS davranış sınaması + kapsama denetimi (`tools/verify-db.sh`).
 - Kalite kapısı: `tsc` + `eslint` + 6 test paketi / 43 test.
+
+### FAZ 1 — Çekirdek altyapı
+
+- expo-router sekme düzeni: Ana Sayfa, Kuran, İbadet, Keşfet, Profil;
+  bulunamayan yol için kendi ekranı.
+- Yerelleştirme: Türkçe kaynak dil (169 anahtar), EN/AR/DE/FR temel arayüz
+  (85 anahtar). Eksik çeviri Türkçeye düşer, anahtar adı hiç gösterilmez.
+- Gömülü metin yasağı sınamayla denetleniyor: ekran dosyalarında düz metin
+  bırakılırsa test kırmızı olur.
+- Kalıcılık: SQLite migration çalıştırıcısı (her sürüm kendi işleminde),
+  AsyncStorage anahtar-değer katmanı, SecureStore sır deposu.
+- Ağ katmanı: kısa zaman aşımı, sınırlı yeniden deneme, üstel geri çekilme,
+  başarısızlıkta bayat önbellek yedeği. Bozuk yanıt önbelleğe yazılmaz.
+- Üretim güvenli günlükleme: konum, e-posta, telefon, jeton ve JWT her
+  derinlikte maskelenir; üretimde debug/info hiç yazılmaz.
+- Hata sınırı ve çevrimdışı şeridi.
+- Bağımlılıklar Expo SDK 54'ün beklediği sürümlere hizalandı
+  (React 19, React Native 0.81.5, expo-router 6) ve `expo export` ile
+  paketlemenin çalıştığı doğrulandı.
+
+### Düzeltilen
+
+- `app.config.ts` marka bilgisini `.ts` dosyasından okuyordu; Expo'nun
+  yapılandırma değerlendiricisi bunu çözemiyor ve `expo export` patlıyordu.
+  Marka değerleri `brand.json` içine alındı, tek kaynak korundu.
+- `src/app/` klasörü expo-router tarafından yönlendirme kökü sanılıyordu;
+  `src/boot/` olarak yeniden adlandırıldı.
+- `migrate()` kendisine verilen migration listesini yok sayıyordu
+  (`pendingMigrations` her zaman genel listeyi okuyordu). Sınama yakaladı.
