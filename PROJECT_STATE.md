@@ -15,7 +15,7 @@
 
 ## Mevcut faz
 
-**FAZ 5 — Kur'an sesi** (FAZ 0–4 tamamlandı)
+**FAZ 7 — Zikir, dualar, hadis, bilgi** (FAZ 0–6 tamamlandı)
 
 ## Tamamlanan
 
@@ -83,16 +83,27 @@
 - [x] Arapça arama: harekesiz sorgu harekeli metinde eşleşiyor (§35, §78)
 - [x] Paylaşımda kaynak künyesi her zaman gidiyor
 
+**FAZ 5 (ses) — yapılabilecek kısım tamam:** oynatma durum mantığı ve
+depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağlı (⛔B4).
+
+**FAZ 6 tamamlandı:**
+
+- [x] Kıble: büyük daire hesabı, derece, Kâbe uzaklığı (§36)
+- [x] Geometrik pusula kadranı — figüratif öge yok (§9)
+- [x] Doğruluk seviyesi, kalibrasyon ve manyetik girişim uyarısı (§36)
+- [x] Hizalanınca bir kez titreşim; reduced-motion açıkken kapalı (§36, §79)
+- [x] Pusula yalnız kıble ekranı öndeyken açık (§81)
+
 ## Devam eden
 
-- [ ] FAZ 5 — Kur'an sesi altyapısı (kıraat lisansı ⛔B4)
+- [ ] FAZ 7 — zikirmatik, dua ekranı genişletme, hadis (⛔B3), bilgi kütüphanesi
 
 ## Sıradaki iş
 
-1. Ses oynatıcı altyapısı: çalma/durdurma, tekrar, aralık, hız (§32) ⛔B4
-2. Arka planda oynatma + kilit ekranı kontrolleri (§32) ⛔B4
-3. İndirme yöneticisi + depolama göstergesi (§33) ⛔B4
-4. FAZ 6 — kıble ekranı (§36): altyapı hazır, ekran yazılacak
+1. Zikirmatik: preset 33/99/100/1000/özel, haptic, ses (§37)
+2. Zikir istatistiği: günlük/haftalık/aylık (§38)
+3. Dua favorileri ve arama (§39)
+4. Namaz rehberi (§40), kaza namazı sayacı (§41), ibadet defteri (§42)
 
 ## Build durumu
 
@@ -100,7 +111,7 @@
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 21 suite / 227 test |
+| Test | ✅ 22 suite / 245 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |

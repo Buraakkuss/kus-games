@@ -118,3 +118,21 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   yalnız aramada; ekranda gösterilen metin kaynaktaki hâliyle kalıyor.
 - Meal, tefsir ve kıraat bölümleri arayüzde duruyor; içerik yerine neden boş
   olduğu yazılı. Lisans gelince yalnız veri yüklenecek.
+
+### FAZ 5 — Kur'an sesi (altyapı)
+
+- Kıraat lisansı olmadığı için ses dosyası yok (⛔B4). Lisans geldiğinde
+  değişmeyecek kısım şimdiden yazıldı ve sınandı: oynatma kuyruğu, dört tekrar
+  kipi (kapalı / âyet / aralık / sure), aralık tekrar sayacı, hız sınırı ve
+  uyku zamanlayıcısı; indirme/depolama hesabı ve silince açılacak yer.
+
+### FAZ 6 — Kıble
+
+- Büyük daire hesabıyla kıble açısı ve Kâbe uzaklığı.
+- Geometrik pusula kadranı: daire, derece çentikleri, yıldız iğne. Kâbe
+  fotoğrafı ya da figüratif öge yok (§9).
+- Doğruluk seviyesi, kalibrasyon yönergesi ve manyetik girişim uyarısı.
+  Girişim, son okumaların yayılımından sezilir.
+- Hizalanınca bir kez titreşim; "hareketi azalt" açıkken titreşim yok.
+- Pusula yalnız kıble ekranı öndeyken açılır; ekran arka plana geçince
+  dinleyici kapanır. Bu, kategorinin en sık pil şikâyetinin sebebidir.

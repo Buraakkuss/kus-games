@@ -39,6 +39,7 @@ function RootStack() {
         <Stack.Screen name="hijri" />
         <Stack.Screen name="reader" />
         <Stack.Screen name="quran-search" />
+        <Stack.Screen name="qibla" />
       </Stack>
     </>
   );

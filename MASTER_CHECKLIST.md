@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 42 · kısmen tamamlanan 5 · dış engele bağlı 31**
+**Toplam 133 madde · tamamlanan 47 · kısmen tamamlanan 7 · dış engele bağlı 31**
 >
 > `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
@@ -78,18 +78,18 @@
 
 ## FAZ 5 — Kur'an sesi
 
-- [ ] Audio player: play/pause/prev/next/repeat/range/speed/sleep timer (§32)  ⛔B4
+- [~] Audio player durum mantığı yazıldı ve sınandı (tekrar kipleri, aralık, hız, uyku zamanlayıcısı); ses dosyası ⛔B4 (§32)
 - [ ] Arka planda oynatma + kilit ekranı kontrolleri (§32)  ⛔B4
 - [ ] Okunan âyeti otomatik vurgulama (§32)  ⛔B4
-- [ ] İndirme yöneticisi + depolama göstergesi + silme (§33)  ⛔B4
+- [~] İndirme/depolama hesabı yazıldı ve sınandı; indirilecek kayıt ⛔B4 (§33)
 
 ## FAZ 6 — Kıble
 
-- [ ] GPS + pusula, büyük daire hesabı (§36)
-- [ ] Derece, mesafe, pusula kadranı (§36)
-- [ ] Doğruluk göstergesi, kalibrasyon ve manyetik girişim uyarısı (§36)
-- [ ] Hizalanınca haptic (§36)
-- [ ] Pusula yalnız Kıble ekranında aktif (§81)
+- [x] GPS + pusula, büyük daire hesabı (§36)
+- [x] Derece, mesafe, geometrik pusula kadranı (§36)
+- [x] Doğruluk göstergesi, kalibrasyon ve manyetik girişim uyarısı (§36)
+- [x] Hizalanınca haptic — bir kez, reduced-motion'da kapalı (§36)
+- [x] Pusula yalnız Kıble ekranında ve ekran öndeyken aktif (§81)
 
 ## FAZ 7 — Zikir, dualar, esma, hadis, bilgi
 

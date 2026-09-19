@@ -80,6 +80,18 @@ export const tr = {
   'qibla.accuracyLow': 'Pusula doğruluğu düşük',
   'qibla.accuracyMedium': 'Pusula doğruluğu orta',
   'qibla.accuracyHigh': 'Pusula doğruluğu yüksek',
+  'qibla.north': 'K',
+  'qibla.east': 'D',
+  'qibla.south': 'G',
+  'qibla.west': 'B',
+  'qibla.degrees': '{deg}°',
+  'qibla.distanceKm': '{km} km',
+  'qibla.turnRight': 'Sağa dön',
+  'qibla.turnLeft': 'Sola dön',
+  'qibla.noCompass': 'Bu cihazda pusula yok. Kıble açısını pusula uygulamasıyla ya da harita ile kullanabilirsin.',
+  'qibla.needLocation': 'Kıble için konum gerekiyor',
+  'qibla.batteryNote': 'Pusula yalnız bu ekran açıkken çalışır; pili boşuna harcamaz.',
+
 
   // --- Kuran (§27–§35)
   'quran.title': 'Kuran',

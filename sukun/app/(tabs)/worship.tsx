@@ -10,6 +10,7 @@ export default function WorshipScreen() {
     <Screen scroll motif="octagonGrid">
       <SectionHeader title={t('worship.title')} />
       <Card padding="sm">
+        <ListItem title={t('qibla.title')} icon="compass" onPress={() => router.push('/qibla')} />
         <ListItem title={t('worship.duas')} icon="heart" onPress={() => router.push('/duas')} />
         <ListItem title={t('worship.names')} icon="star" onPress={() => router.push('/names')} />
         <ListItem title={t('prayer.settings')} icon="clock" onPress={() => router.push('/prayer-settings')} />
