@@ -209,3 +209,17 @@ Semantic versioning. Yayınlanan ilk üretim sürümü hedefi: **1.0.0**.
   güncellemeleri GitHub Pages üzerinde statik bir JSON'dan geliyor: sürüm
   artmadan değişmiyor, şemaya uymayan paket yok sayılıyor ve kanal hiçbir şeyi
   silemiyor. Şema, RLS ve eşitleme motoru v2 için duruyor.
+
+### FAZ 16 — Freemium ve reklam kuralları
+
+- Freemium çizgisi kod düzeyinde çekildi: **ibadetin kendisi hiçbir zaman
+  kilitlenmez.** Namaz vakti, kıble, Kur'an, meal, zikir, kaza, dua, esmâ,
+  hicri takvim, zekât, rehber ve bildirimler ücretsiz ve öyle kalacak —
+  biri kilitlenmeye kalkarsa sınama kırılıyor. Pro yalnız çoğaltıcı olanı
+  açıyor: sınırsız konum, bütün okuyucular, sınırsız indirme, reklamsızlık.
+- Ödeme sorunu sırasında (mağaza yeniden denerken) erişim kesilmiyor.
+- Reklam kuralları koda gömüldü: vaktin girmesine 15 dakika kala ve vakit
+  girdikten sonra 30 dakika reklam durur; okuyucu, kıble, zikir ve namaz
+  rehberi ekranlarında hiç reklam yoktur; tam ekran reklamlar arasında en az
+  üç dakika geçer; 11 uygunsuz kategori engellenir ve yaş derecesi G'ye
+  sabitlenir.

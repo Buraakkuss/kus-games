@@ -146,7 +146,7 @@ depolama hesabı yazıldı ve sınandı; ses dosyaları kıraat lisansına bağl
 |---|---|
 | TypeScript | ✅ `tsc --noEmit` temiz |
 | Lint | ✅ `eslint --max-warnings=0` temiz |
-| Test | ✅ 31 suite / 390 test |
+| Test | ✅ 32 suite / 405 test |
 | Veritabanı | ✅ `bash sukun/tools/verify-db.sh` — migration + RLS + kapsama |
 | Paketleme | ✅ `npm run bundle` — Metro paketi üretiliyor |
 | iOS build | henüz denenmedi (B6 — Apple hesabı) |

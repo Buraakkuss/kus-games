@@ -4,7 +4,7 @@
 > tamamlanmadan `[x]` yapılmaz (§93). `⛔Bn` işareti, o maddenin
 > `KNOWN_ISSUES.md` içindeki **Bn** engeline bağlı olduğunu gösterir:
 > altyapı tamamlanır, veri/kimlik yuvası boş kalır.
-**Toplam 133 madde · tamamlanan 71 · kısmen tamamlanan 7 · dış engele bağlı 22**
+**Toplam 133 madde · tamamlanan 74 · kısmen tamamlanan 7 · dış engele bağlı 22**
 >
 > `[~]` işareti: yapılabilecek kısmı tamamlandı, kalanı dış engele bağlı.
 
@@ -164,11 +164,11 @@
 
 ## FAZ 16 — Abonelik ve reklam
 
-- [ ] Freemium dağılımı (§66)
+- [x] Freemium dağılımı (§66) — ibadetin kendisi hiç kilitlenmez, sınamayla korunuyor
 - [ ] Aylık/yıllık abonelik, StoreKit + Play Billing (§67)  ⛔B6,B7
 - [ ] Fiyat mağazadan, restore, manage, doğrulama (§67)  ⛔B6,B7
-- [ ] Reklam yerleşimi kuralları (§68)
-- [ ] Uygunsuz reklam kategorisi engelleme (§68)
+- [x] Reklam yerleşim kuralları (§68) — vakte yakın, okuyucuda, kıblede ve zikirde reklam yok
+- [x] Uygunsuz reklam kategorisi engelleme + yaş derecesi G (§68)
 
 ## FAZ 17 — Erişilebilirlik, performans, güvenlik
 
